@@ -1,0 +1,38 @@
+name: "Шаблон создания фичи"
+description: Шаблон для создания фичи
+title: "НАЗВАНИЕ ФИЧИ"
+labels: "Фича"
+projects: "yp-nazvanie-komandi/2"
+body:
+  - type: textarea
+    id: tasks
+    attributes:
+      label: "Основные задачи"
+      description: Опишите какие задачи необходимо решить в рамках фичи
+      placeholder: Например - "Создать репозиторий проекта из шаблона. Убедиться, что проект запускается и работает"
+    validations:
+      required: true
+  - type: textarea
+    id: expectations
+    attributes:
+      label: "Ожидания"
+      description: Опишите какие имеются ожидания по фиче
+      placeholder: Например - "Пользователь не может зайти ни на какую страницу проекта, если он не авторизован."
+    validations:
+      required: true
+  - type: textarea
+    id: explanations
+    attributes:
+      label: "Пояснения"
+      description: Предоставьте дополнительные пояснения при наличии
+      placeholder: Например - "Убедиться, что отрабатывает pre-commit hook на каждый коммит и pr-checks на каждом PR"
+    validations:
+      required: false
+  - type: textarea
+    id: additional_resources
+    attributes:
+      label: "Дополнительные материалы"
+      description: Ссылки на документацию, вики, видео, скриншоты и т.д 
+      placeholder: Например - "https://react.dev/reference/react/lazy"
+    validations:
+      required: false
