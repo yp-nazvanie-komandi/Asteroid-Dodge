@@ -1,4 +1,8 @@
 .adButton {
-  width: auto;
-  min-width: 226px !important;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    width: auto;
+    min-width: 226px !important;
+  }
 }
