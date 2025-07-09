@@ -1,8 +1,8 @@
 import React from 'react'
 
-import AdButton from '../../components/adButton/ad-button'
+import AdButton from '../../components/AdButton/AdButton'
 
-const Error400: React.FC = () => {
+const Error400 = () => {
   return (
     <div className={'container container--error'}>
       <h1 className={'error'}>404</h1>
