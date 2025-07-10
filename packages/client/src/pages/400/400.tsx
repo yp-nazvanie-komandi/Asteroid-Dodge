@@ -1,7 +1,6 @@
-import React from 'react'
+import { useNavigate } from 'react-router'
 
 import Button from '../../components/Button/Button'
-import { useNavigate } from 'react-router-dom'
 
 const Error400 = () => {
   const navigate = useNavigate()
