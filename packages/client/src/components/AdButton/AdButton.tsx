@@ -2,14 +2,8 @@ import Button from '@mui/material/Button'
 import './style.scss'
 
 import { useNavigate } from 'react-router-dom'
-
-interface AdButtonProps {
-  variant?: 'text' | 'outlined' | 'contained'
-  text?: string
-  to?: string // внутренняя навигация
-  href?: string // внешняя ссылка
-  onClick?: () => void // обработчик клика
-}
+import React from 'react'
+import { ButtonPropsExtended } from '../../types/button'
 
 export default function AdButton({
   variant = 'contained',
@@ -17,7 +11,7 @@ export default function AdButton({
   to,
   href,
   onClick,
-}: AdButtonProps) {
+}: ButtonPropsExtended) {
   const navigate = useNavigate()
 
   const handleClick = () => {
