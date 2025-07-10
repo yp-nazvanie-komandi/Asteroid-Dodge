@@ -1,11 +1,11 @@
-import Button from '@mui/material/Button'
+import ButtonMaterial from '@mui/material/Button'
 import './style.scss'
 
 import { useNavigate } from 'react-router-dom'
 import React from 'react'
 import { ButtonPropsExtended } from '../../types/button'
 
-export default function AdButton({
+export default function Button({
   variant = 'contained',
   text = '',
   to,
@@ -26,8 +26,11 @@ export default function AdButton({
   }
 
   return (
-    <Button onClick={handleClick} className="adButton" variant={variant}>
+    <ButtonMaterial
+      onClick={handleClick}
+      className="adButton"
+      variant={variant}>
       {text}
-    </Button>
+    </ButtonMaterial>
   )
 }
