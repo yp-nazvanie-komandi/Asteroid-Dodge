@@ -1,0 +1,15 @@
+export enum BasicColors {
+  RED = 'red',
+  GREEN = 'green',
+  BLUE = 'blue',
+  YELLOW = 'yellow',
+  BLACK = 'black',
+  WHITE = 'white',
+  GRAY = 'gray',
+  PURPLE = 'purple',
+  ORANGE = 'orange',
+  PINK = 'pink',
+  BROWN = 'brown',
+  CYAN = 'cyan',
+  MAGENTA = 'magenta',
+}

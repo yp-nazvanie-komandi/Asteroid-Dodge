@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import './App.css'
+import GameCanvas from './pages/Game/Game'
 
 function App() {
   useEffect(() => {
@@ -12,7 +13,11 @@ function App() {
 
     fetchServerData()
   }, [])
-  return <div className="App">Вот тут будет жить ваше приложение :)</div>
+  return (
+    <div className="App">
+      <GameCanvas></GameCanvas>
+    </div>
+  )
 }
 
 export default App
