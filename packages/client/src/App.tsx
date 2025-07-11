@@ -15,6 +15,7 @@ function App() {
   }, [])
   return (
     <div className="App">
+      {/* Только для проверки игрового движка */}
       <GameCanvas></GameCanvas>
     </div>
   )

@@ -1,7 +1,7 @@
+import { Rectangle } from './utils/geometry'
 import React, { useRef, useEffect, useState } from 'react'
 import { SimpleBox } from './entities/base'
 import { BasicColors } from './utils/colors'
-import { Rectangle } from './utils/geometry'
 
 const CANVAS_WIDTH = 800
 const CANVAS_HEIGHT = 600
