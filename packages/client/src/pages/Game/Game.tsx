@@ -2,48 +2,29 @@ import { Rectangle } from './utils/geometry'
 import React, { useRef, useEffect, useState } from 'react'
 import { SimpleBox } from './entities/base'
 import { BasicColors } from './utils/colors'
+import Settings from './settings'
+import { makeGameEntiriesState } from './init'
 
-const CANVAS_WIDTH = 800
-const CANVAS_HEIGHT = 600
-const PLAYER_WIDTH = 50
-const PLAYER_HEIGHT = 20
-const ENEMY_WIDTH = 40
-const ENEMY_HEIGHT = 20
-const BULLET_WIDTH = 4
-const BULLET_HEIGHT = 10
-
-// Скорость
-const SPEED_PALYER = 200
-const SPEED_ENEMY = 50
-const SPEED_BULLET = 300
+const settings = new Settings()
 
 const GameCanvas: React.FC = () => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  // Реактивные элементы
   const [score, setScore] = useState(0)
   const [playerLose, setPlayerLose] = useState(false)
 
-  const player = new SimpleBox(
-    {
-      x: CANVAS_WIDTH / 2 - PLAYER_WIDTH / 2,
-      y: CANVAS_HEIGHT - PLAYER_HEIGHT - 10,
-      width: PLAYER_WIDTH,
-      height: PLAYER_HEIGHT,
-    } as Rectangle,
-    BasicColors.WHITE
-  )
+  // Не реактивные элементы
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
-  const bullets: SimpleBox[] = []
-  const enemies: SimpleBox[] = []
-  const keys: Record<string, boolean> = {}
+  const gameEntietiesState = makeGameEntiriesState()
 
   const spawnEnemy = () => {
-    enemies.push(
+    gameEntietiesState.enemies.push(
       new SimpleBox(
         {
-          x: Math.random() * (CANVAS_WIDTH - ENEMY_WIDTH),
-          y: -ENEMY_HEIGHT,
-          width: ENEMY_WIDTH,
-          height: ENEMY_HEIGHT,
+          x: Math.random() * (settings.CANVAS_WIDTH - settings.ENEMY_WIDTH),
+          y: -settings.ENEMY_HEIGHT,
+          width: settings.ENEMY_WIDTH,
+          height: settings.ENEMY_HEIGHT,
         } as Rectangle,
         BasicColors.BLUE
       )
@@ -51,18 +32,18 @@ const GameCanvas: React.FC = () => {
   }
 
   const draw = (ctx: CanvasRenderingContext2D) => {
-    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+    ctx.clearRect(0, 0, settings.CANVAS_WIDTH, settings.CANVAS_HEIGHT)
 
     // Игрок
-    player.draw(ctx)
+    gameEntietiesState.player.draw(ctx)
 
     // Пули
-    bullets.forEach(bullet => {
+    gameEntietiesState.bullets.forEach(bullet => {
       bullet.draw(ctx)
     })
 
     // Противники
-    enemies.forEach(enemy => {
+    gameEntietiesState.enemies.forEach(enemy => {
       enemy.draw(ctx)
     })
 
@@ -74,48 +55,56 @@ const GameCanvas: React.FC = () => {
 
   const update = (dt: number): boolean => {
     // Движение игрока
-    if (keys['ArrowLeft']) player.x = Math.max(0, player.x - SPEED_PALYER * dt)
-    if (keys['ArrowRight'])
-      player.x = Math.min(
-        CANVAS_WIDTH - player.width,
-        player.x + SPEED_PALYER * dt
+    if (gameEntietiesState.keys['ArrowLeft'])
+      gameEntietiesState.player.x = Math.max(
+        0,
+        gameEntietiesState.player.x - settings.SPEED_PALYER * dt
+      )
+    if (gameEntietiesState.keys['ArrowRight'])
+      gameEntietiesState.player.x = Math.min(
+        settings.CANVAS_WIDTH - gameEntietiesState.player.width,
+        gameEntietiesState.player.x + settings.SPEED_PALYER * dt
       )
 
     // Движение пулей
-    for (let i = bullets.length - 1; i >= 0; i--) {
-      bullets[i].y = bullets[i].y - SPEED_BULLET * dt
-      if (bullets[i].y < 0) bullets.splice(i, 1)
+    for (let i = gameEntietiesState.bullets.length - 1; i >= 0; i--) {
+      gameEntietiesState.bullets[i].y =
+        gameEntietiesState.bullets[i].y - settings.SPEED_BULLET * dt
+      if (gameEntietiesState.bullets[i].y < 0)
+        gameEntietiesState.bullets.splice(i, 1)
     }
 
     // Движение противников
-    for (let i = enemies.length - 1; i >= 0; i--) {
-      enemies[i].y = enemies[i].y + SPEED_ENEMY * dt
-      if (enemies[i].y > CANVAS_HEIGHT) enemies.splice(i, 1)
+    for (let i = gameEntietiesState.enemies.length - 1; i >= 0; i--) {
+      gameEntietiesState.enemies[i].y =
+        gameEntietiesState.enemies[i].y + settings.SPEED_ENEMY * dt
+      if (gameEntietiesState.enemies[i].y > settings.CANVAS_HEIGHT)
+        gameEntietiesState.enemies.splice(i, 1)
     }
 
     // Определение столкновение
     let playerLose = false
 
-    for (let i = enemies.length - 1; i >= 0; i--) {
-      const enemy = enemies[i]
+    for (let i = gameEntietiesState.enemies.length - 1; i >= 0; i--) {
+      const enemy = gameEntietiesState.enemies[i]
 
       // С пулями
-      for (let j = bullets.length - 1; j >= 0; j--) {
-        const bullet = bullets[j]
+      for (let j = gameEntietiesState.bullets.length - 1; j >= 0; j--) {
+        const bullet = gameEntietiesState.bullets[j]
         if (enemy.collision(bullet)) {
           console.log('Enemy shot!')
-          bullets.splice(j, 1)
-          enemies.splice(i, 1)
+          gameEntietiesState.bullets.splice(j, 1)
+          gameEntietiesState.enemies.splice(i, 1)
           setScore(prev => prev + 1)
           break
         }
       }
 
       // С противниками
-      if (player.collision(enemy)) {
+      if (gameEntietiesState.player.collision(enemy)) {
         //alert(`Game Over! Final Score: ${score}`);
         console.log('Boom!')
-        console.log(player, enemy)
+        console.log(gameEntietiesState.player, enemy)
         playerLose = true
         setPlayerLose(true)
         break
@@ -131,15 +120,18 @@ const GameCanvas: React.FC = () => {
     if (!ctx) return
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      keys[e.key] = true
+      gameEntietiesState.keys[e.key] = true
       if (e.key === ' ') {
-        bullets.push(
+        gameEntietiesState.bullets.push(
           new SimpleBox(
             {
-              x: player.x + player.width / 2 - BULLET_WIDTH / 2,
-              y: player.y,
-              width: BULLET_WIDTH,
-              height: BULLET_HEIGHT,
+              x:
+                gameEntietiesState.player.x +
+                gameEntietiesState.player.width / 2 -
+                settings.BULLET_WIDTH / 2,
+              y: gameEntietiesState.player.y,
+              width: settings.BULLET_WIDTH,
+              height: settings.BULLET_HEIGHT,
             } as Rectangle,
             BasicColors.YELLOW
           )
@@ -148,7 +140,7 @@ const GameCanvas: React.FC = () => {
     }
 
     const handleKeyUp = (e: KeyboardEvent) => {
-      keys[e.key] = false
+      gameEntietiesState.keys[e.key] = false
     }
 
     document.addEventListener('keydown', handleKeyDown)
@@ -195,8 +187,8 @@ const GameCanvas: React.FC = () => {
       <p>Score: {score}</p>
       <canvas
         ref={canvasRef}
-        width={CANVAS_WIDTH}
-        height={CANVAS_HEIGHT}
+        width={settings.CANVAS_WIDTH}
+        height={settings.CANVAS_HEIGHT}
         style={{ backgroundColor: 'black' }}
       />
       {playerLose ? (
