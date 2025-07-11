@@ -32,36 +32,3 @@ export function makeGameEntiriesState(): GameEntitiesState {
 
   return gameEntietiesState
 }
-
-// export function shotingPlayerControl(gameEntietiesState: GameEntitiesState):
-//       [handleKeyDown: (e: KeyboardEvent) => void, handleKeyUp: (e: KeyboardEvent) => void] {
-
-//     const handleKeyDown = (e: KeyboardEvent) => {
-//       gameEntietiesState.keys[e.key] = true
-//       if (e.key === ' ') {
-//         gameEntietiesState.bullets.push(
-//           new SimpleBox(
-//             {
-//               x:
-//                 gameEntietiesState.player.x +
-//                 gameEntietiesState.player.width / 2 -
-//                 settings.BULLET_WIDTH / 2,
-//               y: gameEntietiesState.player.y,
-//               width: settings.BULLET_WIDTH,
-//               height: settings.BULLET_HEIGHT,
-//             } as Rectangle,
-//             BasicColors.YELLOW
-//           )
-//         )
-//       }
-//     }
-
-//     const handleKeyUp = (e: KeyboardEvent) => {
-//       gameEntietiesState.keys[e.key] = false
-//     }
-
-//     document.addEventListener('keydown', handleKeyDown)
-//     document.addEventListener('keyup', handleKeyUp)
-
-//     return [handleKeyDown, handleKeyUp]
-// }
