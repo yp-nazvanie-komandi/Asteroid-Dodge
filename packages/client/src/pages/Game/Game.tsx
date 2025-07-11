@@ -7,7 +7,7 @@ import { makeGameEntiriesState } from './init'
 
 const settings = new Settings()
 
-const GameCanvas: React.FC = () => {
+const GameCanvas = () => {
   // Реактивные элементы
   const [score, setScore] = useState(0)
   const [playerLose, setPlayerLose] = useState(false)
