@@ -77,3 +77,19 @@
 
 Если вам понадобится только один сервис, просто уточните какой в команде
 `docker compose up {sevice_name}`, например `docker compose up server`
+
+# Переменные окружения для игрового движка
+Храниться в файле .env
+### Сцена
+VITE_CANVAS_WIDTH = 800
+VITE_CANVAS_HEIGHT = 600
+VITE_PLAYER_WIDTH = 50
+VITE_PLAYER_HEIGHT = 20
+VITE_ENEMY_WIDTH = 40
+VITE_ENEMY_HEIGHT = 20
+VITE_BULLET_WIDTH = 4
+VITE_BULLET_HEIGHT = 10
+### Скорость
+VITE_SPEED_PALYER = 200
+VITE_SPEED_ENEMY = 50
+VITE_SPEED_BULLET = 300

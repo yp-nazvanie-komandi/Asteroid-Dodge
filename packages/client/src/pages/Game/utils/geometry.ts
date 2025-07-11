@@ -5,7 +5,7 @@ export interface Rectangle {
   height: number
 }
 
-export function IsRectanglesIntersect(
+export function isRectanglesIntersect(
   rect1: Rectangle,
   rect2: Rectangle
 ): boolean {

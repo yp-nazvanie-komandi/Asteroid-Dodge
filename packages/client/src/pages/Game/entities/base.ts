@@ -1,5 +1,5 @@
 import { BasicColors } from '../utils/colors'
-import { IsRectanglesIntersect, Rectangle } from '../utils/geometry'
+import { isRectanglesIntersect, Rectangle } from '../utils/geometry'
 
 interface Drawable {
   draw(ctx: CanvasRenderingContext2D): void
@@ -18,7 +18,7 @@ export class Entity {
   }
 
   collision(another: Entity): boolean {
-    return IsRectanglesIntersect(this.rect, another.rect)
+    return isRectanglesIntersect(this.rect, another.rect)
   }
 
   // Геттеры и сеттеры для позиции

@@ -152,7 +152,7 @@ const GameCanvas: React.FC = () => {
     let animationId = -1
 
     const loop = (timestamp: number) => {
-      const now = Date.now()
+      const now = performance.now()
       if (timestamp - lastSpawn > 1000) {
         spawnEnemy()
         lastSpawn = timestamp
