@@ -4,6 +4,7 @@ import { SimpleBox } from './entities/base'
 import { BasicColors } from './utils/colors'
 import Settings from './settings'
 import { makeGameEntiriesState } from './init'
+import { usePlayerControls } from './hooks/shotingPlayer'
 
 const settings = new Settings()
 
@@ -16,6 +17,7 @@ const GameCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
   const gameEntietiesState = makeGameEntiriesState()
+  usePlayerControls(gameEntietiesState) // тут обработчики стрельбы для игрока
 
   const spawnEnemy = () => {
     gameEntietiesState.enemies.push(
@@ -32,7 +34,7 @@ const GameCanvas = () => {
   }
 
   const draw = (ctx: CanvasRenderingContext2D) => {
-    ctx.clearRect(0, 0, settings.CANVAS_WIDTH, settings.CANVAS_HEIGHT)
+    ctx.clearRect(0, 0, settings.CANVAS_WIDTH, settings.CANVAS_HEIGHT) // вся сцена
 
     // Игрок
     gameEntietiesState.player.draw(ctx)
@@ -119,37 +121,7 @@ const GameCanvas = () => {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      gameEntietiesState.keys[e.key] = true
-      if (e.key === ' ') {
-        gameEntietiesState.bullets.push(
-          new SimpleBox(
-            {
-              x:
-                gameEntietiesState.player.x +
-                gameEntietiesState.player.width / 2 -
-                settings.BULLET_WIDTH / 2,
-              y: gameEntietiesState.player.y,
-              width: settings.BULLET_WIDTH,
-              height: settings.BULLET_HEIGHT,
-            } as Rectangle,
-            BasicColors.YELLOW
-          )
-        )
-      }
-    }
-
-    const handleKeyUp = (e: KeyboardEvent) => {
-      gameEntietiesState.keys[e.key] = false
-    }
-
-    document.addEventListener('keydown', handleKeyDown)
-    document.addEventListener('keyup', handleKeyUp)
-
     let lastSpawn = 0
-    let lastTime = 0
-
-    let animationId = -1
 
     const loop = (timestamp: number) => {
       const now = performance.now()
@@ -157,29 +129,24 @@ const GameCanvas = () => {
         spawnEnemy()
         lastSpawn = timestamp
       }
-      const dt = (now - lastTime) / 1000.0
+      const dt = (now - gameEntietiesState.lastFrameTime) / 1000.0
 
       const playerIsLose = update(dt)
 
       draw(ctx)
 
-      lastTime = now
+      gameEntietiesState.lastFrameTime = now
 
       if (playerIsLose) {
         console.log('player is lose')
-        cancelAnimationFrame(animationId)
+        cancelAnimationFrame(gameEntietiesState.animationId)
         return
       }
 
-      animationId = requestAnimationFrame(loop)
+      gameEntietiesState.animationId = requestAnimationFrame(loop)
     }
 
     requestAnimationFrame(loop)
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-      document.removeEventListener('keyup', handleKeyUp)
-    }
   }, [])
 
   return (
