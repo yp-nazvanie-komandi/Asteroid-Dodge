@@ -7,9 +7,11 @@ import { ButtonPropsExtended } from '../../types/button'
 export default function Button({
   variant = 'contained',
   text = '',
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  onClick = () => {},
 }: ButtonPropsExtended) {
   return (
-    <ButtonMaterial className="adButton" variant={variant}>
+    <ButtonMaterial className="adButton" variant={variant} onClick={onClick}>
       {text}
     </ButtonMaterial>
   )
