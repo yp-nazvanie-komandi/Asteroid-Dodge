@@ -1,33 +1,33 @@
 import Button from '../../components/Button/Button'
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 export const Game = () => {
   const [isTimerActive, setIsTimerActive] = useState(false)
-  const [countdown, setCountdown] = useState(3)
-  let timerId: ReturnType<typeof setInterval> | undefined
+  const [displayCount, setDisplayCount] = useState(3) // состояние для отображения
+  const countdownRef = useRef(3) // реф для хранения текущего значения
+  const timerIdRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const startCountdown = () => {
-    setCountdown(3) // начинаем с 3
     setIsTimerActive(true)
   }
 
   useEffect(() => {
     if (isTimerActive) {
-      timerId = setInterval(() => {
-        setCountdown(prev => {
-          if (prev > 0) {
-            return prev - 1
-          } else {
-            // когда достигнем 0 — остановить таймер
-            clearInterval(timerId)
-            return 0
+      timerIdRef.current = setInterval(() => {
+        if (countdownRef.current > 0) {
+          countdownRef.current -= 1
+          setDisplayCount(countdownRef.current)
+        } else {
+          if (timerIdRef.current !== null) {
+            clearInterval(timerIdRef.current)
           }
-        })
+          setIsTimerActive(false)
+        }
       }, 1000)
     }
     return () => {
-      if (timerId !== undefined) {
-        clearInterval(timerId)
+      if (timerIdRef.current !== null) {
+        clearInterval(timerIdRef.current)
       }
     }
   }, [isTimerActive])
@@ -38,7 +38,7 @@ export const Game = () => {
         <Button text={'Ready'} onClick={startCountdown} />
       ) : (
         <div>
-          <h1 className={'title'}>{countdown}</h1>
+          <h1 className={'title'}>{displayCount}</h1>
           <p>секунд до начала игры</p>
         </div>
       )}
