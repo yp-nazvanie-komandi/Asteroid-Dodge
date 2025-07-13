@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'react'
 export const Game = () => {
   const [isTimerActive, setIsTimerActive] = useState(false)
   const [displayCount, setDisplayCount] = useState(3) // состояние для отображения
-  const countdownRef = useRef(3) // реф для хранения текущего значения
   const timerIdRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const startCountdown = () => {
@@ -14,15 +13,13 @@ export const Game = () => {
   useEffect(() => {
     if (isTimerActive) {
       timerIdRef.current = setInterval(() => {
-        if (countdownRef.current > 0) {
-          countdownRef.current -= 1
-          setDisplayCount(countdownRef.current)
-        } else {
-          if (timerIdRef.current !== null) {
-            clearInterval(timerIdRef.current)
+        setDisplayCount(currentDisplayCount => {
+          if (currentDisplayCount > 0) {
+            return currentDisplayCount - 1
+          } else {
+            return currentDisplayCount
           }
-          setIsTimerActive(false)
-        }
+        })
       }, 1000)
     }
     return () => {
@@ -31,6 +28,12 @@ export const Game = () => {
       }
     }
   }, [isTimerActive])
+
+  useEffect(() => {
+    if (displayCount === 0 && timerIdRef.current !== null) {
+      clearInterval(timerIdRef.current)
+    }
+  }, [displayCount])
 
   return (
     <div className={'container container--start'}>
