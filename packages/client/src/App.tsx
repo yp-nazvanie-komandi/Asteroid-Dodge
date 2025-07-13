@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import './App.css'
+import './App.scss'
 import { Router } from './components/Router/Router'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { alpha } from '@mui/material'

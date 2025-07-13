@@ -11,7 +11,7 @@ export default function Button({
   onClick = () => {},
 }: ButtonPropsExtended) {
   return (
-    <ButtonMaterial className="adButton" variant={variant} onClick={onClick}>
+    <ButtonMaterial className="button" variant={variant} onClick={onClick}>
       {text}
     </ButtonMaterial>
   )
