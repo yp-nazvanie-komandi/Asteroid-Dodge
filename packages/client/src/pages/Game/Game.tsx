@@ -7,7 +7,7 @@ export const Game = () => {
   let timerId: ReturnType<typeof setInterval> | undefined
 
   const startCountdown = () => {
-    setCountdown(300) // начинаем с 3
+    setCountdown(3) // начинаем с 3
     setIsTimerActive(true)
   }
 
