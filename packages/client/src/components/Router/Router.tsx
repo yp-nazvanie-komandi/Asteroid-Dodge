@@ -11,17 +11,15 @@ import { ForumTopicCreation } from '../../pages/ForumTopicCreation/ForumTopicCre
 import { ForumTopic } from '../../pages/ForumTopic/ForumTopic'
 import { Exception } from '../../pages/Exception/Exception'
 import Error400 from '../../pages/400/400'
-import { NotFound } from '../../pages/NotFound/NotFound'
+
+import { PrivateRoutes } from '../PrivateRoutes/PrivateRoutes'
 
 export const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/">
-          <Route index element={<Main />} />
-          <Route path="login" element={<Login />} />
-          <Route path="registration" element={<Registration />} />
-          {/* TODO: добавить компонент PrivateRoute для этого роута */}
+        <Route index element={<Main />} />
+        <Route path="/" element={<PrivateRoutes />}>
           <Route path="profile" element={<Profile />} />
           {/* TODO: при необходимости можем добавить отдельными роутами старт экран и конец экран игры и вынести game как родителя */}
           <Route path="game" element={<Game />} />
@@ -31,10 +29,11 @@ export const Router = () => {
             <Route path="new" element={<ForumTopicCreation />} />
             <Route path=":topicId" element={<ForumTopic />} />
           </Route>
-          <Route path="error" element={<Exception />} />
-          <Route path="*" element={<Error400 />} />
-          <Route path="*" element={<NotFound />} />
         </Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="/registration" element={<Registration />} />
+        <Route path="/error" element={<Exception />} />
+        <Route path="*" element={<Error400 />} />
       </Routes>
     </BrowserRouter>
   )
