@@ -1,8 +1,8 @@
 import { Typography } from '@mui/material'
-import { CircleAvatar } from '../../../components/CircleAvatar/CircleAvatar'
 import { FC } from 'react'
 import { TTopicTitlesProps } from './types'
 import './styled.scss'
+import { CircleAvatar } from '../CircleAvatar/CircleAvatar'
 
 export const TopicTitles: FC<TTopicTitlesProps> = ({
   title,

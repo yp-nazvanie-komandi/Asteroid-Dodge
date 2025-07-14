@@ -1,4 +1,10 @@
-.forum-container {
+.forum-wrapper {
   background: var(--Light, rgba(180, 122, 255, 1));
   min-height: 100vh;
+}
+
+.forum-content-wrapper {
+  max-width: 812px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 1);
 }
