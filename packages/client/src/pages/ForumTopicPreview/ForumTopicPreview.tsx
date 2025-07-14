@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { TForumTopicProps } from './types'
 import { TopicTextAreaInput } from './TopicTextAreaInput/TopicTextAreaInput'
 import { Paper } from '@mui/material'
-import { TopicTitles } from '../components/TopicTitles'
+import { TopicTitles } from '../../components/ForumTopicTitles/TopicTitles'
 
 export const ForumTopicPreview: FC<TForumTopicProps> = ({
   avatar,

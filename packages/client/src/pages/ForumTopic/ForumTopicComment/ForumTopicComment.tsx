@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { TForumTopicCommentProps } from './types'
 import { Paper } from '@mui/material'
-import { CircleAvatar } from '../../../../components/CircleAvatar/CircleAvatar'
+import { CircleAvatar } from '../../../components/CircleAvatar/CircleAvatar'
 import './style.scss'
 
 export const ForumTopicComment: FC<TForumTopicCommentProps> = ({

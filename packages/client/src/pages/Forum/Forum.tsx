@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import './style.scss'
 import { TopicsMock } from './mock'
-import { ForumTopicPreview } from './ForumTopicPreview/ForumTopicPreview'
+import { ForumTopicPreview } from '../ForumTopicPreview/ForumTopicPreview'
 
 export const Forum: FC = () => {
   return (
