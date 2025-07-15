@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router'
 
+import { About } from '../../pages/About/About'
 import { Main } from '../../pages/Main/Main'
 import { Login } from '../../pages/Login/Login'
 import { Registration } from '../../pages/Registration/Registration'
@@ -24,6 +25,7 @@ export const Router = () => {
           <Route path="profile" element={<Profile />} />
           {/* TODO: при необходимости можем добавить отдельными роутами старт экран и конец экран игры и вынести game как родителя */}
           <Route path="game" element={<Game />} />
+          <Route path="about" element={<About />} />
           <Route path="leaderboard" element={<Leaderboard />} />
           <Route path="topics">
             <Route index element={<Forum />} />
