@@ -16,9 +16,9 @@ export const Game = () => {
         setDisplayCount(currentDisplayCount => {
           if (currentDisplayCount > 0) {
             return currentDisplayCount - 1
-          } else {
-            return currentDisplayCount
           }
+
+          return currentDisplayCount
         })
       }, 1000)
     }
