@@ -66,6 +66,16 @@ body {
       gap: 16px;
     }
   }
+
+  &--game-over {
+    background: $violet-light;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    margin: 0 auto;
+  }
 }
 
 h1 {
