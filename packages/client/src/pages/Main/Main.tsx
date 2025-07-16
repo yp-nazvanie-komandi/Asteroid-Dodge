@@ -2,9 +2,8 @@ import avatarImg from '/src/assets/img/tmp-avatar.png'
 import rocketSvg from '/src/assets/img/rocket.svg'
 
 import Button from '../../components/Button/Button'
-import { useNavigate } from 'react-router'
+import { Link as RouterLink, useNavigate } from 'react-router'
 import { Link } from '@mui/material'
-import { Link as RouterLink } from 'react-router-dom'
 
 export const Main = () => {
   const profile = {
