@@ -1,8 +1,17 @@
-.button {
+.MuiButton {
   width: 100%;
 
   @media (min-width: 768px) {
     width: auto;
     min-width: 226px !important;
+  }
+
+  &-sizeLarge {
+    min-width: 269px !important;
+  }
+  &-sizeMedium, &-sizeLarge {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+    height: 53px !important;
   }
 }

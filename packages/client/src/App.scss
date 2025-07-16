@@ -28,7 +28,7 @@ body {
   width: 100%;
   padding: 16px;
 
-  &--error {
+  &--error, &--about {
     max-width: 652px;
     display: flex;
     align-items: center;
@@ -75,6 +75,46 @@ body {
     flex-direction: column;
     gap: 16px;
     margin: 0 auto;
+  }
+
+  &--about {
+    gap: 64px;
+
+    .main-block {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+
+      img {
+        width: 96px;
+        aspect-ratio: 1/1;
+      }
+    }
+
+    .links {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      justify-content: space-between;
+
+      &-block {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 0;
+        text-decoration: none;
+
+        span {
+          color: black;
+          font-family: 'Inter', sans-serif;
+          font-size: 1rem;
+          line-height: 150%;
+          letter-spacing: 0.15px;
+          vertical-align: middle;
+        }
+      }
+    }
   }
 }
 
