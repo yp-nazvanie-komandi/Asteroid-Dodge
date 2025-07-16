@@ -11,6 +11,7 @@ import { ForumTopicCreation } from '../../pages/ForumTopicCreation/ForumTopicCre
 import { ForumTopic } from '../../pages/ForumTopic/ForumTopic'
 import { Exception } from '../../pages/Exception/Exception'
 import Error400 from '../../pages/400/400'
+import { NotFound } from '../../pages/NotFound/NotFound'
 
 export const Router = () => {
   return (
@@ -32,6 +33,7 @@ export const Router = () => {
           </Route>
           <Route path="error" element={<Exception />} />
           <Route path="*" element={<Error400 />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </BrowserRouter>

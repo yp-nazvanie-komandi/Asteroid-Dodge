@@ -45,6 +45,27 @@ body {
       text-align: center;
     }
   }
+
+  &--start {
+    max-width: 652px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    margin: 0 auto;
+
+    .button {
+      height: 53px;
+    }
+
+    div {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      gap: 16px;
+    }
+  }
 }
 
 h1 {
@@ -58,5 +79,16 @@ h1 {
     font-size: 252px;
     line-height: 117%;
     letter-spacing: -1.5px;
+  }
+
+  &.title {
+    font-family: "VT323", monospace;
+    font-weight: 400;
+    font-style: normal;
+    color: $secondary-main;
+    font-size: 6rem;
+    line-height: 117%;
+    letter-spacing: -1.5px;
+    text-align: center;
   }
 }
