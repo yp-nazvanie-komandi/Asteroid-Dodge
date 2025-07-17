@@ -46,6 +46,28 @@ body {
     }
   }
 
+  &--game-over {
+    background: $violet-light;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    margin: 0 auto;
+
+    p {
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.5rem;
+      vertical-align: middle;
+      margin: 0;
+      line-height: 133%;
+      letter-spacing: 0;
+      text-align: center;
+
+    }
+  }
+
   &--about {
     gap: 64px;
 
@@ -120,6 +142,7 @@ h1 {
     line-height: 117%;
     letter-spacing: -1.5px;
   }
+
   &.title {
     font-family: "VT323", monospace;
     font-weight: 400;
@@ -128,5 +151,10 @@ h1 {
     font-size: 6rem;
     line-height: 117%;
     letter-spacing: -1.5px;
+    text-align: center;
+
+    &--white {
+      color: white;
+    }
   }
 }
