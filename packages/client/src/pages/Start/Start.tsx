@@ -1,7 +1,7 @@
 import Button from '../../components/Button/Button'
 import { useState, useEffect, useRef } from 'react'
 
-export const Game = () => {
+export const Start = () => {
   const [isTimerActive, setIsTimerActive] = useState(false)
   const [displayCount, setDisplayCount] = useState(3) // состояние для отображения
   const timerIdRef = useRef<ReturnType<typeof setInterval> | null>(null)

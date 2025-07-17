@@ -4,7 +4,7 @@ import { Main } from '../../pages/Main/Main'
 import { Login } from '../../pages/Login/Login'
 import { Registration } from '../../pages/Registration/Registration'
 import { Profile } from '../../pages/Profile/Profile'
-import { Game } from '../../pages/Game/Game'
+import { Start } from '../../pages/Game/Start'
 import { Leaderboard } from '../../pages/Leaderboard/Leaderboard'
 import { Forum } from '../../pages/Forum/Forum'
 import { ForumTopicCreation } from '../../pages/ForumTopicCreation/ForumTopicCreation'
@@ -24,7 +24,7 @@ export const Router = () => {
           {/* TODO: добавить компонент PrivateRoute для этого роута */}
           <Route path="profile" element={<Profile />} />
           {/* TODO: при необходимости можем добавить отдельными роутами старт экран и конец экран игры и вынести game как родителя */}
-          <Route path="game" element={<Game />} />
+          <Route path="start" element={<Start />} />
           <Route path="leaderboard" element={<Leaderboard />} />
           <Route path="topics">
             <Route index element={<Forum />} />
