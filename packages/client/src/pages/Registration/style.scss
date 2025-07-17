@@ -1,0 +1,11 @@
+.registration-container {
+  display: grid;
+  align-items: center;
+  max-width: 576px !important;
+}
+
+h1 {
+  &.registration-title {
+    font-size: 3.75rem;
+  }
+}

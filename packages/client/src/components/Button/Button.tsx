@@ -1,7 +1,6 @@
 import ButtonMaterial from '@mui/material/Button'
 import './style.scss'
 
-import React from 'react'
 import { ButtonPropsExtended } from '../../types/button'
 
 export default function Button({
@@ -9,8 +8,8 @@ export default function Button({
   text = '',
   color = 'primary',
   size = 'small',
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onClick = () => {},
+  onClick,
+  ...rest
 }: ButtonPropsExtended) {
   return (
     <ButtonMaterial
@@ -18,7 +17,9 @@ export default function Button({
       variant={variant}
       size={size}
       color={color}
-      onClick={onClick}>
+      onClick={onClick}
+      {...rest}
+    >
       {text}
     </ButtonMaterial>
   )
