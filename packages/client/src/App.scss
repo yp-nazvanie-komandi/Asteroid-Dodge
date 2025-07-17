@@ -85,6 +85,27 @@ body {
       }
     }
   }
+
+  &--start {
+    max-width: 652px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    margin: 0 auto;
+
+    .button {
+      height: 53px;
+    }
+
+    div {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      gap: 16px;
+    }
+  }
 }
 
 h1 {
