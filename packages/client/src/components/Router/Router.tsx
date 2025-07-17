@@ -19,6 +19,8 @@ export const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route index element={<Main />} />
+        <Route path="login" element={<Login />} />
+        <Route path="registration" element={<Registration />} />
         <Route path="/" element={<PrivateRoutes />}>
           <Route path="profile" element={<Profile />} />
           {/* TODO: при необходимости можем добавить отдельными роутами старт экран и конец экран игры и вынести game как родителя */}
@@ -29,11 +31,9 @@ export const Router = () => {
             <Route path="new" element={<ForumTopicCreation />} />
             <Route path=":topicId" element={<ForumTopic />} />
           </Route>
+          <Route path="/error" element={<Exception />} />
+          <Route path="*" element={<Error400 />} />
         </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/registration" element={<Registration />} />
-        <Route path="/error" element={<Exception />} />
-        <Route path="*" element={<Error400 />} />
       </Routes>
     </BrowserRouter>
   )
