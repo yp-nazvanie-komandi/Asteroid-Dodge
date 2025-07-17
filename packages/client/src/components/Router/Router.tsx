@@ -11,6 +11,7 @@ import { ForumTopicCreation } from '../../pages/ForumTopicCreation/ForumTopicCre
 import { ForumTopic } from '../../pages/ForumTopic/ForumTopic'
 import { Exception } from '../../pages/Exception/Exception'
 import { GameOver } from '../../pages/Game-over/Game-over'
+import { Start } from '../../pages/Start/Start'
 import Error400 from '../../pages/400/400'
 
 export const Router = () => {
@@ -25,6 +26,7 @@ export const Router = () => {
           <Route path="profile" element={<Profile />} />
           {/* TODO: при необходимости можем добавить отдельными роутами старт экран и конец экран игры и вынести game как родителя */}
           <Route path="game" element={<Game />} />
+          <Route path="start" element={<Start />} />
           <Route path="game-over" element={<GameOver />} />
           <Route path="leaderboard" element={<Leaderboard />} />
           <Route path="topics">
