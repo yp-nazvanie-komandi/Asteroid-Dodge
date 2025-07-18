@@ -1,0 +1,19 @@
+class Settings {
+  CANVAS_WIDTH = 800
+  CANVAS_HEIGHT = 600
+
+  PLAYER_WIDTH = 50
+  PLAYER_HEIGHT = 20
+
+  ENEMY_WIDTH = 40
+  ENEMY_HEIGHT = 20
+
+  BULLET_WIDTH = 4
+  BULLET_HEIGHT = 10
+
+  SPEED_PALYER = 200
+  SPEED_ENEMY = 50
+  SPEED_BULLET = 300
+}
+
+export default Settings

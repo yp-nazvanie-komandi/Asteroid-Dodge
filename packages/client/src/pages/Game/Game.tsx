@@ -1,50 +1,59 @@
-import Button from '../../components/Button/Button'
-import { useState, useEffect, useRef } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
+import Settings from './settings'
+import { GameEngine } from './engine/engine.js'
 
-export const Game = () => {
-  const [isTimerActive, setIsTimerActive] = useState(false)
-  const [displayCount, setDisplayCount] = useState(3) // состояние для отображения
-  const timerIdRef = useRef<ReturnType<typeof setInterval> | null>(null)
+const settings = new Settings()
 
-  const startCountdown = () => {
-    setIsTimerActive(true)
-  }
+const GameCanvas = () => {
+  // Реактивные элементы
+  const [score, setScore] = useState(0)
+  const [playerLose, setPlayerLose] = useState(false)
+
+  // Не реактивные элементы
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const engineRef = useRef<GameEngine | null>(null)
 
   useEffect(() => {
-    if (isTimerActive) {
-      timerIdRef.current = setInterval(() => {
-        setDisplayCount(currentDisplayCount => {
-          if (currentDisplayCount > 0) {
-            return currentDisplayCount - 1
-          }
+    const canvas = canvasRef.current
+    if (!canvas) return
 
-          return currentDisplayCount
-        })
-      }, 1000)
-    }
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    const settings = new Settings()
+    engineRef.current = new GameEngine(settings, canvas, ctx, {
+      setScore,
+      setPlayerLose,
+    })
+
+    engineRef.current.start()
+
     return () => {
-      if (timerIdRef.current !== null) {
-        clearInterval(timerIdRef.current)
-      }
+      engineRef.current?.stop()
     }
-  }, [isTimerActive])
-
-  useEffect(() => {
-    if (displayCount === 0 && timerIdRef.current !== null) {
-      clearInterval(timerIdRef.current)
-    }
-  }, [displayCount])
+  }, [])
 
   return (
-    <div className={'container container--start'}>
-      {!isTimerActive ? (
-        <Button text={'Ready'} onClick={startCountdown} />
+    <div style={{ textAlign: 'center' }}>
+      <p>Score: {score}</p>
+      <canvas
+        ref={canvasRef}
+        width={settings.CANVAS_WIDTH}
+        height={settings.CANVAS_HEIGHT}
+        style={{ backgroundColor: 'black' }}
+      />
+      {playerLose ? (
+        <>
+          <p>Вы проиграли!</p>
+          <button onClick={() => document.location.reload()}>
+            Играть снова
+          </button>
+        </>
       ) : (
-        <div>
-          <h1 className={'title'}>{displayCount}</h1>
-          <p>секунд до начала игры</p>
-        </div>
+        ''
       )}
     </div>
   )
 }
+
+export default GameCanvas
