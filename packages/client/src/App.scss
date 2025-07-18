@@ -1,0 +1,160 @@
+@import "colors";
+
+body {
+  margin: 0;
+}
+
+@font-face {
+  font-family: 'VT323';
+  src: url('./assets/fonts/VT323-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('./assets/fonts/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+#root {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+  padding: 16px;
+
+  &--error, &--about {
+    max-width: 652px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    margin: 0 auto;
+
+    p {
+      font-family: "Inter", sans-serif;
+      font-size: 1rem;
+      line-height: 150%;
+      letter-spacing: 0.15px;
+      text-align: center;
+    }
+  }
+
+  &--game-over {
+    background: $violet-light;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    margin: 0 auto;
+
+    p {
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.5rem;
+      vertical-align: middle;
+      margin: 0;
+      line-height: 133%;
+      letter-spacing: 0;
+      text-align: center;
+
+    }
+  }
+
+  &--about {
+    gap: 64px;
+
+    .main-block {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+
+      img {
+        width: 96px;
+        aspect-ratio: 1/1;
+      }
+    }
+
+    .links {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      justify-content: space-between;
+
+      &-block {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 0;
+        text-decoration: none;
+
+        span {
+          color: black;
+          font-family: 'Inter', sans-serif;
+          font-size: 1rem;
+          line-height: 150%;
+          letter-spacing: 0.15px;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+
+  &--start {
+    max-width: 652px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    margin: 0 auto;
+
+    .button {
+      height: 53px;
+    }
+
+    div {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      gap: 16px;
+    }
+  }
+}
+
+h1 {
+  margin: 0;
+
+  &.error {
+    font-family: "VT323", monospace;
+    font-weight: 400;
+    font-style: normal;
+    color: $secondary-main;
+    font-size: 252px;
+    line-height: 117%;
+    letter-spacing: -1.5px;
+  }
+
+  &.title {
+    font-family: "VT323", monospace;
+    font-weight: 400;
+    font-style: normal;
+    color: $secondary-main;
+    font-size: 6rem;
+    line-height: 117%;
+    letter-spacing: -1.5px;
+    text-align: center;
+
+    &--white {
+      color: white;
+    }
+  }
+}
