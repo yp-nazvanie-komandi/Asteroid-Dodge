@@ -4,23 +4,20 @@
   align-items: center;
   justify-content: center;
   gap: 32px;
-}
 
-.forum-container__title {
-  font-family: VT323;
-  //font-weight: $fontWeightLight;
-  font-style: normal;
-  //font-size: $fontSize / 3;
-  line-height: 120%;
-  letter-spacing: -0.5px;
-  text-align: center;
-  vertical-align: middle;
-  color: rgba(254, 96, 3, 1);
-  text-align: center;
-}
+  &__title {
+    font-family: VT323;
+    font-style: normal;
+    line-height: 120%;
+    letter-spacing: -0.5px;
+    text-align: center;
+    vertical-align: middle;
+    color: rgba(254, 96, 3, 1);
+  }
 
-.forum-container__topics {
-  display: flex;
-  gap: 32px;
-  flex-direction: column;
+  &__topics {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
 }
