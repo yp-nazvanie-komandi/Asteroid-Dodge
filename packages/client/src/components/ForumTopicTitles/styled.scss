@@ -1,15 +1,17 @@
-.forum-topic__titles {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 24px;
-  border-bottom: 1px solid var(--Text-disabled, rgba(0, 0, 0, 0.38))
-}
+.forum-topic {
+  &__titles {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    border-bottom: 1px solid var(--Text-disabled, rgba(0, 0, 0, 0.38));
+  }
 
-.forum-topic__text {
-  padding: 12px 24px;
-}
+  &__text {
+    padding: 12px 24px;
+  }
 
-.forum-topic__title {
-  text-align: left;
+  &__title {
+    text-align: left;
+  }
 }
