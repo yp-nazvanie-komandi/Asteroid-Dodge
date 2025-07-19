@@ -1,10 +1,9 @@
-import { FC } from 'react'
 import './style.scss'
 import { TopicsMock } from './mock'
 import { ForumTopicPreview } from '../ForumTopic/ForumTopicPreview/ForumTopicPreview'
 import { ForumContainer } from '../../components/ForumContainer/ForumContainer'
 
-export const Forum: FC = () => {
+export const Forum = () => {
   return (
     <ForumContainer>
       <div className="forum-container">

@@ -1,15 +1,14 @@
 import { Typography } from '@mui/material'
-import { FC } from 'react'
 import { TTopicTitlesProps } from './types'
 import './styled.scss'
 import { CircleAvatar } from '../CircleAvatar/CircleAvatar'
 
-export const TopicTitles: FC<TTopicTitlesProps> = ({
+export const TopicTitles = ({
   title,
   userName,
   avatar,
   text,
-}) => {
+}: TTopicTitlesProps) => {
   return (
     <>
       <div className="forum-topic__titles">

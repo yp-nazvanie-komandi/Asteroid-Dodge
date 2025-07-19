@@ -1,10 +1,9 @@
-import { FC } from 'react'
 import { TCreateTopicInputs } from './types'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import './style.scss'
 import { ForumContainer } from '../../components/ForumContainer/ForumContainer'
 
-export const CreateForumTopic: FC = () => {
+export const CreateForumTopic = () => {
   const {
     register,
     handleSubmit,

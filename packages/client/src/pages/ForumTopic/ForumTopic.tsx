@@ -1,4 +1,3 @@
-import { FC } from 'react'
 import { Paper } from '@mui/material'
 import { forumTopicCommentMock, forumTopicMock } from './mock'
 import { ForumTopicComment } from './ForumTopicComment/ForumTopicComment'
@@ -6,7 +5,7 @@ import './style.scss'
 import { TopicTitles } from '../../components/ForumTopicTitles/TopicTitles'
 import { ForumContainer } from '../../components/ForumContainer/ForumContainer'
 
-export const ForumTopic: FC = () => {
+export const ForumTopic = () => {
   /// тут будет useParams для получения всего что нужно по айди
   return (
     <ForumContainer>

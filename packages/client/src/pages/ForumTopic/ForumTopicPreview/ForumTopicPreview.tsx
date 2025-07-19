@@ -1,15 +1,14 @@
-import { FC } from 'react'
 import { TForumTopicProps } from './types'
 import { TopicTextAreaInput } from './TopicTextAreaInput/TopicTextAreaInput'
 import { Paper } from '@mui/material'
 import { TopicTitles } from '../../../components/ForumTopicTitles/TopicTitles'
 
-export const ForumTopicPreview: FC<TForumTopicProps> = ({
+export const ForumTopicPreview = ({
   avatar,
   title,
   text,
   userName,
-}) => {
+}: TForumTopicProps) => {
   const onSubmit = (form: unknown) => {
     console.log(form)
   }

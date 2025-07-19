@@ -1,11 +1,8 @@
-import { FC } from 'react'
 import { TCommentInput, TTopicTextAreaInput } from './types'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import './styled.scss'
 
-export const TopicTextAreaInput: FC<TTopicTextAreaInput> = ({
-  submitCallback,
-}) => {
+export const TopicTextAreaInput = ({ submitCallback }: TTopicTextAreaInput) => {
   const {
     register,
     handleSubmit,

@@ -1,14 +1,13 @@
-import { FC } from 'react'
 import { TForumTopicCommentProps } from './types'
 import { Paper } from '@mui/material'
 import { CircleAvatar } from '../../../components/CircleAvatar/CircleAvatar'
 import './style.scss'
 
-export const ForumTopicComment: FC<TForumTopicCommentProps> = ({
+export const ForumTopicComment = ({
   avatar,
   userName,
   text,
-}) => {
+}: TForumTopicCommentProps) => {
   return (
     <Paper elevation={5} className="forum-topic__comment">
       <div className="avatar-container">
