@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router'
 import Button from '../../components/Button/Button'
 import { useState, useEffect, useRef } from 'react'
 
@@ -5,6 +6,7 @@ export const Start = () => {
   const [isTimerActive, setIsTimerActive] = useState(false)
   const [displayCount, setDisplayCount] = useState(3) // состояние для отображения
   const timerIdRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const navigate = useNavigate()
 
   const startCountdown = () => {
     setIsTimerActive(true)
@@ -17,7 +19,6 @@ export const Start = () => {
           if (currentDisplayCount > 0) {
             return currentDisplayCount - 1
           }
-
           return currentDisplayCount
         })
       }, 1000)
@@ -32,6 +33,7 @@ export const Start = () => {
   useEffect(() => {
     if (displayCount === 0 && timerIdRef.current !== null) {
       clearInterval(timerIdRef.current)
+      navigate('/game')
     }
   }, [displayCount])
 

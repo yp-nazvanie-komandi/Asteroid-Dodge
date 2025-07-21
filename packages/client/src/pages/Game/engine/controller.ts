@@ -1,5 +1,6 @@
 import { GameModel } from './model'
 import Settings from '../settings'
+import { Direction } from '../entities/types.js'
 
 export class GameController {
   private lastSpawn = 0
@@ -8,16 +9,20 @@ export class GameController {
 
   update(dt: number): boolean {
     // Движение игрока
-    if (this.model.keys['ArrowLeft'])
+    if (this.model.keys['ArrowLeft']) {
       this.model.player.x = Math.max(
         0,
         this.model.player.x - this.settings.SPEED_PALYER * dt
       )
-    if (this.model.keys['ArrowRight'])
+      this.model.player.update(Direction.Right)
+    }
+    if (this.model.keys['ArrowRight']) {
       this.model.player.x = Math.min(
         this.settings.CANVAS_WIDTH - this.model.player.width,
         this.model.player.x + this.settings.SPEED_PALYER * dt
       )
+      this.model.player.update(Direction.Left)
+    }
 
     // Движение пуль
     for (let i = this.model.bullets.length - 1; i >= 0; i--) {
@@ -28,8 +33,11 @@ export class GameController {
     // Движение противников
     for (let i = this.model.enemies.length - 1; i >= 0; i--) {
       this.model.enemies[i].y += this.settings.SPEED_ENEMY * dt
-      if (this.model.enemies[i].y > this.settings.CANVAS_HEIGHT)
+      if (this.model.enemies[i].y > this.settings.CANVAS_HEIGHT) {
         this.model.enemies.splice(i, 1)
+      } else {
+        this.model.enemies[i].update(dt)
+      }
     }
 
     // Проверка столкновений
