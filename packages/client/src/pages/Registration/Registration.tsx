@@ -1,108 +1,150 @@
-import { useState, type FormEvent, type ChangeEvent } from 'react'
+import { useState } from 'react'
 
 import { useNavigate } from 'react-router'
 
+import { useForm } from 'react-hook-form'
+
+import { Container, Divider, Stack, TextField, Typography } from '@mui/material'
+
 import { Auth } from '../../services/Auth/Auth'
 
-// TODO: НУЖНО ПОЛНОСТЬЮ ПЕРЕДЕЛАТЬ В РАМКАХ https://github.com/yp-nazvanie-komandi/Asteroid-Dodge/issues/11
+import Button from '../../components/Button/Button'
+
+import './style.scss'
+
+interface IRegistrationFormValues {
+  first_name: string
+  second_name: string
+  login: string
+  email: string
+  password: string
+  phone: string
+}
+
+const DEFAULT_REGISTRATION_ERROR_MESSAGE =
+  'Произошла ошибка при регистрации. Повторите попытку позже.'
+
+const REGISTRATION_FORM_FIELDS = [
+  {
+    name: 'first_name',
+    label: 'First name',
+    type: 'text',
+    placeholder: 'Somename',
+    autoComplete: 'given-name',
+  },
+  {
+    name: 'second_name',
+    label: 'Second name',
+    type: 'text',
+    placeholder: 'Somesecondname',
+    autoComplete: 'family-name',
+  },
+  {
+    name: 'login',
+    label: 'Login',
+    type: 'text',
+    placeholder: 'Someone1#',
+    autoComplete: 'username',
+  },
+  {
+    name: 'email',
+    label: 'Email',
+    type: 'email',
+    placeholder: 'Someone@mail.com',
+    autoComplete: 'email',
+  },
+  {
+    name: 'password',
+    label: 'Password',
+    type: 'password',
+    placeholder: '*************',
+    autoComplete: 'new-password',
+  },
+  {
+    name: 'phone',
+    label: 'Phone',
+    type: 'tel',
+    placeholder: '+0000000000000',
+    autoComplete: 'tel',
+  },
+] as const
+
 export const Registration = () => {
-  const [firstName, setFirstName] = useState('')
-  const [secondName, setSecondName] = useState('')
-  const [email, setEmail] = useState('')
-  const [login, setLogin] = useState('')
-  const [password, setPassword] = useState('')
-  const [phone, setPhone] = useState('')
-  const [error, setError] = useState<string>()
+  const [signupError, setSignupError] = useState<string>()
 
   const navigate = useNavigate()
 
-  const handleRegistration = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+  } = useForm<IRegistrationFormValues>({
+    mode: 'all',
+  })
+
+  const handleRegistration = async (values: IRegistrationFormValues) => {
+    setSignupError(undefined)
 
     try {
-      const { successful, error } = await Auth.getInstance().signup({
-        first_name: firstName,
-        second_name: secondName,
-        email,
-        login,
-        password,
-        phone,
-      })
+      const { successful, error } = await Auth.getInstance().signup(values)
 
       if (successful) {
         navigate('/profile')
       } else {
-        setError(error?.message || 'Registration failed')
+        setSignupError(error?.message || DEFAULT_REGISTRATION_ERROR_MESSAGE)
       }
     } catch (error) {
-      setError('Registration failed')
+      setSignupError(
+        (error as Error)?.message || DEFAULT_REGISTRATION_ERROR_MESSAGE
+      )
     }
   }
 
-  const handleChangeLogin = (event: ChangeEvent<HTMLInputElement>) => {
-    setLogin(event.target.value)
-  }
-
-  const handleChangePassword = (event: ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value)
-  }
-
-  const handleChangeFirstName = (event: ChangeEvent<HTMLInputElement>) => {
-    setFirstName(event.target.value)
-  }
-
-  const handleChangeSecondName = (event: ChangeEvent<HTMLInputElement>) => {
-    setSecondName(event.target.value)
-  }
-
-  const handleChangeEmail = (event: ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value)
-  }
-
-  const handleChangePhone = (event: ChangeEvent<HTMLInputElement>) => {
-    setPhone(event.target.value)
-  }
-
   return (
-    <form onSubmit={handleRegistration}>
-      <input
-        type="text"
-        placeholder="first name"
-        value={firstName}
-        onChange={handleChangeFirstName}
-      />
-      <input
-        type="text"
-        placeholder="second name"
-        value={secondName}
-        onChange={handleChangeSecondName}
-      />
-      <input
-        type="email"
-        placeholder="email"
-        value={email}
-        onChange={handleChangeEmail}
-      />
-      <input
-        type="text"
-        placeholder="phone"
-        value={phone}
-        onChange={handleChangePhone}
-      />
-      <input
-        type="text"
-        placeholder="login"
-        value={login}
-        onChange={handleChangeLogin}
-      />
-      <input
-        type="password"
-        placeholder="password"
-        value={password}
-        onChange={handleChangePassword}
-      />
-      <button type="submit">Register</button>
-      {error}
-    </form>
+    <Container
+      component="form"
+      className="registration-container"
+      onSubmit={handleSubmit(handleRegistration)}
+    >
+      <Stack direction="column">
+        <Typography
+          component="h1"
+          className="title registration-title"
+          marginBottom={2}
+        >
+          Registration
+        </Typography>
+        <Divider orientation="horizontal" />
+        <Stack spacing={2} direction="column" marginTop={7} marginBottom={4}>
+          {REGISTRATION_FORM_FIELDS.map(field => (
+            <TextField
+              key={field.name}
+              type={field.type}
+              placeholder={field.placeholder}
+              autoComplete={field.autoComplete}
+              label={field.label}
+              error={Boolean(errors[field.name])}
+              helperText={errors[field.name]?.message}
+              aria-invalid={errors[field.name] ? true : false}
+              // TODO: добавить валидацию на форму
+              {...register(field.name, {
+                required: 'Поле обязательно для заполнения',
+              })}
+            />
+          ))}
+        </Stack>
+        <Button
+          type="submit"
+          text="Register"
+          size="large"
+          loading={isSubmitting}
+        />
+        {signupError && (
+          <Typography marginTop={2} color="error" textAlign="center">
+            {signupError}
+          </Typography>
+        )}
+      </Stack>
+    </Container>
   )
 }
