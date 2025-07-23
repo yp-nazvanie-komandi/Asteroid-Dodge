@@ -2,25 +2,23 @@ import { useState } from 'react'
 
 import { useNavigate } from 'react-router'
 
-import { Auth } from '../../services/Auth/Auth'
+import { usePostAuthLogoutMutation } from '../../redux/api/Auth/auth'
 
 // TODO: ПОЛНОСТЬЮ ПЕРЕДЕЛАТЬ В РАМКАХ ТАСКИ СТРАНИЦЫ ПРОФИЛЯ
 export const Profile = () => {
   const [error, setError] = useState<string>()
 
+  const [logoutMutate] = usePostAuthLogoutMutation()
+
   const navigate = useNavigate()
 
   const handleLogout = async () => {
     try {
-      const { successful, error } = await Auth.getInstance().logout()
+      await logoutMutate().unwrap()
 
-      if (successful) {
-        navigate('/login')
-      } else {
-        setError(error?.message || 'Logout failed')
-      }
+      navigate('/login')
     } catch (error) {
-      setError('Logout failed')
+      setError((error as Error)?.message || 'Logout failed')
     }
   }
 
