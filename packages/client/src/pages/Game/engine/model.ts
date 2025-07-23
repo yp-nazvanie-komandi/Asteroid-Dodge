@@ -3,6 +3,9 @@ import { Rectangle } from '../utils/geometry'
 import { SimpleBox } from '../entities/base'
 import { BasicColors } from '../utils/colors'
 import Settings from '../settings'
+import { ResourceVisual } from '../types.js'
+import { Asteriod } from '../entities/asteroid.js'
+import { SpaceCraft } from '../entities/player.js'
 
 export class GameModel {
   public score = 0
@@ -11,26 +14,31 @@ export class GameModel {
   public animationId = 0
   public keys: { [key: string]: boolean } = {}
 
-  public player: SimpleBox
-  public bullets: SimpleBox[] = []
-  public enemies: SimpleBox[] = []
+  public resources: ResourceVisual
 
-  constructor(private settings: Settings) {
+  public player: SpaceCraft
+  public bullets: SimpleBox[] = []
+  public enemies: Asteriod[] = []
+
+  constructor(private settings: Settings, resources: ResourceVisual) {
     this.settings = settings
-    this.player = new SimpleBox(
+    this.resources = resources
+    this.player = new SpaceCraft(
       {
         x: settings.CANVAS_WIDTH / 2 - settings.PLAYER_WIDTH / 2,
         y: settings.CANVAS_HEIGHT - settings.PLAYER_HEIGHT - 10,
         width: settings.PLAYER_WIDTH,
         height: settings.PLAYER_HEIGHT,
       } as Rectangle,
-      BasicColors.RED
+      this.resources['cruftLeft'],
+      this.resources['cruftRight'],
+      this.resources['cruft']
     )
   }
 
   spawnEnemy() {
     this.enemies.push(
-      new SimpleBox(
+      new Asteriod(
         {
           x:
             Math.random() *
@@ -39,13 +47,15 @@ export class GameModel {
           width: this.settings.ENEMY_WIDTH,
           height: this.settings.ENEMY_HEIGHT,
         } as Rectangle,
-        BasicColors.BLUE
+        this.resources['asteroid']
       )
     )
   }
 
   initControls() {
     const handleKeyDown = (e: KeyboardEvent) => {
+      e.preventDefault() // паредотвращаем событие прокрутки страницы, стандартное поведение браузера
+
       this.keys[e.key] = true
 
       // Стрельба при нажатии пробела

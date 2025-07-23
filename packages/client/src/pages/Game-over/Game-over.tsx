@@ -1,9 +1,13 @@
 import Button from '../../components/Button/Button'
 import { useNavigate } from 'react-router'
 
-export const GameOver = () => {
+interface GameOverProps {
+  countPoints: number
+}
+
+export const GameOver = (props: GameOverProps) => {
   const navigate = useNavigate()
-  const countPoints = 777
+  const { countPoints } = props
 
   return (
     <div className={'container container--game-over'}>

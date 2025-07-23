@@ -1,63 +1,48 @@
-interface ResourceCache {
-  [key: string]: HTMLImageElement | boolean
+import asteroidUrl from '../../assets/img/entities/asteroid.png'
+import cruftLeftUrl from '../../assets/img/entities/space-cruft-left.png'
+import cruftRightUrl from '../../assets/img/entities/space-cruft-right.png'
+import cruftUrl from '../../assets/img/entities/space-cruft.png'
+import { ResourceVisual } from './types.js'
+
+const loadImage = (url: string): Promise<HTMLImageElement> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    img.src = url
+    img.onload = () => resolve(img)
+    img.onerror = reject
+  })
 }
 
-interface Resources {
-  load: (urlOrArr: string | string[]) => void
-  get: (url: string) => HTMLImageElement | boolean
-  onReady: (func: () => void) => void
-  isReady: () => boolean
+const loadAllImages = async (): Promise<ResourceVisual> => {
+  const imageUrls = {
+    asteroid: asteroidUrl,
+    cruft: cruftUrl,
+    cruftLeft: cruftLeftUrl,
+    cruftRight: cruftRightUrl,
+  }
+
+  const result: ResourceVisual = {}
+
+  await Promise.all(
+    Object.entries(imageUrls).map(async ([key, url]) => {
+      result[key] = await loadImage(url)
+    })
+  )
+
+  return result
 }
 
-;(function () {
-  const resourceCache: ResourceCache = {}
-  //const loading: string[] = []
-  const readyCallbacks: Array<() => void> = []
+const LoadImageGallery = async () => {
+  let resourceVisual: ResourceVisual = {}
 
-  // Load an image url or an array of image urls
-  function load(urlOrArr: string | string[]): void {
-    if (Array.isArray(urlOrArr)) {
-      urlOrArr.forEach(function (url: string) {
-        _load(url)
-      })
-    } else {
-      _load(urlOrArr)
-    }
+  try {
+    // Загружаем изображение и ждем завершения
+    resourceVisual = await loadAllImages()
+    return resourceVisual
+  } catch (error) {
+    console.error('Ошибка загрузки изображений:', error)
+    throw error
   }
+}
 
-  function _load(url: string): void {
-    if (resourceCache[url]) {
-      return
-    } else {
-      const img = new Image()
-      img.onload = function () {
-        resourceCache[url] = img
-
-        if (isReady()) {
-          readyCallbacks.forEach(func => func())
-        }
-      }
-      resourceCache[url] = false
-      img.src = url
-    }
-  }
-
-  function get(url: string): HTMLImageElement | boolean {
-    return resourceCache[url]
-  }
-
-  function isReady(): boolean {
-    return Object.values(resourceCache).every(resource => resource !== false)
-  }
-
-  function onReady(func: () => void): void {
-    readyCallbacks.push(func)
-  }
-
-  ;(window as any).resources = {
-    load,
-    get,
-    onReady,
-    isReady,
-  } as Resources
-})()
+export default LoadImageGallery

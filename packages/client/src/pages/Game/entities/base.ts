@@ -1,9 +1,6 @@
 import { BasicColors } from '../utils/colors'
 import { isRectanglesIntersect, Rectangle } from '../utils/geometry'
-
-interface Drawable {
-  draw(ctx: CanvasRenderingContext2D): void
-}
+import { Drawable } from './types.js'
 
 export class Entity {
   rect: Rectangle
