@@ -19,7 +19,6 @@ export const GameOver = (props: GameOverProps) => {
         color={'info'}
         size={'large'}
         onClick={() => {
-          console.log('go to game')
           navigate('/start')
         }}
         text={'Play again'}
