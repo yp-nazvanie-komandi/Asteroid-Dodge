@@ -38,14 +38,10 @@ const LoadImageGallery = async () => {
   try {
     // Загружаем изображение и ждем завершения
     resourceVisual = await loadAllImages()
-
-    // Теперь можно использовать resourceVisual.asteroid
-    console.log('Все изображение загружены:', resourceVisual.asteroid)
-
     return resourceVisual
   } catch (error) {
     console.error('Ошибка загрузки изображений:', error)
-    throw error // или возвращаем fallback
+    throw error
   }
 }
 
