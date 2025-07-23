@@ -1,0 +1,11 @@
+.login-container {
+  display: grid;
+  align-items: center;
+  max-width: 576px !important;
+}
+
+h1 {
+  &.login-title {
+    font-size: 3.75rem;
+  }
+}
