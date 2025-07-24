@@ -1,24 +1,7 @@
-import { useEffect, useState } from 'react'
+/// убрал все что связано со стейтами т.к. хранить и получать юзера мы будем на верхнем уровне, а хранить в сторе или контексте.
 
-import { Auth } from '../../services/Auth/Auth'
-
-export const useAuth = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [isLoading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const authenticate = async () => {
-      try {
-        const { successful } = await Auth.getInstance().authenticate()
-
-        setIsAuthenticated(successful)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    authenticate()
-  }, [])
-
-  return { isAuthenticated, isLoading }
+export function useAuth() {
+  const user = useSelector((state: RootState) => state.auth.user)
+  const loading = useSelector((state: RootState) => state.auth.loading)
+  return { user, isAuth: !!user, isLoading: loading }
 }
