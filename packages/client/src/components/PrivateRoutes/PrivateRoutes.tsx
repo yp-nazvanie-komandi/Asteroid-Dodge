@@ -7,7 +7,7 @@ import { useAuth } from '../../hooks/Auth/useAuth'
 import './style.scss'
 
 export const PrivateRoutes = () => {
-  const { isAuthenticated, isLoading } = useAuth()
+  const { isAuth, isLoading } = useAuth()
 
   if (isLoading) {
     return (
@@ -17,7 +17,7 @@ export const PrivateRoutes = () => {
     )
   }
 
-  if (!isAuthenticated) {
+  if (!isAuth) {
     return <Navigate to="/login" replace />
   }
 
