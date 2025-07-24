@@ -13,6 +13,7 @@ import { Exception } from '../../pages/Exception/Exception'
 import { GameOver } from '../../pages/Game-over/Game-over'
 import { Start } from '../../pages/Start/Start'
 import Error400 from '../../pages/400/400'
+import { CreateForumTopic } from '../../pages/CreateForumTopic/CreateForumTopic'
 
 import { PrivateRoutes } from '../PrivateRoutes/PrivateRoutes'
 
@@ -32,7 +33,7 @@ export const Router = () => {
           <Route path="leaderboard" element={<Leaderboard />} />
           <Route path="topics">
             <Route index element={<Forum />} />
-            <Route path="new" element={<ForumTopicCreation />} />
+            <Route path="new" element={<CreateForumTopic />} />
             <Route path=":topicId" element={<ForumTopic />} />
           </Route>
           <Route path="/error" element={<Exception />} />
