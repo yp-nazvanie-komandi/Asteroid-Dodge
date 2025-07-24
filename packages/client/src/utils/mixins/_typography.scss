@@ -1,0 +1,152 @@
+@mixin h1-title($color: $secondary-main) {
+  font-family: 'VT323', monospace;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 6rem;
+  line-height: 117%;
+  letter-spacing: -1.5px;
+  color: $color;
+  margin: 0;
+  text-align: center;
+}
+
+@mixin h2-title($color: $secondary-main) {
+  font-family: 'VT323', monospace;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 3.75rem;
+  line-height: 120%;
+  letter-spacing: -0.5px;
+  color: $color;
+  margin: 0;
+  text-align: center;
+}
+
+@mixin h3-title($color: $secondary-main) {
+  font-family: 'VT323', monospace;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 3rem;
+  line-height: 117%;
+  letter-spacing: 0;
+  color: $color;
+  margin: 0;
+  text-align: center;
+}
+
+@mixin h4-title($color: $secondary-main) {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 2.125rem;
+  line-height: 124%;
+  letter-spacing: 0.25px;
+  color: $color;
+  margin: 0;
+  text-align: center;
+}
+
+@mixin h5-title($color: $secondary-main) {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.5rem;
+  line-height: 133%;
+  letter-spacing: 0;
+  color: $color;
+  margin: 0;
+  text-align: center;
+}
+
+@mixin h6-title($color: $secondary-main) {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 1.25rem;
+  line-height: 160%;
+  letter-spacing: 0.15px;
+  color: $color;
+  margin: 0;
+  text-align: center;
+}
+
+@mixin subtitle-1($color: $secondary-main) {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1rem;
+  line-height: 175%;
+  letter-spacing: 0.15px;
+  color: $color;
+  margin: 0;
+}
+
+@mixin subtitle-2($color: $secondary-main) {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 0.875rem;
+  line-height: 157%;
+  letter-spacing: 0.1px;
+  color: $color;
+  margin: 0;
+}
+
+@mixin body-1($color: $secondary-main) {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1rem;
+  line-height: 150%;
+  letter-spacing: 0.15px;
+  color: $color;
+  margin: 0;
+}
+
+@mixin body-2($color: $secondary-main) {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 0.875rem;
+  line-height: 143%;
+  letter-spacing: 0.17px;
+  color: $color;
+  margin: 0;
+}
+
+@mixin caption($color: $secondary-main) {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 0.75rem;
+  line-height: 166%;
+  letter-spacing: 0.4px;
+  color: $color;
+  margin: 0;
+}
+
+@mixin overline($color: $secondary-main) {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 0.75rem;
+  line-height: 266%;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: $color;
+  margin: 0;
+}
+
+@mixin button-large($color: $secondary-main) {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 266%;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: $color;
+  margin: 0;
+}
+
+
