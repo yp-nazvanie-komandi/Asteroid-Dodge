@@ -1,7 +1,6 @@
 import ButtonMaterial from '@mui/material/Button'
 import './style.scss'
-
-import { ButtonPropsExtended } from '../../types/button'
+import { ButtonPropsExtended } from './types'
 
 export default function Button({
   variant = 'contained',

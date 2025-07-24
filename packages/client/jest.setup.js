@@ -1,5 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { TextEncoder, TextDecoder } = require('util');
+require('@testing-library/jest-dom')
 
-globalThis.TextEncoder = TextEncoder;
-globalThis.TextDecoder = TextDecoder;
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { TextEncoder, TextDecoder } = require('util')
+globalThis.TextEncoder = TextEncoder
+globalThis.TextDecoder = TextDecoder
