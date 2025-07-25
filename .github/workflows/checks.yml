@@ -22,7 +22,7 @@ jobs:
       - name: Install main deps
         run: yarn
       - name: Initialize
-        run: yarn lerna bootstrap
+        run: yarn bootstrap
       - name: Lint
         run: yarn lint
       - name: Test

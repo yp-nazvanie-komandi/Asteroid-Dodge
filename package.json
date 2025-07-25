@@ -2,7 +2,7 @@
   "name": "asteroid-dodge",
   "private": true,
   "scripts": {
-    "bootstrap": "yarn && node init.js && lerna clean && yarn && lerna bootstrap",
+    "bootstrap": "yarn && node init.js",
     "build": "lerna run build",
     "dev:client": "lerna run dev --scope=client",
     "dev:server": "lerna run dev --scope=server",
@@ -27,7 +27,7 @@
     "@commitlint/cz-commitlint": "^19.8.1",
     "@evilmartians/lefthook": "^1.11.16",
     "commitizen": "^4.3.1",
-    "lerna": "^5.4.3"
+    "lerna": "^8.2.3"
   },
   "config": {
     "commitizen": {
