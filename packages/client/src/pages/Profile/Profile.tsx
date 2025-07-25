@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router'
 import { Auth } from '../../services/Auth/Auth'
 import { User } from '../../services/User'
 import { IUser, IPasswordFormValues } from './types'
-import { Container, Divider, Stack, TextField, Typography } from '@mui/material'
+import { Container, Stack, TextField, Typography } from '@mui/material'
 import Button from '../../components/Button/Button'
 
 import avatarImg from '/src/assets/img/tmp-avatar.png'
@@ -12,7 +12,7 @@ import avatarImg from '/src/assets/img/tmp-avatar.png'
 export const Profile = () => {
   const [error, setError] = useState<string>()
   const [user, setUser] = useState<IUser>()
-  const [signinError, setSigninError] = useState<string>()
+  const [passError, setUpdatePassError] = useState<string>()
 
   const navigate = useNavigate()
 
@@ -78,8 +78,8 @@ export const Profile = () => {
   } = useForm<IPasswordFormValues>({
     mode: 'all',
   })
-  const handleLogin = async (values: IPasswordFormValues) => {
-    setSigninError(undefined)
+  const handleUpdatePass = async (values: IPasswordFormValues) => {
+    setUpdatePassError(undefined)
     try {
       const { successful, error } = await User.getInstance().updatePassword(
         values
@@ -88,24 +88,10 @@ export const Profile = () => {
       if (successful) {
         navigate('/start')
       } else {
-        setSigninError(error?.message || DEFAULT_ERROR_MESSAGE)
+        setUpdatePassError(error?.message || DEFAULT_ERROR_MESSAGE)
       }
     } catch (error) {
-      setSigninError((error as Error)?.message || DEFAULT_ERROR_MESSAGE)
-    }
-  }
-
-  const handleLogout = async () => {
-    try {
-      const { successful, error } = await Auth.getInstance().logout()
-
-      if (successful) {
-        navigate('/login')
-      } else {
-        setError(error?.message || 'Ошибка при выходе')
-      }
-    } catch (error) {
-      setError('Ошибка при выходе')
+      setUpdatePassError((error as Error)?.message || DEFAULT_ERROR_MESSAGE)
     }
   }
 
@@ -130,7 +116,7 @@ export const Profile = () => {
         <p>{user?.first_name}</p>
       </div>
 
-      <Container component="form" onSubmit={handleSubmit(handleLogin)}>
+      <Container component="form" onSubmit={handleSubmit(handleUpdatePass)}>
         <Stack spacing={2} padding={0} direction="column">
           <Stack spacing={2} direction="column">
             {FORM_FIELDS.map(field => (
@@ -156,9 +142,9 @@ export const Profile = () => {
             size="large"
             loading={isSubmitting}
           />
-          {signinError && (
+          {passError && (
             <Typography marginTop={2} color="error" textAlign="center">
-              {signinError}
+              {passError}
             </Typography>
           )}
         </Stack>

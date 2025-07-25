@@ -77,7 +77,7 @@ export const GameCanvas = () => {
         setIsLoading(false)
       })
       .catch(error => {
-        console.log(error)
+        console.error(error)
       })
   }, [])
 
@@ -90,7 +90,8 @@ export const GameCanvas = () => {
         height: '100vh', // Занимает всю высоту экрана
         width: '100vw', // Занимает всю ширину экрана
         margin: 0,
-      }}>
+      }}
+    >
       {isLoading ? (
         <div style={{ textAlign: 'center', margin: 0 }}>
           <p style={{ fontSize: 26 }}>Loading...</p>

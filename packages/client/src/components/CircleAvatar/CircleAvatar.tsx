@@ -3,7 +3,6 @@ import { Avatar } from '@mui/material'
 import { stringAvatar } from './utils'
 
 export const CircleAvatar = ({ url, name }: TCircleAvatar) => {
-  console.log(name)
   return url ? (
     <Avatar alt={name} src={url} sx={{ width: 40, height: 40 }} />
   ) : (

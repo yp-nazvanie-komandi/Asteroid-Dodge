@@ -85,7 +85,6 @@ export class GameModel {
     document.addEventListener('keyup', handleKeyUp)
 
     return () => {
-      //console.log('Remove handlers');
       document.removeEventListener('keydown', handleKeyDown)
       document.removeEventListener('keyup', handleKeyUp)
     }
