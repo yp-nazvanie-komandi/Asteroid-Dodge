@@ -1,0 +1,362 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Users API",
+    "description": "Интерактивная документация API",
+    "version": "2.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://ya-praktikum.tech/api/v2"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Users operations"
+    }
+  ],
+  "paths": {
+    "/user/profile": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Change user profile",
+        "requestBody": {
+          "description": "User data",
+          "content": {
+            "*/*": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {}
+          }
+        },
+        "x-codegen-request-body-name": "userRequest"
+      }
+    },
+    "/user/profile/avatar": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Change user avatar",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/profile_avatar_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/user/password": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Change user password",
+        "requestBody": {
+          "description": "Password request",
+          "content": {
+            "*/*": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {}
+          }
+        },
+        "x-codegen-request-body-name": "changePasswordRequest"
+      }
+    },
+    "/user/search": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Search for user by login (max 10)",
+        "requestBody": {
+          "description": "User data",
+          "content": {
+            "*/*": {
+              "schema": {
+                "$ref": "#/components/schemas/FindUserRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {}
+          }
+        },
+        "x-codegen-request-body-name": "findUserRequest"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserResponse": {
+        "required": [
+          "avatar",
+          "display_name",
+          "email",
+          "first_name",
+          "id",
+          "login",
+          "phone",
+          "second_name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "User id"
+          },
+          "first_name": {
+            "type": "string",
+            "description": "First name"
+          },
+          "second_name": {
+            "type": "string",
+            "description": "Second name"
+          },
+          "display_name": {
+            "type": "string",
+            "description": "Display name"
+          },
+          "login": {
+            "type": "string",
+            "description": "User login - unique"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email - unique",
+            "format": "email"
+          },
+          "phone": {
+            "type": "string",
+            "description": "User phone"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "Avatar"
+          }
+        },
+        "example": {
+          "id": 123,
+          "first_name": "Petya",
+          "second_name": "Pupkin",
+          "display_name": "Petya Pupkin",
+          "phone": "+79001001100",
+          "login": "userLogin",
+          "avatar": "/path/to/avatar.jpg",
+          "email": "string@ya.ru"
+        }
+      },
+      "HttpErrorBody": {
+        "required": [
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "description": "Error message"
+          }
+        }
+      },
+      "UserUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "description": "First name"
+          },
+          "second_name": {
+            "type": "string",
+            "description": "Second name"
+          },
+          "display_name": {
+            "type": "string",
+            "description": "Display Name"
+          },
+          "login": {
+            "type": "string",
+            "description": "User login - unique"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Phone"
+          }
+        }
+      },
+      "FindUserRequest": {
+        "required": [
+          "login"
+        ],
+        "type": "object",
+        "properties": {
+          "login": {
+            "type": "string",
+            "description": "User login (beginning of login)"
+          }
+        }
+      },
+      "ChangePasswordRequest": {
+        "required": [
+          "newPassword",
+          "oldPassword"
+        ],
+        "type": "object",
+        "properties": {
+          "oldPassword": {
+            "type": "string",
+            "description": "Old password"
+          },
+          "newPassword": {
+            "type": "string",
+            "description": "New password"
+          }
+        }
+      },
+      "profile_avatar_body": {
+        "required": [
+          "avatar"
+        ],
+        "type": "object",
+        "properties": {
+          "avatar": {
+            "type": "string",
+            "description": "Avatar (JPEG, JPG, PNG, GIF, WebP are allowed)",
+            "format": "binary"
+          }
+        }
+      }
+    }
+  },
+  "x-original-swagger-version": "2.0"
+}
