@@ -1,7 +1,11 @@
 import asteroidUrl from '../../assets/img/entities/asteroid.png'
+import enemy1 from '../../assets/img/entities/enemy-1.png'
+import enemy2 from '../../assets/img/entities/enemy-2.png'
+import enemy3 from '../../assets/img/entities/enemy-3.png'
 import cruftLeftUrl from '../../assets/img/entities/space-cruft-left.png'
 import cruftRightUrl from '../../assets/img/entities/space-cruft-right.png'
 import cruftUrl from '../../assets/img/entities/space-cruft.png'
+
 import { ResourceVisual } from './types.js'
 
 const loadImage = (url: string): Promise<HTMLImageElement> => {
@@ -17,6 +21,9 @@ const loadAllImages = async (): Promise<ResourceVisual> => {
   const imageUrls = {
     asteroid: asteroidUrl,
     cruft: cruftUrl,
+    enemy1: enemy1,
+    enemy2: enemy2,
+    enemy3: enemy3,
     cruftLeft: cruftLeftUrl,
     cruftRight: cruftRightUrl,
   }

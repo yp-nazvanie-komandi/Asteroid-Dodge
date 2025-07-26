@@ -31,25 +31,25 @@ export class GameController {
     }
 
     // Движение противников
-    for (let i = this.model.enemies.length - 1; i >= 0; i--) {
-      this.model.enemies[i].y += this.settings.SPEED_ENEMY * dt
-      if (this.model.enemies[i].y > this.settings.CANVAS_HEIGHT) {
-        this.model.enemies.splice(i, 1)
+    for (let i = this.model.asteroids.length - 1; i >= 0; i--) {
+      this.model.asteroids[i].y += this.settings.SPEED_ENEMY * dt
+      if (this.model.asteroids[i].y > this.settings.CANVAS_HEIGHT) {
+        this.model.asteroids.splice(i, 1)
       } else {
-        this.model.enemies[i].update(dt)
+        this.model.asteroids[i].update(dt)
       }
     }
 
     // Проверка столкновений
-    for (let i = this.model.enemies.length - 1; i >= 0; i--) {
-      const enemy = this.model.enemies[i]
+    for (let i = this.model.asteroids.length - 1; i >= 0; i--) {
+      const enemy = this.model.asteroids[i]
 
       // С пулями
       for (let j = this.model.bullets.length - 1; j >= 0; j--) {
         const bullet = this.model.bullets[j]
         if (enemy.collision(bullet)) {
           this.model.bullets.splice(j, 1)
-          this.model.enemies.splice(i, 1)
+          this.model.asteroids.splice(i, 1)
           this.model.score += 1
           break
         }

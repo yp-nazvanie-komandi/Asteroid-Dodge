@@ -5,6 +5,7 @@ import { ResourceVisual } from './types.js'
 import LoadImageGallery from './resources.js'
 import CircularProgress from '@mui/material/CircularProgress'
 import { GameOver } from '../Game-over/Game-over.js'
+import { Typography } from '@mui/material'
 
 const settings = new Settings()
 
@@ -82,34 +83,27 @@ export const GameCanvas = () => {
   }, [])
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh', // Занимает всю высоту экрана
-        width: '100vw', // Занимает всю ширину экрана
-        margin: 0,
-      }}>
+    <div className={'container--play'}>
       {isLoading ? (
-        <div style={{ textAlign: 'center', margin: 0 }}>
-          <p style={{ fontSize: 26 }}>Loading...</p>
+        <div>
           <CircularProgress />
         </div>
       ) : (
-        <div style={{ textAlign: 'center', margin: 0 }}>
+        <div>
           {playerLose && showGameOver ? (
             <GameOver countPoints={score} />
           ) : (
-            <>
-              <p>Score: {score}</p>
+            <div>
+              <Typography component="h1" className="title" marginBottom={2}>
+                {score}
+              </Typography>
+
               <canvas
                 ref={canvasRef}
                 width={settings.CANVAS_WIDTH}
                 height={settings.CANVAS_HEIGHT}
-                style={{ backgroundColor: 'black', display: 'block' }}
               />
-            </>
+            </div>
           )}
         </div>
       )}

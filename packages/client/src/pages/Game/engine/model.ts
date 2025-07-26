@@ -18,11 +18,12 @@ export class GameModel {
 
   public player: SpaceCraft
   public bullets: SimpleBox[] = []
-  public enemies: Asteriod[] = []
+  public asteroids: Asteriod[] = []
 
   constructor(private settings: Settings, resources: ResourceVisual) {
     this.settings = settings
     this.resources = resources
+
     this.player = new SpaceCraft(
       {
         x: settings.CANVAS_WIDTH / 2 - settings.PLAYER_WIDTH / 2,
@@ -37,7 +38,7 @@ export class GameModel {
   }
 
   spawnEnemy() {
-    this.enemies.push(
+    this.asteroids.push(
       new Asteriod(
         {
           x:
@@ -85,7 +86,6 @@ export class GameModel {
     document.addEventListener('keyup', handleKeyUp)
 
     return () => {
-      //console.log('Remove handlers');
       document.removeEventListener('keydown', handleKeyDown)
       document.removeEventListener('keyup', handleKeyUp)
     }

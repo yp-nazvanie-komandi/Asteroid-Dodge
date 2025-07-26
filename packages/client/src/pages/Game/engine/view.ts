@@ -17,6 +17,6 @@ export class GameView {
     this.model.bullets.forEach(bullet => bullet.draw(this.ctx))
 
     // Противники
-    this.model.enemies.forEach(enemy => enemy.draw(this.ctx))
+    this.model.asteroids.forEach(asteroids => asteroids.draw(this.ctx))
   }
 }
