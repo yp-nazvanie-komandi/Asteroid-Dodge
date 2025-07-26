@@ -9,6 +9,26 @@ import Button from '../../components/Button/Button'
 
 import avatarImg from '/src/assets/img/tmp-avatar.png'
 
+const DEFAULT_ERROR_MESSAGE =
+  'Упс, что-то пошло не так. Повторите попытку позже.'
+
+const FORM_FIELDS = [
+  {
+    name: 'oldPassword',
+    label: 'Старый пароль',
+    type: 'password',
+    placeholder: '*************',
+    autoComplete: 'current-password',
+  },
+  {
+    name: 'newPassword',
+    label: 'Новый пароль',
+    type: 'password',
+    placeholder: '*************',
+    autoComplete: 'new-password',
+  },
+]
+
 export const Profile = () => {
   const [error, setError] = useState<string>()
   const [user, setUser] = useState<IUser>()
@@ -51,25 +71,6 @@ export const Profile = () => {
       }
     }
   }
-
-  const FORM_FIELDS = [
-    {
-      name: 'oldPassword',
-      label: 'Старый пароль',
-      type: 'password',
-      placeholder: '*************',
-      autoComplete: 'current-password',
-    },
-    {
-      name: 'newPassword',
-      label: 'Новый пароль',
-      type: 'password',
-      placeholder: '*************',
-      autoComplete: 'new-password',
-    },
-  ]
-  const DEFAULT_ERROR_MESSAGE =
-    'Упс, что-то пошло не так. Повторите попытку позже.'
 
   const {
     handleSubmit,
