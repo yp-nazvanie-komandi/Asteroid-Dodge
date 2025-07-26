@@ -1,0 +1,156 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OAuth API",
+    "description": "Интерактивная документация API",
+    "version": "2.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://ya-praktikum.tech/api/v2"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Oauth",
+      "description": "Oauth service"
+    }
+  ],
+  "paths": {
+    "/oauth/yandex": {
+      "post": {
+        "tags": [
+          "Oauth"
+        ],
+        "summary": "Sign in / sign up with yandex",
+        "requestBody": {
+          "description": "Oauth data",
+          "content": {
+            "*/*": {
+              "schema": {
+                "$ref": "#/components/schemas/OauthSignInRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {}
+          },
+          "400": {
+            "description": "Bad Request (No such redirect_uri or wrong code)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {}
+          }
+        },
+        "x-codegen-request-body-name": "OauthSignInRequest"
+      }
+    },
+    "/oauth/yandex/service-id": {
+      "get": {
+        "tags": [
+          "Oauth"
+        ],
+        "summary": "Get service id",
+        "parameters": [
+          {
+            "name": "redirect_uri",
+            "in": "query",
+            "description": "Redirect uri that you are using for oauth",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Yandex client id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceId"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (No such redirect_uri refistered)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorBody"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "OauthSignInRequest": {
+        "required": [
+          "code",
+          "redirect_uri"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "User code from Yandex"
+          },
+          "redirect_uri": {
+            "type": "string",
+            "description": "Redirect uri that you are using for oauth"
+          }
+        }
+      },
+      "ServiceId": {
+        "required": [
+          "service_id"
+        ],
+        "type": "object",
+        "properties": {
+          "service_id": {
+            "type": "string",
+            "description": "Service id"
+          }
+        }
+      },
+      "HttpErrorBody": {
+        "required": [
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "description": "Error message"
+          }
+        }
+      }
+    }
+  },
+  "x-original-swagger-version": "2.0"
+}

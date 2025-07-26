@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 
 import { Container, Divider, Stack, TextField, Typography } from '@mui/material'
 
-import { Auth } from '../../services/Auth/Auth'
+import { usePostAuthSignupMutation } from '../../redux/api/Auth/auth'
 
 import Button from '../../components/Button/Button'
 
@@ -72,6 +72,8 @@ const REGISTRATION_FORM_FIELDS = [
 export const Registration = () => {
   const [signupError, setSignupError] = useState<string>()
 
+  const [signupMutate] = usePostAuthSignupMutation()
+
   const navigate = useNavigate()
 
   const {
@@ -86,16 +88,12 @@ export const Registration = () => {
     setSignupError(undefined)
 
     try {
-      const { successful, error } = await Auth.getInstance().signup(values)
+      await signupMutate({ signUpRequest: values }).unwrap()
 
-      if (successful) {
-        navigate('/profile')
-      } else {
-        setSignupError(error?.message || DEFAULT_REGISTRATION_ERROR_MESSAGE)
-      }
+      navigate('/profile')
     } catch (error) {
       setSignupError(
-        (error as Error)?.message || DEFAULT_REGISTRATION_ERROR_MESSAGE
+        (error as Error)?.message || DEFAULT_REGISTRATION_ERROR_MESSAGE,
       )
     }
   }

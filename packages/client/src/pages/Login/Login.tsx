@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 
 import { Container, Divider, Stack, TextField, Typography } from '@mui/material'
 
-import { Auth } from '../../services/Auth/Auth'
+import { usePostAuthSigninMutation } from '../../redux/api/Auth/auth'
 
 import Button from '../../components/Button/Button'
 
@@ -40,6 +40,8 @@ const LOGIN_FORM_FIELDS = [
 export const Login = () => {
   const [signinError, setSigninError] = useState<string>()
 
+  const [signinMutate] = usePostAuthSigninMutation()
+
   const navigate = useNavigate()
 
   const {
@@ -54,13 +56,9 @@ export const Login = () => {
     setSigninError(undefined)
 
     try {
-      const { successful, error } = await Auth.getInstance().signin(values)
+      await signinMutate({ signInRequest: values }).unwrap()
 
-      if (successful) {
-        navigate('/profile')
-      } else {
-        setSigninError(error?.message || DEFAULT_LOGIN_ERROR_MESSAGE)
-      }
+      navigate('/profile')
     } catch (error) {
       setSigninError((error as Error)?.message || DEFAULT_LOGIN_ERROR_MESSAGE)
     }
