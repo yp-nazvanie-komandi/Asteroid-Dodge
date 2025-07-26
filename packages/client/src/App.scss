@@ -150,6 +150,63 @@ body {
       left: 5vw;
     }
   }
+
+  &-profile {
+    gap: 48px;
+    max-width: 422px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0 auto;
+
+    & .profile {
+      &-user {
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        p {
+          font-family: 'Inter', sans-serif;
+          font-size: 20px;
+          line-height: 20px;
+          letter-spacing: 0.14px;
+          text-align: center;
+          vertical-align: middle;
+        }
+
+        label {
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 16px;
+
+          input {
+            display: none;
+          }
+
+          p {
+            color: $primary-main;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 150%;
+            letter-spacing: 0.15px;
+            vertical-align: middle;
+            text-decoration: underline;
+          }
+
+          img {
+            border-radius: 100%;
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            object-position: center;
+          }
+        }
+      }
+    }
+  }
 }
 
 h1 {
