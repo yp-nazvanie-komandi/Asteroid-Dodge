@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect, ChangeEvent } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 import { Auth } from '../../services/Auth/Auth'
@@ -31,7 +31,7 @@ export const Profile = () => {
     getUserData()
   }, [])
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e?.target?.files
     if (file && file[0]) {
       const formData = new FormData()
@@ -65,7 +65,7 @@ export const Profile = () => {
       label: 'Новый пароль',
       type: 'password',
       placeholder: '*************',
-      autoComplete: 'current-password',
+      autoComplete: 'new-password',
     },
   ]
   const DEFAULT_ERROR_MESSAGE =
