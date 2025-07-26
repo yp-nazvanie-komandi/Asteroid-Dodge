@@ -1,0 +1,211 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Leaderboard API",
+    "description": "Интерактивная документация API",
+    "version": "2.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://ya-praktikum.tech/api/v2"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Leaderboard",
+      "description": "Leaderboard operations (prefix /game/api/v2)"
+    }
+  ],
+  "paths": {
+    "/leaderboard": {
+      "post": {
+        "tags": [
+          "Leaderboard"
+        ],
+        "summary": "Add user to leaderboard",
+        "requestBody": {
+          "description": "Leader data",
+          "content": {
+            "*/*": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaderboardNewLeaderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {}
+          }
+        },
+        "x-codegen-request-body-name": "leaderboardNewLeaderRequest"
+      }
+    },
+    "/leaderboard/all": {
+      "post": {
+        "tags": [
+          "Leaderboard"
+        ],
+        "summary": "Get all leaderboard",
+        "requestBody": {
+          "description": "Leaderboard request",
+          "content": {
+            "*/*": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaderboardRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {}
+          }
+        },
+        "x-codegen-request-body-name": "leaderboardRequest"
+      }
+    },
+    "/leaderboard/{teamName}": {
+      "post": {
+        "tags": [
+          "Leaderboard"
+        ],
+        "summary": "Get team leaderboard",
+        "parameters": [
+          {
+            "name": "teamName",
+            "in": "path",
+            "description": "Name of the team, which leaderboard you want to get",
+            "required": true,
+            "schema": {}
+          }
+        ],
+        "requestBody": {
+          "description": "Leaderboard request. Cursor is used for pagination. If limit is 10, then for the 1st page - cursor=0, for the 2nd page - cursor=10.",
+          "content": {
+            "*/*": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaderboardRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {}
+          }
+        },
+        "x-codegen-request-body-name": "leaderboardRequest"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LeaderboardNewLeaderRequest": {
+        "required": [
+          "data",
+          "ratingFieldName"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {},
+            "description": "Leaderboard data object, any type"
+          },
+          "ratingFieldName": {
+            "type": "string",
+            "description": "Which field is used to sort (if new value of the field more than old, data is stored)"
+          },
+          "teamName": {
+            "type": "string",
+            "description": "Your team name. Used to make unique leaderboard for each project."
+          }
+        }
+      },
+      "LeaderboardRequest": {
+        "required": [
+          "cursor",
+          "limit",
+          "ratingFieldName"
+        ],
+        "type": "object",
+        "properties": {
+          "ratingFieldName": {
+            "type": "string",
+            "description": "Which field is used to sort"
+          },
+          "cursor": {
+            "type": "integer",
+            "description": "Used to paginate between pages. If limit is 10, then for the 1st page - cursor=0, for the 2nd page - cursor=10."
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Maximum amount of leaders to return"
+          }
+        }
+      },
+      "HttpErrorBody": {
+        "required": [
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "description": "Error message"
+          }
+        }
+      }
+    }
+  },
+  "x-original-swagger-version": "2.0"
+}

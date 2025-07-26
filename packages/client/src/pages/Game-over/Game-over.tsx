@@ -2,7 +2,7 @@ import Button from '../../components/Button/Button'
 import { useNavigate } from 'react-router'
 
 interface GameOverProps {
-  countPoints: number
+  countPoints?: number
 }
 
 export const GameOver = (props: GameOverProps) => {

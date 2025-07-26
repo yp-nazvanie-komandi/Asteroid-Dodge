@@ -9,6 +9,8 @@ import Button from '../../components/Button/Button'
 
 import avatarImg from '/src/assets/img/tmp-avatar.png'
 
+import { usePostAuthLogoutMutation } from '../../redux/api/Auth/auth'
+
 const DEFAULT_ERROR_MESSAGE =
   'Упс, что-то пошло не так. Повторите попытку позже.'
 
@@ -69,6 +71,18 @@ export const Profile = () => {
       } catch (err) {
         console.error('Произошла ошибка:', err)
       }
+    }
+  }
+
+  const [logoutMutate] = usePostAuthLogoutMutation()
+
+  const handleLogout = async () => {
+    try {
+      await logoutMutate().unwrap()
+
+      navigate('/login')
+    } catch (error) {
+      setError((error as Error)?.message || 'Logout failed')
     }
   }
 
@@ -137,12 +151,21 @@ export const Profile = () => {
               />
             ))}
           </Stack>
+
           <Button
             type="submit"
             text="Change Password"
             size="large"
             loading={isSubmitting}
           />
+
+          <Button
+            type="button"
+            text="Log out"
+            size="medium"
+            onClick={handleLogout}
+          />
+
           {passError && (
             <Typography marginTop={2} color="error" textAlign="center">
               {passError}
