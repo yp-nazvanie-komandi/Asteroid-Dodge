@@ -40,15 +40,15 @@ import { generateEndpoints } from '@rtk-query/codegen-openapi'
 
       const serviceReduxApiFile = resolve(
         serviceReduxApiFolder,
-        `${serviceName.toLowerCase()}.ts`,
+        `${serviceName.toLowerCase()}.ts`
       )
 
       await writeFile(
         serviceReduxApiFile,
         `/* eslint-disable @typescript-eslint/no-explicit-any */\n/* eslint-disable @typescript-eslint/ban-types */\n// ВНИМАНИЕ! Этот файл был сгенерирован автоматически. Изменения могут быть перезаписаны. НЕ редактируйте его вручную!\n\n${generatedApi}`,
-        'utf-8',
+        'utf-8'
       )
-    }),
+    })
   )
 })()
 //
