@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import { useLocation, useNavigate, Link as RouterLink } from 'react-router'
 import { useForm } from 'react-hook-form'
+
+import { yupResolver } from '@hookform/resolvers/yup'
+
+import * as yup from 'yup'
+
 import {
   Container,
   Divider,
@@ -11,12 +16,14 @@ import {
 } from '@mui/material'
 
 import { usePostAuthSigninMutation } from '../../redux/api/Auth/auth'
+
 import { isFetchBaseQueryErrorWithReason } from '../../redux/api/helpers'
+
+import type { TFormFieldsSchemas } from '../../utils/types/validation'
 
 import Button from '../../components/Button/Button'
 
 import './style.scss'
-
 interface ILoginFormValues {
   login: string
   password: string
@@ -24,6 +31,8 @@ interface ILoginFormValues {
 
 const DEFAULT_LOGIN_ERROR_MESSAGE =
   'Произошла ошибка при входе. Повторите попытку позже.'
+
+const DEFAULT_REQUIRED_FIELD_MESSAGE = 'Поле обязательно для заполнения'
 
 const ALREADY_IN_SYSTEM_ERROR_REASON = 'User already in system'
 
@@ -36,6 +45,13 @@ const LOGIN_FORM_FIELDS = [
     type: 'text',
     placeholder: 'Someone1#',
     autoComplete: 'username',
+    validation: yup
+      .string()
+      .required(DEFAULT_REQUIRED_FIELD_MESSAGE)
+      .matches(
+        /^(?!\d+$)[A-Za-z0-9_-]{3,20}$/,
+        'Поле состоит от 3 до 20 символов, латиницы, может содержать цифры, но не состоять из них, без пробелов, без спецсимволов (допустимы дефис и нижнее подчёркивание)',
+      ),
   },
   {
     name: 'password',
@@ -43,9 +59,29 @@ const LOGIN_FORM_FIELDS = [
     type: 'password',
     placeholder: '*************',
     autoComplete: 'current-password',
+    validation: yup
+      .string()
+      .required(DEFAULT_REQUIRED_FIELD_MESSAGE)
+      .matches(
+        /^(?=.*[A-Z])(?=.*\d).{8,40}$/,
+        'Поле состоит от 8 до 40 символов, обязательно хотя бы одна заглавная буква и цифра',
+      ),
   },
 ] as const
 
+const LOGIN_FORM_FIELDS_SCHEMA = yup
+  .object(
+    LOGIN_FORM_FIELDS.reduce(
+      (acc, field) => {
+        acc[field.name] = field.validation
+        return acc
+      },
+      {} as TFormFieldsSchemas<typeof LOGIN_FORM_FIELDS>,
+    ),
+  )
+  .required()
+
+// TODO: Вынести в отдельный компонент форму https://github.com/yp-nazvanie-komandi/Asteroid-Dodge/issues/96
 export const Login = () => {
   const [signinError, setSigninError] = useState<string>()
 
@@ -61,6 +97,7 @@ export const Login = () => {
     formState: { errors, isSubmitting },
   } = useForm<ILoginFormValues>({
     mode: 'all',
+    resolver: yupResolver(LOGIN_FORM_FIELDS_SCHEMA),
   })
 
   const handleLogin = async (values: ILoginFormValues) => {
@@ -117,10 +154,7 @@ export const Login = () => {
               error={Boolean(errors[field.name])}
               helperText={errors[field.name]?.message}
               aria-invalid={errors[field.name] ? true : false}
-              // TODO: добавить валидацию на форму
-              {...register(field.name, {
-                required: 'Поле обязательно для заполнения',
-              })}
+              {...register(field.name)}
             />
           ))}
         </Stack>
