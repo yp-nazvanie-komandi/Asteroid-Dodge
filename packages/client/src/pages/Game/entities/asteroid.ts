@@ -2,7 +2,7 @@ import { Rectangle } from '../types.js'
 import { Entity } from './base.js'
 import { Drawable, Updateable } from './types.js'
 
-export class Asteriod extends Entity implements Drawable, Updateable {
+export class Asteroid extends Entity implements Drawable, Updateable {
   visual: HTMLImageElement
 
   private rotationAngle = 0 // Текущий угол в радианах

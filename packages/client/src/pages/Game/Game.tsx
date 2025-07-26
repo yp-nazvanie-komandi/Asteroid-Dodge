@@ -78,7 +78,7 @@ export const GameCanvas = () => {
         setIsLoading(false)
       })
       .catch(error => {
-        console.log(error)
+        console.error(error)
       })
   }, [])
 
