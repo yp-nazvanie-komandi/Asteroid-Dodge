@@ -93,7 +93,7 @@ export const Registration = () => {
       navigate('/profile')
     } catch (error) {
       setSignupError(
-        (error as Error)?.message || DEFAULT_REGISTRATION_ERROR_MESSAGE
+        (error as Error)?.message || DEFAULT_REGISTRATION_ERROR_MESSAGE,
       )
     }
   }

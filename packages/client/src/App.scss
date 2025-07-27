@@ -54,6 +54,8 @@ body {
     flex-direction: column;
     gap: 16px;
     margin: 0 auto;
+    width: 100vw;
+    height: 100vh;
 
     p {
       color: white;
@@ -126,6 +128,26 @@ body {
       align-items: center;
       flex-direction: column;
       gap: 16px;
+    }
+  }
+
+  &--play {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    canvas {
+      background: $darkest;
+    }
+
+    h1 {
+      position: fixed;
+      top: 5vh;
+      left: 5vw;
     }
   }
 

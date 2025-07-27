@@ -34,7 +34,7 @@ export class User {
     params: {
       method?: string
       body?: BodyInit // FormData, string, Blob и т.д.
-    } = {}
+    } = {},
   ): RequestInit {
     const { method = 'GET', body } = params
 
@@ -56,7 +56,7 @@ export class User {
   }
 
   private async _getResponseData<TQueryData>(
-    queryFn: () => TAwaitable<Response>
+    queryFn: () => TAwaitable<Response>,
   ) {
     const state: TQueryState<TQueryData> = {
       data: undefined,
@@ -102,8 +102,8 @@ export class User {
     return this._getResponseData(() =>
       fetch(
         `${this._entrypoint}/profile/avatar`,
-        this._getRequestInitParams({ method: 'PUT', body })
-      )
+        this._getRequestInitParams({ method: 'PUT', body }),
+      ),
     )
   }
   updatePassword(data: IPasswordFormValues) {
@@ -113,8 +113,8 @@ export class User {
         this._getRequestInitParams({
           method: 'PUT',
           body: JSON.stringify(data),
-        }) // Передача FormData как есть
-      )
+        }), // Передача FormData как есть
+      ),
     )
   }
 }

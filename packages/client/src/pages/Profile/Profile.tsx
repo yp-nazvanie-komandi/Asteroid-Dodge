@@ -60,9 +60,8 @@ export const Profile = () => {
       formData.append('avatar', file[0], file[0].name)
 
       try {
-        const { successful, error } = await User.getInstance().updateAvatar(
-          formData
-        )
+        const { successful, error } =
+          await User.getInstance().updateAvatar(formData)
         if (successful) {
           await getUserData()
         } else {
@@ -96,9 +95,8 @@ export const Profile = () => {
   const handleUpdatePass = async (values: IPasswordFormValues) => {
     setUpdatePassError(undefined)
     try {
-      const { successful, error } = await User.getInstance().updatePassword(
-        values
-      )
+      const { successful, error } =
+        await User.getInstance().updatePassword(values)
 
       if (successful) {
         navigate('/start')

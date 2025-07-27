@@ -2,11 +2,11 @@ import { Rectangle } from '../types.js'
 import { Entity } from './base.js'
 import { Drawable, Updateable } from './types.js'
 
-export class Asteroid extends Entity implements Drawable, Updateable {
+export class Enemy extends Entity implements Drawable, Updateable {
   visual: HTMLImageElement
 
   private rotationAngle = 0 // Текущий угол в радианах
-  private rotationSpeed = 5 // Скорость вращения (рад/кадр)
+  private rotationSpeed = 0 // Скорость вращения (рад/кадр)
 
   constructor(rect: Rectangle, visual: HTMLImageElement) {
     super(rect)
