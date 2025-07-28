@@ -1,6 +1,6 @@
 import { GameModel } from './model'
 import Settings from '../settings'
-import { Direction } from '../entities/types.js'
+import { Direction } from '../entities/types'
 
 export class GameController {
   private lastSpawn = 0
@@ -35,6 +35,11 @@ export class GameController {
       this.model.enemies[i].y += this.settings.SPEED_ENEMY * dt
       if (this.model.enemies[i].y > this.settings.CANVAS_HEIGHT) {
         this.model.enemies.splice(i, 1)
+        this.model.countLife -= 1
+        if (this.model.countLife <= 0) {
+          this.model.playerLose = true
+          return true
+        }
       } else {
         this.model.enemies[i].update(dt)
       }

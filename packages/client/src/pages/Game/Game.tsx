@@ -11,6 +11,7 @@ const settings = new Settings()
 export const GameCanvas = () => {
   // Реактивные элементы
   const [score, setScore] = useState(0)
+  const [countLifes, setCountLifes] = useState(3)
   const [playerLose, setPlayerLose] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [showGameOver, setShowGameOver] = useState(false)
@@ -37,6 +38,7 @@ export const GameCanvas = () => {
         imageGallery.current,
         {
           setScore,
+          setCountLifes,
           setPlayerLose: (value: boolean) => {
             if (value) {
               setPlayerLose(true)
@@ -90,7 +92,8 @@ export const GameCanvas = () => {
         height: '100vh', // Занимает всю высоту экрана
         width: '100vw', // Занимает всю ширину экрана
         margin: 0,
-      }}>
+      }}
+    >
       {isLoading ? (
         <div style={{ textAlign: 'center', margin: 0 }}>
           <p style={{ fontSize: 26 }}>Loading...</p>
@@ -102,6 +105,13 @@ export const GameCanvas = () => {
             <GameOver countPoints={score} />
           ) : (
             <>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                {Array.from({ length: countLifes }).map((_, index) => (
+                  <span key={index} style={{ color: 'red', fontSize: '24px' }}>
+                    ❤️
+                  </span>
+                ))}
+              </div>
               <p>Score: {score}</p>
               <canvas
                 ref={canvasRef}

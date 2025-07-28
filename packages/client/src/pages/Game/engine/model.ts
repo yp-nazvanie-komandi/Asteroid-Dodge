@@ -1,11 +1,10 @@
 // game/models/GameModel.ts
-import { Rectangle } from '../utils/geometry'
 import { SimpleBox } from '../entities/base'
 import { BasicColors } from '../utils/colors'
 import Settings from '../settings'
-import { ResourceVisual } from '../types.js'
-import { Asteriod } from '../entities/asteroid.js'
-import { SpaceCraft } from '../entities/player.js'
+import { ResourceVisual, Rectangle } from '../types'
+import { Asteriod } from '../entities/asteroid'
+import { SpaceCraft } from '../entities/player'
 
 export class GameModel {
   public score = 0
@@ -13,7 +12,7 @@ export class GameModel {
   public lastFrameTime = 0
   public animationId = 0
   public keys: { [key: string]: boolean } = {}
-
+  public countLife = 3
   public resources: ResourceVisual
 
   public player: SpaceCraft

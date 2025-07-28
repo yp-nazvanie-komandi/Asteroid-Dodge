@@ -1,6 +1,7 @@
+import { Rectangle } from '../types'
 import { BasicColors } from '../utils/colors'
-import { isRectanglesIntersect, Rectangle } from '../utils/geometry'
-import { Drawable } from './types.js'
+import { isRectanglesIntersect } from '../utils/geometry'
+import { Drawable } from './types'
 
 export class Entity {
   rect: Rectangle
