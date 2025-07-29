@@ -41,7 +41,6 @@ export class GameEngine {
 
   start() {
     const loop = (timestamp: number) => {
-      this.controller.spawnIfNeeded(timestamp)
       const dt = (performance.now() - this.model.lastFrameTime) / 1000.0
 
       const playerIsLose = this.controller.update(dt)
@@ -59,6 +58,8 @@ export class GameEngine {
         this.controller.stop()
         return
       }
+
+      this.controller.spawnIfNeeded(timestamp) // тут добавим астероиды
 
       this.model.animationId = requestAnimationFrame(loop)
     }

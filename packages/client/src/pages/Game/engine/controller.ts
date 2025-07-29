@@ -77,6 +77,8 @@ export class GameController {
   }
 
   stop() {
+    this.model.bullets = []
+    this.model.enemies = []
     cancelAnimationFrame(this.model.animationId)
   }
 }
