@@ -49,7 +49,7 @@ export const GameCanvas = () => {
               setShowGameOver(false)
             }
           },
-        }
+        },
       )
 
       engineRef.current.start()
@@ -84,53 +84,34 @@ export const GameCanvas = () => {
   }, [])
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh', // Занимает всю высоту экрана
-        width: '100vw', // Занимает всю ширину экрана
-        margin: 0,
-      }}
-    >
-      <div className={'container--play'}>
-        {isLoading ? (
-          <div>
-            <CircularProgress />
-          </div>
-        ) : (
-          <div>
-            {playerLose && showGameOver ? (
-              <GameOver countPoints={score} />
-            ) : (
-              <>
-                <div style={{ display: 'flex', gap: '4px' }}>
+    <div className={'container container--play'}>
+      {isLoading ? (
+        <CircularProgress />
+      ) : (
+        <div>
+          {playerLose && showGameOver ? (
+            <GameOver countPoints={score} />
+          ) : (
+            <div className={'count'}>
+              <Typography component="h1" className="title" marginBottom={2}>
+                {score}
+
+                <div className={'count-life'}>
                   {Array.from({ length: countLifes }).map((_, index) => (
-                    <span
-                      key={index}
-                      style={{ color: 'red', fontSize: '24px' }}
-                    >
-                      ❤️
-                    </span>
+                    <span key={index}>❤️</span>
                   ))}
                 </div>
-                <p>Score: {score}</p>
-                <div>
-                  <Typography component="h1" className="title" marginBottom={2}>
-                    {score}
-                  </Typography>
-                  <canvas
-                    ref={canvasRef}
-                    width={settings.CANVAS_WIDTH}
-                    height={settings.CANVAS_HEIGHT}
-                  />
-                </div>
-              </>
-            )}
-          </div>
-        )}
-      </div>
+              </Typography>
+
+              <canvas
+                ref={canvasRef}
+                width={settings.CANVAS_WIDTH}
+                height={settings.CANVAS_HEIGHT}
+              />
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }

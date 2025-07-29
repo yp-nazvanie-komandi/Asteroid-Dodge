@@ -1,5 +1,5 @@
 class Settings {
-  CANVAS_WIDTH = (window.innerWidth || 800) + 10
+  CANVAS_WIDTH = 800
   CANVAS_HEIGHT = (window.innerHeight || 600) + 10
 
   PLAYER_WIDTH = 50
