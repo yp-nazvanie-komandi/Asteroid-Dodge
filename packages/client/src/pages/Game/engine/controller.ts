@@ -1,6 +1,10 @@
 import { GameModel } from './model'
 import Settings from '../settings'
 import { Direction } from '../entities/types'
+import { Asteroid } from '../entities/asteroid'
+
+type EnemyKeys = 'asteroids' | 'enemy'
+
 
 export class GameController {
   private lastSpawn = 0
@@ -42,36 +46,58 @@ export class GameController {
         }
       } else {
         this.model.enemies[i].update(dt)
+
+    const keysBots: EnemyKeys[] = ['asteroids', 'enemy']
+    // Обновление позиций противников
+    for (const key of keysBots) {
+      const enemies = this.model[key] as Asteroid[]
+      for (let i = enemies.length - 1; i >= 0; i--) {
+        enemies[i].y += this.settings.SPEED_ENEMY * dt
+        if (enemies[i].y > this.settings.CANVAS_HEIGHT) {
+          enemies.splice(i, 1)
+        } else {
+          enemies[i].update(dt)
+        }
       }
     }
 
     // Проверка столкновений
-    for (let i = this.model.enemies.length - 1; i >= 0; i--) {
-      const enemy = this.model.enemies[i]
+    for (const key of keysBots) {
+      const enemies = this.model[key]
+      for (let i = enemies.length - 1; i >= 0; i--) {
+        const enemyObj = enemies[i]
 
-      // С пулями
-      for (let j = this.model.bullets.length - 1; j >= 0; j--) {
-        const bullet = this.model.bullets[j]
-        if (enemy.collision(bullet)) {
-          this.model.bullets.splice(j, 1)
-          this.model.enemies.splice(i, 1)
-          this.model.score += 1
-          break
+        // Проверка с пулями
+        for (let j = this.model.bullets.length - 1; j >= 0; j--) {
+          const bullet = this.model.bullets[j]
+          if (enemyObj.collision(bullet)) {
+            this.model.bullets.splice(j, 1)
+            enemies.splice(i, 1)
+            this.model.score += 1
+            break
+          }
+        }
+
+        // Проверка с игроком
+        if (this.model.player.collision(enemyObj)) {
+          this.model.playerLose = true
+          return true
         }
       }
-
-      // С игроком
-      if (this.model.player.collision(enemy)) {
-        this.model.playerLose = true
-        return true
-      }
     }
+
     return false
   }
 
   spawnIfNeeded(timestamp: number) {
     if (timestamp - this.lastSpawn > 1000) {
-      this.model.spawnEnemy()
+      const spawnAsteroidsOrEnemy = Math.floor(Math.random() * 100) + 1
+
+      if (spawnAsteroidsOrEnemy % 2 === 0) {
+        this.model.spawnAsteroids()
+      } else {
+        this.model.spawnEnemy()
+      }
       this.lastSpawn = timestamp
     }
   }

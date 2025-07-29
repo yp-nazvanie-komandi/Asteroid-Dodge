@@ -1,10 +1,12 @@
-// game/models/GameModel.ts
 import { SimpleBox } from '../entities/base'
 import { BasicColors } from '../utils/colors'
 import Settings from '../settings'
 import { ResourceVisual, Rectangle } from '../types'
 import { Asteriod } from '../entities/asteroid'
 import { SpaceCraft } from '../entities/player'
+import { SimpleBox } from '../entities/base'
+import { BasicColors } from '../utils/colors'
+import Settings from '../settings'
 
 export class GameModel {
   public score = 0
@@ -17,11 +19,13 @@ export class GameModel {
 
   public player: SpaceCraft
   public bullets: SimpleBox[] = []
-  public enemies: Asteriod[] = []
+  public asteroids: Asteroid[] = []
+  public enemy: Enemy[] = []
 
   constructor(private settings: Settings, resources: ResourceVisual) {
     this.settings = settings
     this.resources = resources
+
     this.player = new SpaceCraft(
       {
         x: settings.CANVAS_WIDTH / 2 - settings.PLAYER_WIDTH / 2,
@@ -35,9 +39,9 @@ export class GameModel {
     )
   }
 
-  spawnEnemy() {
-    this.enemies.push(
-      new Asteriod(
+  spawnAsteroids() {
+    this.asteroids.push(
+      new Asteroid(
         {
           x:
             Math.random() *
@@ -47,6 +51,22 @@ export class GameModel {
           height: this.settings.ENEMY_HEIGHT,
         } as Rectangle,
         this.resources['asteroid']
+      )
+    )
+  }
+
+  spawnEnemy() {
+    this.enemy.push(
+      new Enemy(
+        {
+          x:
+            Math.random() *
+            (this.settings.CANVAS_WIDTH - this.settings.ENEMY_WIDTH),
+          y: -this.settings.ENEMY_HEIGHT,
+          width: this.settings.ENEMY_WIDTH,
+          height: this.settings.ENEMY_HEIGHT,
+        } as Rectangle,
+        this.resources[`enemy${Math.floor(Math.random() * 3) + 1}`]
       )
     )
   }
@@ -84,7 +104,6 @@ export class GameModel {
     document.addEventListener('keyup', handleKeyUp)
 
     return () => {
-      //console.log('Remove handlers');
       document.removeEventListener('keydown', handleKeyDown)
       document.removeEventListener('keyup', handleKeyUp)
     }

@@ -9,7 +9,6 @@ export class SpaceCraft extends Entity implements Drawable, Updateable {
   private visualRight: HTMLImageElement
 
   private direction: Direction = Direction.Unknown
-  private isRight = false
 
   constructor(
     rect: Rectangle,

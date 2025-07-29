@@ -1,4 +1,5 @@
 // TODO: Весь функционал здесь лежит ВРЕМЕННО, пока мы не договоримся о том как работать с сетью в приложении и разобьем этот файл на нормальные составляющие
+import { IUser } from '../../pages/Profile/types'
 
 interface ISignInRequestBody {
   login: string
@@ -68,7 +69,7 @@ export class Auth {
   }
 
   private async _getResponseData<TQueryData>(
-    queryFn: () => TAwaitable<Response>
+    queryFn: () => TAwaitable<Response>,
   ) {
     const state: TQueryState<TQueryData> = {
       data: undefined,
@@ -118,8 +119,8 @@ export class Auth {
         this._getRequestInitParams({
           method: 'POST',
           body: requestBody,
-        })
-      )
+        }),
+      ),
     )
   }
 
@@ -130,14 +131,19 @@ export class Auth {
         this._getRequestInitParams({
           method: 'POST',
           body: requestBody,
-        })
-      )
+        }),
+      ),
     )
   }
 
   authenticate() {
     return this._getResponseData<TAuthenticateResponseData>(() =>
-      fetch(`${this._entrypoint}/user`, this._getRequestInitParams())
+      fetch(`${this._entrypoint}/user`, this._getRequestInitParams()),
+    )
+  }
+  getUserData() {
+    return this._getResponseData<IUser>(() =>
+      fetch(`${this._entrypoint}/user`, this._getRequestInitParams()),
     )
   }
 
@@ -145,8 +151,8 @@ export class Auth {
     return this._getResponseData(() =>
       fetch(
         `${this._entrypoint}/logout`,
-        this._getRequestInitParams({ method: 'POST' })
-      )
+        this._getRequestInitParams({ method: 'POST' }),
+      ),
     )
   }
 }
