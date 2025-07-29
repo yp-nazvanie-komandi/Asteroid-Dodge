@@ -2,11 +2,9 @@ import { SimpleBox } from '../entities/base'
 import { BasicColors } from '../utils/colors'
 import Settings from '../settings'
 import { ResourceVisual, Rectangle } from '../types'
-import { Asteriod } from '../entities/asteroid'
+import { Asteroid } from '../entities/asteroid'
 import { SpaceCraft } from '../entities/player'
-import { SimpleBox } from '../entities/base'
-import { BasicColors } from '../utils/colors'
-import Settings from '../settings'
+import { Enemy } from '../entities/enemy'
 
 export class GameModel {
   public score = 0
@@ -20,7 +18,7 @@ export class GameModel {
   public player: SpaceCraft
   public bullets: SimpleBox[] = []
   public asteroids: Asteroid[] = []
-  public enemy: Enemy[] = []
+  public enemies: Enemy[] = []
 
   constructor(private settings: Settings, resources: ResourceVisual) {
     this.settings = settings
@@ -56,7 +54,7 @@ export class GameModel {
   }
 
   spawnEnemy() {
-    this.enemy.push(
+    this.enemies.push(
       new Enemy(
         {
           x:

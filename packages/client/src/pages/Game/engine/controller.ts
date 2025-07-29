@@ -5,7 +5,6 @@ import { Asteroid } from '../entities/asteroid'
 
 type EnemyKeys = 'asteroids' | 'enemy'
 
-
 export class GameController {
   private lastSpawn = 0
 
@@ -34,7 +33,7 @@ export class GameController {
       if (this.model.bullets[i].y < 0) this.model.bullets.splice(i, 1)
     }
 
-    // Движение противников
+    // Движение астероидов
     for (let i = this.model.enemies.length - 1; i >= 0; i--) {
       this.model.enemies[i].y += this.settings.SPEED_ENEMY * dt
       if (this.model.enemies[i].y > this.settings.CANVAS_HEIGHT) {
@@ -46,40 +45,31 @@ export class GameController {
         }
       } else {
         this.model.enemies[i].update(dt)
-
-    const keysBots: EnemyKeys[] = ['asteroids', 'enemy']
-    // Обновление позиций противников
-    for (const key of keysBots) {
-      const enemies = this.model[key] as Asteroid[]
-      for (let i = enemies.length - 1; i >= 0; i--) {
-        enemies[i].y += this.settings.SPEED_ENEMY * dt
-        if (enemies[i].y > this.settings.CANVAS_HEIGHT) {
-          enemies.splice(i, 1)
-        } else {
-          enemies[i].update(dt)
-        }
       }
     }
 
+    const keysBots: EnemyKeys[] = ['asteroids'] // сейчас в игре нет enemy
+
     // Проверка столкновений
     for (const key of keysBots) {
-      const enemies = this.model[key]
-      for (let i = enemies.length - 1; i >= 0; i--) {
-        const enemyObj = enemies[i]
+      const asteroids = this.model.asteroids
+
+      for (let i = asteroids.length - 1; i >= 0; i--) {
+        const asteroid = asteroids[i]
 
         // Проверка с пулями
         for (let j = this.model.bullets.length - 1; j >= 0; j--) {
           const bullet = this.model.bullets[j]
-          if (enemyObj.collision(bullet)) {
+          if (asteroid.collision(bullet)) {
             this.model.bullets.splice(j, 1)
-            enemies.splice(i, 1)
+            this.model.asteroids.splice(i, 1)
             this.model.score += 1
             break
           }
         }
 
         // Проверка с игроком
-        if (this.model.player.collision(enemyObj)) {
+        if (this.model.player.collision(asteroid)) {
           this.model.playerLose = true
           return true
         }

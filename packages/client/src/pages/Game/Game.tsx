@@ -70,7 +70,6 @@ export const GameCanvas = () => {
       // Вычисляем оставшееся время до 2 секунд
       const elapsed = performance.now() - startTime
       const remainingDelay = Math.max(2000 - elapsed, 0)
-
       // Ждем оставшееся время
       await new Promise(resolve => setTimeout(resolve, remainingDelay))
     }
@@ -95,38 +94,43 @@ export const GameCanvas = () => {
         margin: 0,
       }}
     >
-    <div className={'container--play'}>
-      {isLoading ? (
-        <div>
-          <CircularProgress />
-        </div>
-      ) : (
-        <div>
-          {playerLose && showGameOver ? (
-            <GameOver countPoints={score} />
-          ) : (
-            <>
-              <div style={{ display: 'flex', gap: '4px' }}>
-                {Array.from({ length: countLifes }).map((_, index) => (
-                  <span key={index} style={{ color: 'red', fontSize: '24px' }}>
-                    ❤️
-                  </span>
-                ))}
-              </div>
-              <p>Score: {score}</p>
-            <div>
-              <Typography component="h1" className="title" marginBottom={2}>
-                {score}
-              </Typography>
-              <canvas
-                ref={canvasRef}
-                width={settings.CANVAS_WIDTH}
-                height={settings.CANVAS_HEIGHT}
-              />
-            </div>
-          )}
-        </div>
-      )}
+      <div className={'container--play'}>
+        {isLoading ? (
+          <div>
+            <CircularProgress />
+          </div>
+        ) : (
+          <div>
+            {playerLose && showGameOver ? (
+              <GameOver countPoints={score} />
+            ) : (
+              <>
+                <div style={{ display: 'flex', gap: '4px' }}>
+                  {Array.from({ length: countLifes }).map((_, index) => (
+                    <span
+                      key={index}
+                      style={{ color: 'red', fontSize: '24px' }}
+                    >
+                      ❤️
+                    </span>
+                  ))}
+                </div>
+                <p>Score: {score}</p>
+                <div>
+                  <Typography component="h1" className="title" marginBottom={2}>
+                    {score}
+                  </Typography>
+                  <canvas
+                    ref={canvasRef}
+                    width={settings.CANVAS_WIDTH}
+                    height={settings.CANVAS_HEIGHT}
+                  />
+                </div>
+              </>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
