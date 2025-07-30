@@ -1,8 +1,8 @@
-import { GameModel } from './model.js'
-import { GameView } from './view.js'
-import Settings from '../settings.js'
-import { GameController } from './controller.js'
-import { ResourceVisual } from '../types.js'
+import { GameModel } from './model'
+import { GameView } from './view'
+import Settings from '../settings'
+import { GameController } from './controller'
+import { ResourceVisual } from '../types'
 
 export class GameEngine {
   controller: GameController
@@ -12,6 +12,7 @@ export class GameEngine {
 
   // Колбэки для обновления состояния
   private setScore?: (score: number) => void
+  private setCountLifes?: (score: number) => void
   private setPlayerLose?: (lose: boolean) => void
 
   constructor(
@@ -21,6 +22,7 @@ export class GameEngine {
     resources: ResourceVisual,
     callbacks?: {
       setScore?: (score: number) => void
+      setCountLifes?: (score: number) => void
       setPlayerLose?: (lose: boolean) => void
     }
   ) {
@@ -33,12 +35,12 @@ export class GameEngine {
     this.eventHandlersRemove = this.model.initControls()
     // Колбека для обновления состояния родительского компонента
     this.setScore = callbacks?.setScore
+    this.setCountLifes = callbacks?.setCountLifes
     this.setPlayerLose = callbacks?.setPlayerLose
   }
 
   start() {
     const loop = (timestamp: number) => {
-      this.controller.spawnIfNeeded(timestamp)
       const dt = (performance.now() - this.model.lastFrameTime) / 1000.0
 
       const playerIsLose = this.controller.update(dt)
@@ -47,6 +49,7 @@ export class GameEngine {
 
       // Обновляем состояние React
       if (this.setScore) this.setScore(this.model.score)
+      if (this.setCountLifes) this.setCountLifes(this.model.countLife)
       if (playerIsLose && this.setPlayerLose) this.setPlayerLose(true)
 
       this.model.lastFrameTime = performance.now()
@@ -55,6 +58,8 @@ export class GameEngine {
         this.controller.stop()
         return
       }
+
+      this.controller.spawnIfNeeded(timestamp) // тут добавим астероиды
 
       this.model.animationId = requestAnimationFrame(loop)
     }

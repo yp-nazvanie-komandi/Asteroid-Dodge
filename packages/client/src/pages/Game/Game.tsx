@@ -12,6 +12,7 @@ const settings = new Settings()
 export const GameCanvas = () => {
   // Реактивные элементы
   const [score, setScore] = useState(0)
+  const [countLifes, setCountLifes] = useState(3)
   const [playerLose, setPlayerLose] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [showGameOver, setShowGameOver] = useState(false)
@@ -38,6 +39,7 @@ export const GameCanvas = () => {
         imageGallery.current,
         {
           setScore,
+          setCountLifes,
           setPlayerLose: (value: boolean) => {
             if (value) {
               setPlayerLose(true)
@@ -47,7 +49,7 @@ export const GameCanvas = () => {
               setShowGameOver(false)
             }
           },
-        }
+        },
       )
 
       engineRef.current.start()
@@ -68,7 +70,6 @@ export const GameCanvas = () => {
       // Вычисляем оставшееся время до 2 секунд
       const elapsed = performance.now() - startTime
       const remainingDelay = Math.max(2000 - elapsed, 0)
-
       // Ждем оставшееся время
       await new Promise(resolve => setTimeout(resolve, remainingDelay))
     }
@@ -83,19 +84,23 @@ export const GameCanvas = () => {
   }, [])
 
   return (
-    <div className={'container--play'}>
+    <div className={'container container--play'}>
       {isLoading ? (
-        <div>
-          <CircularProgress />
-        </div>
+        <CircularProgress />
       ) : (
         <div>
           {playerLose && showGameOver ? (
             <GameOver countPoints={score} />
           ) : (
-            <div>
+            <div className={'count'}>
               <Typography component="h1" className="title" marginBottom={2}>
                 {score}
+
+                <div className={'count-life'}>
+                  {Array.from({ length: countLifes }).map((_, index) => (
+                    <span key={index}>❤️</span>
+                  ))}
+                </div>
               </Typography>
 
               <canvas

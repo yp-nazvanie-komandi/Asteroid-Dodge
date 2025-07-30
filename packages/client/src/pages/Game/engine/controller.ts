@@ -1,28 +1,31 @@
 import { GameModel } from './model'
 import Settings from '../settings'
-import { Direction } from '../entities/types.js'
+import { Direction } from '../entities/types'
 import { Asteroid } from '../entities/asteroid'
 
-type EnemyKeys = 'asteroids' | 'enemy'
+type EnemyKeys = 'asteroids' | 'enemies'
 
 export class GameController {
   private lastSpawn = 0
 
-  constructor(private model: GameModel, private settings: Settings) {}
+  constructor(
+    private model: GameModel,
+    private settings: Settings,
+  ) {}
 
   update(dt: number): boolean {
     // Движение игрока
     if (this.model.keys['ArrowLeft']) {
       this.model.player.x = Math.max(
         0,
-        this.model.player.x - this.settings.SPEED_PALYER * dt
+        this.model.player.x - this.settings.SPEED_PALYER * dt,
       )
       this.model.player.update(Direction.Right)
     }
     if (this.model.keys['ArrowRight']) {
       this.model.player.x = Math.min(
         this.settings.CANVAS_WIDTH - this.model.player.width,
-        this.model.player.x + this.settings.SPEED_PALYER * dt
+        this.model.player.x + this.settings.SPEED_PALYER * dt,
       )
       this.model.player.update(Direction.Left)
     }
@@ -33,7 +36,7 @@ export class GameController {
       if (this.model.bullets[i].y < 0) this.model.bullets.splice(i, 1)
     }
 
-    const keysBots: EnemyKeys[] = ['asteroids', 'enemy']
+    const keysBots: EnemyKeys[] = ['asteroids', 'enemies']
     // Обновление позиций противников
     for (const key of keysBots) {
       const enemies = this.model[key] as Asteroid[]
@@ -89,6 +92,9 @@ export class GameController {
   }
 
   stop() {
+    this.model.bullets = []
+    this.model.enemies = []
+    this.model.asteroids = []
     cancelAnimationFrame(this.model.animationId)
   }
 }

@@ -1,10 +1,10 @@
 import { SimpleBox } from '../entities/base'
 import { BasicColors } from '../utils/colors'
-import { Rectangle, ResourceVisual } from '../types.js'
-import { Asteroid } from '../entities/asteroid.js'
-import { Enemy } from '../entities/enemy.js'
-import { SpaceCraft } from '../entities/player.js'
 import Settings from '../settings'
+import { ResourceVisual, Rectangle } from '../types'
+import { Asteroid } from '../entities/asteroid'
+import { SpaceCraft } from '../entities/player'
+import { Enemy } from '../entities/enemy'
 
 export class GameModel {
   public score = 0
@@ -12,13 +12,13 @@ export class GameModel {
   public lastFrameTime = 0
   public animationId = 0
   public keys: { [key: string]: boolean } = {}
-
+  public countLife = 3
   public resources: ResourceVisual
 
   public player: SpaceCraft
   public bullets: SimpleBox[] = []
   public asteroids: Asteroid[] = []
-  public enemy: Enemy[] = []
+  public enemies: Enemy[] = []
 
   constructor(private settings: Settings, resources: ResourceVisual) {
     this.settings = settings
@@ -54,7 +54,7 @@ export class GameModel {
   }
 
   spawnEnemy() {
-    this.enemy.push(
+    this.enemies.push(
       new Enemy(
         {
           x:

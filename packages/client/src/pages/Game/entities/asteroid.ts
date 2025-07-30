@@ -1,6 +1,6 @@
-import { Rectangle } from '../types.js'
-import { Entity } from './base.js'
-import { Drawable, Updateable } from './types.js'
+import { Rectangle } from '../types'
+import { Entity } from './base'
+import { Drawable, Updateable } from './types'
 
 export class Asteroid extends Entity implements Drawable, Updateable {
   visual: HTMLImageElement
