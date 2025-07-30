@@ -33,8 +33,5 @@
     "commitizen": {
       "path": "@commitlint/cz-commitlint"
     }
-  },
-  "dependencies": {
-    "react-redux": "^9.2.0"
   }
 }
