@@ -1,0 +1,18 @@
+@import "../../colors";
+
+.link, a {
+  margin-top: 16px;
+  cursor: pointer;
+  color: $primary-main;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  line-height: 150%;
+  letter-spacing: 0.15px;
+  vertical-align: middle;
+  text-decoration: underline;
+
+  &.text-center {
+    display: flex;
+    justify-content: center;
+  }
+}

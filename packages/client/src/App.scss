@@ -84,30 +84,6 @@ body {
         aspect-ratio: 1/1;
       }
     }
-
-    .links {
-      width: 100%;
-      max-width: 480px;
-      display: flex;
-      justify-content: space-between;
-
-      &-block {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 0;
-        text-decoration: none;
-
-        span {
-          color: black;
-          font-family: 'Inter', sans-serif;
-          font-size: 1rem;
-          line-height: 150%;
-          letter-spacing: 0.15px;
-          vertical-align: middle;
-        }
-      }
-    }
   }
 
   &--start {

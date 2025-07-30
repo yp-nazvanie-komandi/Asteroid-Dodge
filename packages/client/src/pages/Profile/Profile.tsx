@@ -5,11 +5,12 @@ import { Auth } from '../../services/Auth/Auth'
 import { User } from '../../services/User'
 import { IUser, IPasswordFormValues } from './types'
 import { Container, Stack, TextField, Typography } from '@mui/material'
+import { usePostAuthLogoutMutation } from '../../redux/api/Auth/auth'
+
 import Button from '../../components/Button/Button'
+import { Link } from '../../components/Link/Link'
 
 import avatarImg from '/src/assets/img/tmp-avatar.png'
-
-import { usePostAuthLogoutMutation } from '../../redux/api/Auth/auth'
 
 const DEFAULT_ERROR_MESSAGE =
   'Упс, что-то пошло не так. Повторите попытку позже.'
@@ -157,12 +158,9 @@ export const Profile = () => {
             loading={isSubmitting}
           />
 
-          <Button
-            type="button"
-            text="Log out"
-            size="medium"
-            onClick={handleLogout}
-          />
+          <Link onClick={handleLogout}>
+            <p className="text-center">Log out</p>
+          </Link>
 
           {passError && (
             <Typography marginTop={2} color="error" textAlign="center">

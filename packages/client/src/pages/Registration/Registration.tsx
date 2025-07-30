@@ -11,6 +11,7 @@ import { usePostAuthSignupMutation } from '../../redux/api/Auth/auth'
 import Button from '../../components/Button/Button'
 
 import './style.scss'
+import { Link } from '../../components/Link/Link'
 
 interface IRegistrationFormValues {
   first_name: string
@@ -112,7 +113,9 @@ export const Registration = () => {
         >
           Registration
         </Typography>
+
         <Divider orientation="horizontal" />
+
         <Stack spacing={2} direction="column" marginTop={7} marginBottom={4}>
           {REGISTRATION_FORM_FIELDS.map(field => (
             <TextField
@@ -131,12 +134,20 @@ export const Registration = () => {
             />
           ))}
         </Stack>
+
         <Button
           type="submit"
           text="Register"
           size="large"
           loading={isSubmitting}
         />
+
+        <Link>
+          <a className="text-center" href="/login">
+            Login
+          </a>
+        </Link>
+
         {signupError && (
           <Typography marginTop={2} color="error" textAlign="center">
             {signupError}
