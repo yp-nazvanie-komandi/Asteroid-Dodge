@@ -1,8 +1,7 @@
 import { GameModel } from './model'
 import Settings from '../settings'
 import { Direction } from '../entities/types'
-import { Asteroid } from '../entities/asteroid'
-import { Entity, SimpleBox } from '../entities/base'
+import { SimpleBox } from '../entities/base'
 import { getRandomElement } from '../utils/collections'
 import { Enemy } from '../entities/enemy'
 import { Rectangle } from '../types'
@@ -14,21 +13,29 @@ export class GameController {
   private lastSpawn = 0
   private lastShoot = 0
 
-  constructor(private model: GameModel, private settings: Settings) {}
+  constructor(
+    private model: GameModel,
+    private settings: Settings,
+  ) {}
 
   update(dt: number): boolean {
+    if (this.model.countLife <= 0) {
+      this.model.playerLose = true
+      return true
+    }
+
     // Движение игрока
     if (this.model.keys['ArrowLeft']) {
       this.model.player.x = Math.max(
         0,
-        this.model.player.x - this.settings.SPEED_PALYER * dt
+        this.model.player.x - this.settings.SPEED_PALYER * dt,
       )
       this.model.player.update(Direction.Right)
     }
     if (this.model.keys['ArrowRight']) {
       this.model.player.x = Math.min(
         this.settings.CANVAS_WIDTH - this.model.player.width,
-        this.model.player.x + this.settings.SPEED_PALYER * dt
+        this.model.player.x + this.settings.SPEED_PALYER * dt,
       )
       this.model.player.update(Direction.Left)
     }
@@ -66,6 +73,9 @@ export class GameController {
       if (this.model.asteroids[i].y > this.settings.CANVAS_HEIGHT) {
         this.model.asteroids.splice(i, 1)
         this.model.countLife -= 1
+
+        const healthDown = this.model.resources.audio.health[0]
+        healthDown.audio.play()
       } else {
         this.model.asteroids[i].update(dt)
       }
@@ -82,6 +92,13 @@ export class GameController {
           this.model.bullets.splice(j, 1)
           enemies.splice(i, 1)
           this.model.score += 1
+
+          const randomExplosion = getRandomElement(
+            this.model.resources.audio.explosions,
+          )
+
+          randomExplosion?.audio.play()
+
           break
         }
         if (
@@ -111,6 +128,13 @@ export class GameController {
           this.model.bullets.splice(j, 1)
           asteroids.splice(i, 1)
           this.model.score += 1
+
+          const randomExplosion = getRandomElement(
+            this.model.resources.audio.explosions,
+          )
+
+          randomExplosion?.audio.play()
+
           break
         }
       }
@@ -129,6 +153,9 @@ export class GameController {
     if (performance.now() - this.lastShoot > 2000) {
       if (this.model.enemies.length > 0) {
         const randomEnemy = getRandomElement(this.model.enemies) as Enemy
+
+        const randomLaser = getRandomElement(this.model.resources.audio.lasers)
+
         this.model.bullets.push(
           new SimpleBox(
             {
@@ -140,9 +167,14 @@ export class GameController {
               width: this.settings.BULLET_WIDTH,
               height: this.settings.BULLET_HEIGHT,
             } as Rectangle,
-            BasicColors.RED
-          )
+            BasicColors.RED,
+          ),
         )
+
+        if (randomLaser) {
+          randomLaser.audio.currentTime = 0
+          randomLaser.audio.play()
+        }
       }
       this.lastShoot = performance.now()
     }

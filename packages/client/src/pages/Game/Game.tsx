@@ -1,11 +1,10 @@
-import React, { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import Settings from './settings'
-import { GameEngine } from './engine/engine.js'
-import { ResourceVisual } from './types.js'
-import LoadImageGallery from './resources.js'
-import CircularProgress from '@mui/material/CircularProgress'
-import { GameOver } from '../Game-over/Game-over.js'
-import { Typography } from '@mui/material'
+import { GameEngine } from './engine/engine'
+import { loadResources } from './resources'
+import { GameResources } from './types'
+import { GameOver } from '../Game-over/Game-over'
+import { Typography, CircularProgress } from '@mui/material'
 
 const settings = new Settings()
 
@@ -21,7 +20,7 @@ export const GameCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const engineRef = useRef<GameEngine | null>(null)
 
-  const imageGallery = useRef<ResourceVisual | null>(null)
+  const gameResourcesRef = useRef<GameResources | null>(null)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -30,13 +29,13 @@ export const GameCanvas = () => {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    if (imageGallery.current) {
+    if (gameResourcesRef.current) {
       const settings = new Settings()
       engineRef.current = new GameEngine(
         settings,
         canvas,
         ctx,
-        imageGallery.current,
+        gameResourcesRef.current,
         {
           setScore,
           setCountLifes,
@@ -61,12 +60,24 @@ export const GameCanvas = () => {
   }, [isLoading])
 
   useEffect(() => {
-    const loadImages = async () => {
+    const loadGameResources = async () => {
       const startTime = performance.now()
-      imageGallery.current = await LoadImageGallery()
-      if (!imageGallery.current || !imageGallery.current['asteroid']) {
-        throw new Error('Asteroid image not loaded')
+      gameResourcesRef.current = await loadResources()
+
+      if (
+        !gameResourcesRef.current.visuals ||
+        !Object.values(gameResourcesRef.current.visuals)
+      ) {
+        throw new Error('Game visuals resources not loaded')
       }
+
+      if (
+        !gameResourcesRef.current.audio ||
+        !Object.values(gameResourcesRef.current.audio)
+      ) {
+        throw new Error('Game audio resources not loaded')
+      }
+
       // Вычисляем оставшееся время до 2 секунд
       const elapsed = performance.now() - startTime
       const remainingDelay = Math.max(2000 - elapsed, 0)
@@ -74,7 +85,7 @@ export const GameCanvas = () => {
       await new Promise(resolve => setTimeout(resolve, remainingDelay))
     }
 
-    loadImages()
+    loadGameResources()
       .then(() => {
         setIsLoading(false)
       })
