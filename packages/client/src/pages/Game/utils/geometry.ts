@@ -1,4 +1,4 @@
-import { Rectangle } from '../types.js'
+import { Rectangle } from '../types'
 
 export function isRectanglesIntersect(
   rect1: Rectangle,
