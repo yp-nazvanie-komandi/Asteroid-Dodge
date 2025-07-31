@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent } from 'react'
+import { useState, useEffect, ChangeEvent, MouseEvent } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 import { Auth } from '../../services/Auth/Auth'
@@ -76,12 +76,12 @@ export const Profile = () => {
 
   const [logoutMutate] = usePostAuthLogoutMutation()
 
-  const handleLogout = async (e: KeyboardEvent) => {
+  const handleLogout = async (e: MouseEvent) => {
     e.preventDefault() // паредотвращаем событие клика
     try {
       await logoutMutate().unwrap()
 
-      navigate('/registration')
+      navigate('/login')
     } catch (error) {
       setError((error as Error)?.message || 'Logout failed')
     }
@@ -162,9 +162,10 @@ export const Profile = () => {
           <Link
             className="link text-center"
             component={RouterLink}
+            to="/login"
             onClick={handleLogout}
           >
-            Registration
+            Log out
           </Link>
 
           {passError && (
