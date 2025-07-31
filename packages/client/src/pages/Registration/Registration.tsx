@@ -95,6 +95,7 @@ export const Registration = () => {
 
       navigate('/profile')
     } catch (error) {
+      // TODO: https://redux-toolkit.js.org/rtk-query/usage-with-typescript#inline-error-handling-example
       setSignupError(
         (error as Error)?.message || DEFAULT_REGISTRATION_ERROR_MESSAGE,
       )

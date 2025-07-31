@@ -1,16 +1,25 @@
-import { useState, useEffect, ChangeEvent, MouseEvent } from 'react'
+import { useState, type ChangeEvent, type MouseEvent } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router'
-import { Auth } from '../../services/Auth/Auth'
-import { User } from '../../services/User'
-import { IUser, IPasswordFormValues } from './types'
+import { useNavigate, Link as RouterLink } from 'react-router'
+
 import { Container, Link, Stack, TextField, Typography } from '@mui/material'
-import { usePostAuthLogoutMutation } from '../../redux/api/Auth/auth'
 
 import Button from '../../components/Button/Button'
 
 import avatarImg from '/src/assets/img/tmp-avatar.png'
-import { Link as RouterLink } from 'react-router'
+
+import { type IPasswordFormValues } from './types'
+
+import {
+  useGetAuthUserQuery,
+  usePostAuthLogoutMutation,
+} from '../../redux/api/Auth/auth'
+
+import {
+  type ProfileAvatarBody,
+  usePutUserPasswordMutation,
+  usePutUserProfileAvatarMutation,
+} from '../../redux/api/Users/users'
 
 const DEFAULT_ERROR_MESSAGE =
   'Упс, что-то пошло не так. Повторите попытку позже.'
@@ -33,59 +42,16 @@ const FORM_FIELDS = [
 ] as const
 
 export const Profile = () => {
-  const [error, setError] = useState<string>()
-  const [user, setUser] = useState<IUser>()
+  const [logoutError, setLogoutError] = useState<string>()
   const [passError, setUpdatePassError] = useState<string>()
 
-  const navigate = useNavigate()
-
-  const getUserData = async () => {
-    try {
-      const { data } = await Auth.getInstance().getUserData()
-      if (data) {
-        setUser(data)
-      }
-    } catch (err) {
-      setError('Не удалось загрузить данные пользователя')
-    }
-  }
-
-  useEffect(() => {
-    getUserData()
-  }, [])
-
-  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e?.target?.files
-    if (file && file[0]) {
-      const formData = new FormData()
-      formData.append('avatar', file[0], file[0].name)
-
-      try {
-        const { successful, error } =
-          await User.getInstance().updateAvatar(formData)
-        if (successful) {
-          await getUserData()
-        } else {
-          console.error('Ошибка при обновлении аватара:', error)
-        }
-      } catch (err) {
-        console.error('Произошла ошибка:', err)
-      }
-    }
-  }
+  const { data: user } = useGetAuthUserQuery()
 
   const [logoutMutate] = usePostAuthLogoutMutation()
+  const [updatePasswordMutate] = usePutUserPasswordMutation()
+  const [updateAvatarMutate] = usePutUserProfileAvatarMutation()
 
-  const handleLogout = async (e: MouseEvent) => {
-    e.preventDefault() // паредотвращаем событие клика
-    try {
-      await logoutMutate().unwrap()
-
-      navigate('/login')
-    } catch (error) {
-      setError((error as Error)?.message || 'Logout failed')
-    }
-  }
+  const navigate = useNavigate()
 
   const {
     handleSubmit,
@@ -94,18 +60,49 @@ export const Profile = () => {
   } = useForm<IPasswordFormValues>({
     mode: 'all',
   })
+
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e?.target?.files
+
+    if (file && file[0]) {
+      const formData = new FormData()
+
+      formData.append('avatar', file[0], file[0].name)
+
+      try {
+        await updateAvatarMutate({
+          profileAvatarBody: formData as unknown as ProfileAvatarBody,
+        }).unwrap()
+      } catch (err) {
+        console.error('Ошибка при обновлении аватара:', err)
+      }
+    }
+  }
+
+  const handleLogout = async (e: MouseEvent) => {
+    e.preventDefault()
+
+    try {
+      await logoutMutate().unwrap()
+
+      navigate('/login')
+    } catch (error) {
+      // TODO: https://redux-toolkit.js.org/rtk-query/usage-with-typescript#inline-error-handling-example
+      setLogoutError((error as Error)?.message || 'Logout failed')
+    }
+  }
+
   const handleUpdatePass = async (values: IPasswordFormValues) => {
     setUpdatePassError(undefined)
-    try {
-      const { successful, error } =
-        await User.getInstance().updatePassword(values)
 
-      if (successful) {
-        navigate('/start')
-      } else {
-        setUpdatePassError(error?.message || DEFAULT_ERROR_MESSAGE)
-      }
+    try {
+      await updatePasswordMutate({
+        changePasswordRequest: values,
+      }).unwrap()
+
+      navigate('/start')
     } catch (error) {
+      // TODO: https://redux-toolkit.js.org/rtk-query/usage-with-typescript#inline-error-handling-example
       setUpdatePassError((error as Error)?.message || DEFAULT_ERROR_MESSAGE)
     }
   }
@@ -168,9 +165,9 @@ export const Profile = () => {
             Log out
           </Link>
 
-          {passError && (
+          {(passError || logoutError) && (
             <Typography marginTop={2} color="error" textAlign="center">
-              {passError}
+              {passError || logoutError}
             </Typography>
           )}
         </Stack>
