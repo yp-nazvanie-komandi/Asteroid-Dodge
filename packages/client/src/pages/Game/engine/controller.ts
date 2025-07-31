@@ -2,80 +2,150 @@ import { GameModel } from './model'
 import Settings from '../settings'
 import { Direction } from '../entities/types'
 import { Asteroid } from '../entities/asteroid'
+import { Entity, SimpleBox } from '../entities/base'
+import { getRandomElement } from '../utils/collections'
+import { Enemy } from '../entities/enemy'
+import { Rectangle } from '../types'
+import { BasicColors } from '../utils/colors'
 
-type EnemyKeys = 'asteroids' | 'enemies'
+type EnemyKeys = 'asteroids' | 'enemy'
 
 export class GameController {
   private lastSpawn = 0
+  private lastShoot = 0
 
-  constructor(
-    private model: GameModel,
-    private settings: Settings,
-  ) {}
+  constructor(private model: GameModel, private settings: Settings) {}
 
   update(dt: number): boolean {
     // Движение игрока
     if (this.model.keys['ArrowLeft']) {
       this.model.player.x = Math.max(
         0,
-        this.model.player.x - this.settings.SPEED_PALYER * dt,
+        this.model.player.x - this.settings.SPEED_PALYER * dt
       )
       this.model.player.update(Direction.Right)
     }
     if (this.model.keys['ArrowRight']) {
       this.model.player.x = Math.min(
         this.settings.CANVAS_WIDTH - this.model.player.width,
-        this.model.player.x + this.settings.SPEED_PALYER * dt,
+        this.model.player.x + this.settings.SPEED_PALYER * dt
       )
       this.model.player.update(Direction.Left)
     }
 
+    // Стрельба вражеских кораблей
+    this.shootIfNeeded()
+
     // Движение пуль
     for (let i = this.model.bullets.length - 1; i >= 0; i--) {
-      this.model.bullets[i].y -= this.settings.SPEED_BULLET * dt
-      if (this.model.bullets[i].y < 0) this.model.bullets.splice(i, 1)
-    }
-
-    const keysBots: EnemyKeys[] = ['asteroids', 'enemies']
-    // Обновление позиций противников
-    for (const key of keysBots) {
-      const enemies = this.model[key] as Asteroid[]
-      for (let i = enemies.length - 1; i >= 0; i--) {
-        enemies[i].y += this.settings.SPEED_ENEMY * dt
-        if (enemies[i].y > this.settings.CANVAS_HEIGHT) {
-          enemies.splice(i, 1)
-        } else {
-          enemies[i].update(dt)
-        }
+      if (this.model.bullets[i].color === BasicColors.RED) {
+        this.model.bullets[i].y += this.settings.SPEED_BULLET * dt
+        if (this.model.bullets[i].y > this.settings.CANVAS_HEIGHT)
+          this.model.bullets.splice(i, 1)
+      } else {
+        this.model.bullets[i].y -= this.settings.SPEED_BULLET * dt
+        if (this.model.bullets[i].y < 0) this.model.bullets.splice(i, 1)
       }
     }
 
-    // Проверка столкновений
-    for (const key of keysBots) {
-      const enemies = this.model[key]
-      for (let i = enemies.length - 1; i >= 0; i--) {
-        const enemyObj = enemies[i]
+    const keysBots: EnemyKeys[] = ['asteroids', 'enemy']
 
-        // Проверка с пулями
-        for (let j = this.model.bullets.length - 1; j >= 0; j--) {
-          const bullet = this.model.bullets[j]
-          if (enemyObj.collision(bullet)) {
-            this.model.bullets.splice(j, 1)
-            enemies.splice(i, 1)
-            this.model.score += 1
-            break
-          }
+    // Обновление позиций противников
+    for (let i = this.model.enemies.length - 1; i >= 0; i--) {
+      this.model.enemies[i].y += this.settings.SPEED_ENEMY * dt
+      if (this.model.enemies[i].y > this.settings.CANVAS_HEIGHT) {
+        this.model.enemies.splice(i, 1)
+      } else {
+        this.model.enemies[i].update(dt)
+      }
+    }
+
+    // Обновление позиций астероидов
+    for (let i = this.model.asteroids.length - 1; i >= 0; i--) {
+      this.model.asteroids[i].y += this.settings.SPEED_ASTEROID * dt
+      if (this.model.asteroids[i].y > this.settings.CANVAS_HEIGHT) {
+        this.model.asteroids.splice(i, 1)
+        this.model.countLife -= 1
+      } else {
+        this.model.asteroids[i].update(dt)
+      }
+    }
+
+    // Проверка столкновений вражеских кораблей
+    const enemies = this.model.enemies
+    for (let i = enemies.length - 1; i >= 0; i--) {
+      const enemyObj = enemies[i]
+      // Проверка с пулями игрока
+      for (let j = this.model.bullets.length - 1; j >= 0; j--) {
+        const bullet = this.model.bullets[j]
+        if (bullet.color === BasicColors.GREEN && enemyObj.collision(bullet)) {
+          this.model.bullets.splice(j, 1)
+          enemies.splice(i, 1)
+          this.model.score += 1
+          break
         }
-
-        // Проверка с игроком
-        if (this.model.player.collision(enemyObj)) {
+        if (
+          bullet.color === BasicColors.RED &&
+          this.model.player.collision(bullet)
+        ) {
           this.model.playerLose = true
           return true
         }
       }
+
+      // Проверка с игроком
+      if (this.model.player.collision(enemyObj)) {
+        this.model.playerLose = true
+        return true
+      }
+    }
+
+    // Проверка столкновений c астероидами
+    const asteroids = this.model.asteroids
+    for (let i = asteroids.length - 1; i >= 0; i--) {
+      const asteroidOdj = asteroids[i]
+      // Проверка с пулями
+      for (let j = this.model.bullets.length - 1; j >= 0; j--) {
+        const bullet = this.model.bullets[j]
+        if (asteroidOdj.collision(bullet)) {
+          this.model.bullets.splice(j, 1)
+          asteroids.splice(i, 1)
+          this.model.score += 1
+          break
+        }
+      }
+      // Проверка с игроком
+      if (this.model.player.collision(asteroidOdj)) {
+        this.model.playerLose = true
+        return true
+      }
     }
 
     return false
+  }
+
+  shootIfNeeded() {
+    // Случайный вражеский корабль стреляет
+    if (performance.now() - this.lastShoot > 2000) {
+      if (this.model.enemies.length > 0) {
+        const randomEnemy = getRandomElement(this.model.enemies) as Enemy
+        this.model.bullets.push(
+          new SimpleBox(
+            {
+              x:
+                randomEnemy.x +
+                randomEnemy.width / 2 -
+                this.settings.BULLET_WIDTH / 2,
+              y: randomEnemy.y - this.settings.BULLET_HEIGHT,
+              width: this.settings.BULLET_WIDTH,
+              height: this.settings.BULLET_HEIGHT,
+            } as Rectangle,
+            BasicColors.RED
+          )
+        )
+      }
+      this.lastShoot = performance.now()
+    }
   }
 
   spawnIfNeeded(timestamp: number) {
@@ -92,9 +162,6 @@ export class GameController {
   }
 
   stop() {
-    this.model.bullets = []
-    this.model.enemies = []
-    this.model.asteroids = []
     cancelAnimationFrame(this.model.animationId)
   }
 }
