@@ -29,7 +29,7 @@ const FORM_FIELDS = [
     placeholder: '*************',
     autoComplete: 'new-password',
   },
-]
+] as const
 
 export const Profile = () => {
   const [error, setError] = useState<string>()
