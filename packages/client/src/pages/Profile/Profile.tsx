@@ -76,11 +76,12 @@ export const Profile = () => {
 
   const [logoutMutate] = usePostAuthLogoutMutation()
 
-  const handleLogout = async () => {
+  const handleLogout = async (e: KeyboardEvent) => {
+    e.preventDefault() // паредотвращаем событие клика
     try {
       await logoutMutate().unwrap()
 
-      navigate('/login')
+      navigate('/registration')
     } catch (error) {
       setError((error as Error)?.message || 'Logout failed')
     }
