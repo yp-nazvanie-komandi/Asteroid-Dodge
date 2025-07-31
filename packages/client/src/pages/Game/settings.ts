@@ -13,6 +13,7 @@ class Settings {
 
   SPEED_PALYER = 200
   SPEED_ENEMY = 50
+  SPEED_ASTEROID = 50
   SPEED_BULLET = 300
 }
 

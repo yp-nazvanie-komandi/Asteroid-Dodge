@@ -1,7 +1,7 @@
-import { Rectangle } from '../types.js'
-import { isCirclesIntersect } from '../utils/geometry.js'
-import { Entity } from './base.js'
-import { Direction, Drawable, Updateable } from './types.js'
+import { Rectangle } from '../types'
+import { isCirclesIntersect } from '../utils/geometry'
+import { Entity } from './base'
+import { Direction, Drawable, Updateable } from './types'
 
 export class SpaceCraft extends Entity implements Drawable, Updateable {
   private visual: HTMLImageElement
