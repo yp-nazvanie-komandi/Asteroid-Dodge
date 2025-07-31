@@ -66,6 +66,10 @@ export class GameController {
       if (this.model.asteroids[i].y > this.settings.CANVAS_HEIGHT) {
         this.model.asteroids.splice(i, 1)
         this.model.countLife -= 1
+        if (this.model.countLife < 0) {
+          this.model.playerLose = true
+          return true
+        }
       } else {
         this.model.asteroids[i].update(dt)
       }

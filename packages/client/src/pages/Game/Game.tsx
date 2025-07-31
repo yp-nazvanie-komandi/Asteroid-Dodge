@@ -49,9 +49,8 @@ export const GameCanvas = () => {
               setShowGameOver(false)
             }
           },
-        },
+        }
       )
-
       engineRef.current.start()
     }
 
@@ -102,7 +101,6 @@ export const GameCanvas = () => {
                   ))}
                 </div>
               </Typography>
-
               <canvas
                 ref={canvasRef}
                 width={settings.CANVAS_WIDTH}
