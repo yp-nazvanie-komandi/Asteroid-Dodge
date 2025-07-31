@@ -22,8 +22,8 @@ export const Router = () => {
       <Routes>
         <Route path="login" element={<Login />} />
         <Route path="registration" element={<Registration />} />
+        <Route index element={<Main />} />
         <Route path="/" element={<PrivateRoutes />}>
-          <Route index element={<Main />} />
           <Route path="profile" element={<Profile />} />
           {/* TODO: при необходимости можем добавить отдельными роутами старт экран и конец экран игры и вынести game как родителя */}
           <Route path="game" element={<GameCanvas />} />

@@ -6,7 +6,8 @@ import { Container, Divider, Stack, TextField, Typography } from '@mui/material'
 import { usePostAuthSigninMutation } from '../../redux/api/Auth/auth'
 
 import Button from '../../components/Button/Button'
-import { Link } from '../../components/Link/Link'
+import { Link as RouterLink } from 'react-router'
+import { Link } from '@mui/material'
 
 import './style.scss'
 
@@ -103,10 +104,12 @@ export const Login = () => {
           loading={isSubmitting}
         />
 
-        <Link>
-          <a className="text-center" href="/registration">
-            Registration
-          </a>
+        <Link
+          className="link text-center"
+          component={RouterLink}
+          to="/registration"
+        >
+          Registration
         </Link>
 
         {signinError && (

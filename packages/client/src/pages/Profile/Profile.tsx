@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router'
 import { Auth } from '../../services/Auth/Auth'
 import { User } from '../../services/User'
 import { IUser, IPasswordFormValues } from './types'
-import { Container, Stack, TextField, Typography } from '@mui/material'
+import { Container, Link, Stack, TextField, Typography } from '@mui/material'
 import { usePostAuthLogoutMutation } from '../../redux/api/Auth/auth'
 
 import Button from '../../components/Button/Button'
-import { Link } from '../../components/Link/Link'
 
 import avatarImg from '/src/assets/img/tmp-avatar.png'
+import { Link as RouterLink } from 'react-router'
 
 const DEFAULT_ERROR_MESSAGE =
   'Упс, что-то пошло не так. Повторите попытку позже.'
@@ -158,8 +158,12 @@ export const Profile = () => {
             loading={isSubmitting}
           />
 
-          <Link onClick={handleLogout}>
-            <p className="text-center">Log out</p>
+          <Link
+            className="link text-center"
+            component={RouterLink}
+            onClick={handleLogout}
+          >
+            Registration
           </Link>
 
           {passError && (

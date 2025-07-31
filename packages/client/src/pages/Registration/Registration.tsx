@@ -11,7 +11,9 @@ import { usePostAuthSignupMutation } from '../../redux/api/Auth/auth'
 import Button from '../../components/Button/Button'
 
 import './style.scss'
-import { Link } from '../../components/Link/Link'
+
+import { Link as RouterLink } from 'react-router'
+import { Link } from '@mui/material'
 
 interface IRegistrationFormValues {
   first_name: string
@@ -142,10 +144,8 @@ export const Registration = () => {
           loading={isSubmitting}
         />
 
-        <Link>
-          <a className="text-center" href="/login">
-            Login
-          </a>
+        <Link className="link text-center" component={RouterLink} to="/login">
+          Login
         </Link>
 
         {signupError && (
