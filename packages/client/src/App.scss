@@ -84,30 +84,6 @@ body {
         aspect-ratio: 1/1;
       }
     }
-
-    .links {
-      width: 100%;
-      max-width: 480px;
-      display: flex;
-      justify-content: space-between;
-
-      &-block {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 0;
-        text-decoration: none;
-
-        span {
-          color: black;
-          font-family: 'Inter', sans-serif;
-          font-size: 1rem;
-          line-height: 150%;
-          letter-spacing: 0.15px;
-          vertical-align: middle;
-        }
-      }
-    }
   }
 
   &--start {
@@ -246,5 +222,22 @@ h1 {
     &--white {
       color: white;
     }
+  }
+}
+
+.link.MuiTypography-root, .MuiTypography-root a {
+  margin-top: 16px;
+  cursor: pointer;
+  color: $primary-main;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  line-height: 150%;
+  letter-spacing: 0.15px;
+  vertical-align: middle;
+  text-decoration: underline;
+
+  &.text-center {
+    display: flex;
+    justify-content: center;
   }
 }

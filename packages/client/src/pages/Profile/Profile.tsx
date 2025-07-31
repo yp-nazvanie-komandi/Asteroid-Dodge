@@ -1,15 +1,16 @@
-import { useState, useEffect, ChangeEvent } from 'react'
+import { useState, useEffect, ChangeEvent, MouseEvent } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 import { Auth } from '../../services/Auth/Auth'
 import { User } from '../../services/User'
 import { IUser, IPasswordFormValues } from './types'
-import { Container, Stack, TextField, Typography } from '@mui/material'
+import { Container, Link, Stack, TextField, Typography } from '@mui/material'
+import { usePostAuthLogoutMutation } from '../../redux/api/Auth/auth'
+
 import Button from '../../components/Button/Button'
 
 import avatarImg from '/src/assets/img/tmp-avatar.png'
-
-import { usePostAuthLogoutMutation } from '../../redux/api/Auth/auth'
+import { Link as RouterLink } from 'react-router'
 
 const DEFAULT_ERROR_MESSAGE =
   'Упс, что-то пошло не так. Повторите попытку позже.'
@@ -75,7 +76,8 @@ export const Profile = () => {
 
   const [logoutMutate] = usePostAuthLogoutMutation()
 
-  const handleLogout = async () => {
+  const handleLogout = async (e: MouseEvent) => {
+    e.preventDefault() // паредотвращаем событие клика
     try {
       await logoutMutate().unwrap()
 
@@ -157,12 +159,14 @@ export const Profile = () => {
             loading={isSubmitting}
           />
 
-          <Button
-            type="button"
-            text="Log out"
-            size="medium"
+          <Link
+            className="link text-center"
+            component={RouterLink}
+            to="/login"
             onClick={handleLogout}
-          />
+          >
+            Log out
+          </Link>
 
           {passError && (
             <Typography marginTop={2} color="error" textAlign="center">

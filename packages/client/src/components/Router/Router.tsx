@@ -7,7 +7,6 @@ import { Profile } from '../../pages/Profile/Profile'
 import { GameCanvas } from '../../pages/Game/Game'
 import { Leaderboard } from '../../pages/Leaderboard/Leaderboard'
 import { Forum } from '../../pages/Forum/Forum'
-import { ForumTopicCreation } from '../../pages/ForumTopicCreation/ForumTopicCreation'
 import { ForumTopic } from '../../pages/ForumTopic/ForumTopic'
 import { Exception } from '../../pages/Exception/Exception'
 import { GameOver } from '../../pages/Game-over/Game-over'
@@ -21,9 +20,9 @@ export const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route index element={<Main />} />
         <Route path="login" element={<Login />} />
         <Route path="registration" element={<Registration />} />
+        <Route index element={<Main />} />
         <Route path="/" element={<PrivateRoutes />}>
           <Route path="profile" element={<Profile />} />
           {/* TODO: при необходимости можем добавить отдельными роутами старт экран и конец экран игры и вынести game как родителя */}

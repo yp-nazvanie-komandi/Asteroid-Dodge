@@ -40,7 +40,7 @@ export const Start = () => {
   return (
     <div className={'container container--start'}>
       {!isTimerActive ? (
-        <Button text={'Ready'} onClick={startCountdown} />
+        <Button text={'Ready'} size="large" onClick={startCountdown} />
       ) : (
         <div>
           <h1 className={'title'}>{displayCount}</h1>

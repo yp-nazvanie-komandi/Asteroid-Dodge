@@ -12,6 +12,9 @@ import Button from '../../components/Button/Button'
 
 import './style.scss'
 
+import { Link as RouterLink } from 'react-router'
+import { Link } from '@mui/material'
+
 interface IRegistrationFormValues {
   first_name: string
   second_name: string
@@ -112,7 +115,9 @@ export const Registration = () => {
         >
           Registration
         </Typography>
+
         <Divider orientation="horizontal" />
+
         <Stack spacing={2} direction="column" marginTop={7} marginBottom={4}>
           {REGISTRATION_FORM_FIELDS.map(field => (
             <TextField
@@ -131,12 +136,18 @@ export const Registration = () => {
             />
           ))}
         </Stack>
+
         <Button
           type="submit"
           text="Register"
           size="large"
           loading={isSubmitting}
         />
+
+        <Link className="link text-center" component={RouterLink} to="/login">
+          Login
+        </Link>
+
         {signupError && (
           <Typography marginTop={2} color="error" textAlign="center">
             {signupError}

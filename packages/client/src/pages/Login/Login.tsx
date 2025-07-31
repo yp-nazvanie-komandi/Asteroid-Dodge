@@ -1,14 +1,13 @@
 import { useState } from 'react'
-
 import { useNavigate } from 'react-router'
-
 import { useForm } from 'react-hook-form'
-
 import { Container, Divider, Stack, TextField, Typography } from '@mui/material'
 
 import { usePostAuthSigninMutation } from '../../redux/api/Auth/auth'
 
 import Button from '../../components/Button/Button'
+import { Link as RouterLink } from 'react-router'
+import { Link } from '@mui/material'
 
 import './style.scss'
 
@@ -58,7 +57,7 @@ export const Login = () => {
     try {
       await signinMutate({ signInRequest: values }).unwrap()
 
-      navigate('/profile')
+      navigate('/')
     } catch (error) {
       setSigninError((error as Error)?.message || DEFAULT_LOGIN_ERROR_MESSAGE)
     }
@@ -97,12 +96,22 @@ export const Login = () => {
             />
           ))}
         </Stack>
+
         <Button
           type="submit"
           text="Login"
           size="large"
           loading={isSubmitting}
         />
+
+        <Link
+          className="link text-center"
+          component={RouterLink}
+          to="/registration"
+        >
+          Registration
+        </Link>
+
         {signinError && (
           <Typography marginTop={2} color="error" textAlign="center">
             {signinError}
