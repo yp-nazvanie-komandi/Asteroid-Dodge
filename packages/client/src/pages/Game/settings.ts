@@ -1,6 +1,9 @@
 class Settings {
   CANVAS_WIDTH = 800
-  CANVAS_HEIGHT = 900 //(window.innerHeight || 600) + 10
+
+  get CANVAS_HEIGHT() {
+    return window.innerHeight || 900
+  }
 
   PLAYER_WIDTH = 50
   PLAYER_HEIGHT = 50

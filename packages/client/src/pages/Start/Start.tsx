@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router'
 import Button from '../../components/Button/Button'
 import { useState, useEffect, useRef } from 'react'
+import { FullscreenToggle } from '../../components/FullscreenToggle/FullscreenToggle'
 
 export const Start = () => {
   const [isTimerActive, setIsTimerActive] = useState(false)
@@ -38,15 +39,18 @@ export const Start = () => {
   }, [displayCount])
 
   return (
-    <div className={'container container--start'}>
-      {!isTimerActive ? (
-        <Button text={'Ready'} onClick={startCountdown} />
-      ) : (
-        <div>
-          <h1 className={'title'}>{displayCount}</h1>
-          <p>секунд до начала игры</p>
-        </div>
-      )}
-    </div>
+    <>
+      <div className={'container container--start'}>
+        {!isTimerActive ? (
+          <Button text={'Ready'} onClick={startCountdown} />
+        ) : (
+          <div>
+            <h1 className={'title'}>{displayCount}</h1>
+            <p>секунд до начала игры</p>
+          </div>
+        )}
+      </div>
+      <FullscreenToggle />
+    </>
   )
 }
