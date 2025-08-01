@@ -59,6 +59,7 @@ export const Login = () => {
 
       navigate('/')
     } catch (error) {
+      // TODO: https://redux-toolkit.js.org/rtk-query/usage-with-typescript#inline-error-handling-example
       setSigninError((error as Error)?.message || DEFAULT_LOGIN_ERROR_MESSAGE)
     }
   }

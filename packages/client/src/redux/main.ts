@@ -3,7 +3,7 @@ import { setupListeners } from '@reduxjs/toolkit/query'
 
 import { useDispatch, useSelector, useStore } from 'react-redux'
 
-import { baseAPI as api } from './api/base'
+import { enhancedAPI as api } from './api/enhanced'
 
 export const store = configureStore({
   reducer: {
