@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from 'react-router'
+import { Navigate, Outlet, useLocation } from 'react-router'
 
 import { Container, CircularProgress } from '@mui/material'
 
@@ -9,6 +9,8 @@ import './style.scss'
 export const PrivateRoutes = () => {
   const { isAuthenticated, isLoading } = useAuth()
 
+  const location = useLocation()
+
   if (isLoading) {
     return (
       <Container fixed className="router-loader">
@@ -18,7 +20,7 @@ export const PrivateRoutes = () => {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />
+    return <Navigate to="/login" replace state={{ from: location }} />
   }
 
   return <Outlet />

@@ -1,13 +1,19 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate, Link as RouterLink } from 'react-router'
 import { useForm } from 'react-hook-form'
-import { Container, Divider, Stack, TextField, Typography } from '@mui/material'
+import {
+  Container,
+  Divider,
+  Stack,
+  TextField,
+  Typography,
+  Link,
+} from '@mui/material'
 
 import { usePostAuthSigninMutation } from '../../redux/api/Auth/auth'
+import { isFetchBaseQueryErrorWithReason } from '../../redux/api/helpers'
 
 import Button from '../../components/Button/Button'
-import { Link as RouterLink } from 'react-router'
-import { Link } from '@mui/material'
 
 import './style.scss'
 
@@ -18,6 +24,10 @@ interface ILoginFormValues {
 
 const DEFAULT_LOGIN_ERROR_MESSAGE =
   'Произошла ошибка при входе. Повторите попытку позже.'
+
+const ALREADY_IN_SYSTEM_ERROR_REASON = 'User already in system'
+
+const DEFAULT_AFTER_LOGIN_NAVIGATION_PATH = '/'
 
 const LOGIN_FORM_FIELDS = [
   {
@@ -39,6 +49,8 @@ const LOGIN_FORM_FIELDS = [
 export const Login = () => {
   const [signinError, setSigninError] = useState<string>()
 
+  const location = useLocation()
+
   const [signinMutate] = usePostAuthSigninMutation()
 
   const navigate = useNavigate()
@@ -57,9 +69,24 @@ export const Login = () => {
     try {
       await signinMutate({ signInRequest: values }).unwrap()
 
-      navigate('/')
+      navigate(location.state?.from || DEFAULT_AFTER_LOGIN_NAVIGATION_PATH, {
+        replace: true,
+      })
     } catch (error) {
       // TODO: https://redux-toolkit.js.org/rtk-query/usage-with-typescript#inline-error-handling-example
+      if (isFetchBaseQueryErrorWithReason(error)) {
+        if (error.data.reason === ALREADY_IN_SYSTEM_ERROR_REASON) {
+          navigate(
+            location.state?.from || DEFAULT_AFTER_LOGIN_NAVIGATION_PATH,
+            {
+              replace: true,
+            },
+          )
+
+          return
+        }
+      }
+
       setSigninError((error as Error)?.message || DEFAULT_LOGIN_ERROR_MESSAGE)
     }
   }
