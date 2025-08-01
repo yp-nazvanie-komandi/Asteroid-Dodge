@@ -1,5 +1,11 @@
 import { useState, type ChangeEvent, type MouseEvent } from 'react'
+
 import { useForm } from 'react-hook-form'
+
+import { yupResolver } from '@hookform/resolvers/yup'
+
+import * as yup from 'yup'
+
 import { useNavigate, Link as RouterLink } from 'react-router'
 
 import { Container, Link, Stack, TextField, Typography } from '@mui/material'
@@ -9,6 +15,8 @@ import Button from '../../components/Button/Button'
 import avatarImg from '/src/assets/img/tmp-avatar.png'
 
 import { type IPasswordFormValues } from './types'
+
+import type { TFormFieldsSchemas } from '../../utils/types/validation'
 
 import {
   useGetAuthUserQuery,
@@ -24,13 +32,16 @@ import {
 const DEFAULT_ERROR_MESSAGE =
   'Упс, что-то пошло не так. Повторите попытку позже.'
 
-const FORM_FIELDS = [
+const DEFAULT_REQUIRED_FIELD_MESSAGE = 'Поле обязательно для заполнения'
+
+const PASSWORD_FORM_FIELDS = [
   {
     name: 'oldPassword',
     label: 'Старый пароль',
     type: 'password',
     placeholder: '*************',
     autoComplete: 'current-password',
+    validation: yup.string().required(DEFAULT_REQUIRED_FIELD_MESSAGE),
   },
   {
     name: 'newPassword',
@@ -38,8 +49,27 @@ const FORM_FIELDS = [
     type: 'password',
     placeholder: '*************',
     autoComplete: 'new-password',
+    validation: yup
+      .string()
+      .required(DEFAULT_REQUIRED_FIELD_MESSAGE)
+      .matches(
+        /^(?=.*[A-Z])(?=.*\d).{8,40}$/,
+        'Поле состоит от 8 до 40 символов, обязательно хотя бы одна заглавная буква и цифра',
+      ),
   },
 ] as const
+
+const PASSWORDS_FORM_FIELDS_SCHEMA = yup
+  .object(
+    PASSWORD_FORM_FIELDS.reduce(
+      (acc, field) => {
+        acc[field.name] = field.validation
+        return acc
+      },
+      {} as TFormFieldsSchemas<typeof PASSWORD_FORM_FIELDS>,
+    ),
+  )
+  .required()
 
 export const Profile = () => {
   const [logoutError, setLogoutError] = useState<string>()
@@ -59,8 +89,10 @@ export const Profile = () => {
     formState: { errors, isSubmitting },
   } = useForm<IPasswordFormValues>({
     mode: 'all',
+    resolver: yupResolver(PASSWORDS_FORM_FIELDS_SCHEMA),
   })
 
+  // TODO: Вынести в отдельный компонент и добавить валидацию для файлов https://github.com/yp-nazvanie-komandi/Asteroid-Dodge/issues/96
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e?.target?.files
 
@@ -131,7 +163,7 @@ export const Profile = () => {
       <Container component="form" onSubmit={handleSubmit(handleUpdatePass)}>
         <Stack spacing={2} padding={0} direction="column">
           <Stack spacing={2} direction="column">
-            {FORM_FIELDS.map(field => (
+            {PASSWORD_FORM_FIELDS.map(field => (
               <TextField
                 key={field.name}
                 type={field.type}
@@ -141,10 +173,7 @@ export const Profile = () => {
                 error={Boolean(errors[field.name])}
                 helperText={errors[field.name]?.message}
                 aria-invalid={errors[field.name] ? true : false}
-                // TODO: добавить валидацию на форму
-                {...register(field?.name, {
-                  required: 'Поле обязательно для заполнения',
-                })}
+                {...register(field?.name)}
               />
             ))}
           </Stack>
