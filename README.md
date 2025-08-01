@@ -69,12 +69,9 @@
 
 Откройте issue, я приду :)
 
-## Автодеплой статики на vercel
-Зарегистрируйте аккаунт на [vercel](https://vercel.com/)
-Следуйте [инструкции](https://vitejs.dev/guide/static-deploy.html#vercel-for-git)
-В качестве `root directory` укажите `packages/client`
+## Автодеплой клиента на Netlify
 
-Все ваши PR будут автоматически деплоиться на vercel. URL вам предоставит деплоящий бот
+[![Netlify Status](https://api.netlify.com/api/v1/badges/04c1ed2f-8669-4ef4-8dc2-fb040159431a/deploy-status)](https://app.netlify.com/projects/asteroid-dodge/deploys)
 
 ## Production окружение в докере
 Перед первым запуском выполните `node init.js`
