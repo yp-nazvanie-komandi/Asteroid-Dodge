@@ -1,7 +1,10 @@
 import { useGetAuthUserQuery } from '../../redux/api/Auth/auth'
 
 export const useAuth = () => {
-  const { isLoading, error } = useGetAuthUserQuery()
+  const { data, isLoading, isFetching, error } = useGetAuthUserQuery()
 
-  return { isLoading, isAuthenticated: !error }
+  return {
+    isLoading: isFetching || isLoading,
+    isAuthenticated: Boolean(data) && !error,
+  }
 }

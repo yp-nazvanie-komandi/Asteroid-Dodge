@@ -2,7 +2,7 @@ import { GameModel } from './model'
 import { GameView } from './view'
 import Settings from '../settings'
 import { GameController } from './controller'
-import { ResourceVisual } from '../types'
+import { GameResources } from '../types'
 
 export class GameEngine {
   controller: GameController
@@ -19,12 +19,12 @@ export class GameEngine {
     settings: Settings,
     canvas: HTMLCanvasElement,
     ctx: CanvasRenderingContext2D,
-    resources: ResourceVisual,
+    resources: GameResources,
     callbacks?: {
       setScore?: (score: number) => void
       setCountLifes?: (score: number) => void
       setPlayerLose?: (lose: boolean) => void
-    }
+    },
   ) {
     const model = new GameModel(settings, resources)
     this.model = model

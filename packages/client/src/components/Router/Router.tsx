@@ -7,7 +7,6 @@ import { Profile } from '../../pages/Profile/Profile'
 import { GameCanvas } from '../../pages/Game/Game'
 import { Leaderboard } from '../../pages/Leaderboard/Leaderboard'
 import { Forum } from '../../pages/Forum/Forum'
-import { ForumTopicCreation } from '../../pages/ForumTopicCreation/ForumTopicCreation'
 import { ForumTopic } from '../../pages/ForumTopic/ForumTopic'
 import { Exception } from '../../pages/Exception/Exception'
 import { GameOver } from '../../pages/Game-over/Game-over'
@@ -22,11 +21,10 @@ export const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route index element={<Main />} />
-        <Route path="login" element={<Login />} />
-        <Route path="registration" element={<Registration />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/registration" element={<Registration />} />
         <Route path="/" element={<PrivateRoutes />}>
           <Route path="profile" element={<Profile />} />
-          {/* TODO: при необходимости можем добавить отдельными роутами старт экран и конец экран игры и вынести game как родителя */}
           <Route path="game" element={<GameCanvas />} />
           <Route path="start" element={<Start />} />
           <Route path="game-over" element={<GameOver />} />
@@ -36,9 +34,9 @@ export const Router = () => {
             <Route path="new" element={<CreateForumTopic />} />
             <Route path=":topicId" element={<ForumTopic />} />
           </Route>
-          <Route path="/error" element={<Exception />} />
-          <Route path="*" element={<Error400 />} />
         </Route>
+        <Route path="/error" element={<Exception />} />
+        <Route path="*" element={<Error400 />} />
       </Routes>
     </BrowserRouter>
   )

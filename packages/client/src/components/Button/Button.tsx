@@ -1,8 +1,10 @@
-import ButtonMaterial from '@mui/material/Button'
+import ButtonMaterial, { ButtonProps } from '@mui/material/Button'
 import './style.scss'
 import { styled } from '@mui/material/styles'
 
-import { ButtonPropsExtended } from '../../types/button'
+interface IButtonPropsExtended extends ButtonProps<'button'> {
+  text: string
+}
 
 export default function Button({
   variant = 'contained',
@@ -12,7 +14,7 @@ export default function Button({
   onClick,
   customClass = 'MuiButton',
   ...rest
-}: ButtonPropsExtended) {
+}: IButtonPropsExtended) {
   return (
     <ButtonMaterial
       className={customClass}

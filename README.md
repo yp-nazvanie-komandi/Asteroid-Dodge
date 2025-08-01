@@ -10,22 +10,32 @@
 
 Для автоматической генерации коммита можно использовать команду `yarn commit`, перед его отправкой также будет произведена проверка с использованием `commitlint`
 
-### Как добавить зависимости?
-В этом проекте используется `monorepo` на основе [`lerna`](https://github.com/lerna/lerna)
+### Как управлять зависимостями?
+
+В этом проекте используется [`yarn workspaces`](https://yarnpkg.com/features/workspaces)
 
 Чтобы добавить зависимость для клиента 
-```yarn lerna add {your_dep} --scope client```
+```yarn workspace client add [PACKAGES_NAMES] [FLAGS]```
 
-Для сервера
-```yarn lerna add {your_dep} --scope server```
+Пример
+```yarn workspace client add react react-dom```
 
-И для клиента и для сервера
-```yarn lerna add {your_dep}```
+Чтобы добавить зависимость для сервера 
+```yarn workspace server add [PACKAGES_NAMES] [FLAGS]```
 
+Пример
+```yarn workspace server add nodemon -D```
 
-Если вы хотите добавить dev зависимость, проделайте то же самое, но с флагом `dev`
-```yarn lerna add {your_dep} --dev --scope server```
+Чтобы добавить глобальные зависимости для всего проекта
+```yarn add [PACKAGES_NAMES] [FLAGS] -W```
 
+Пример
+```yarn add lerna -D -W```
+
+Удаление зависимостей происходит аналогично добавлению, только вместо `add`, необходимо использовать `remove`
+
+Пример
+```yarn workspace server remove dotenv```
 
 ### Тесты
 
@@ -59,12 +69,9 @@
 
 Откройте issue, я приду :)
 
-## Автодеплой статики на vercel
-Зарегистрируйте аккаунт на [vercel](https://vercel.com/)
-Следуйте [инструкции](https://vitejs.dev/guide/static-deploy.html#vercel-for-git)
-В качестве `root directory` укажите `packages/client`
+## Автодеплой клиента на Netlify
 
-Все ваши PR будут автоматически деплоиться на vercel. URL вам предоставит деплоящий бот
+[![Netlify Status](https://api.netlify.com/api/v1/badges/04c1ed2f-8669-4ef4-8dc2-fb040159431a/deploy-status)](https://app.netlify.com/projects/asteroid-dodge/deploys)
 
 ## Production окружение в докере
 Перед первым запуском выполните `node init.js`
