@@ -1,10 +1,11 @@
 import { SimpleBox } from '../entities/base'
 import { BasicColors } from '../utils/colors'
 import Settings from '../settings'
-import { ResourceVisual, Rectangle } from '../types'
+import { GameResources, Rectangle } from '../types'
 import { Asteroid } from '../entities/asteroid'
 import { SpaceCraft } from '../entities/player'
 import { Enemy } from '../entities/enemy'
+import { getRandomElement } from '../utils/collections'
 
 export class GameModel {
   public score = 0
@@ -13,14 +14,17 @@ export class GameModel {
   public animationId = 0
   public keys: { [key: string]: boolean } = {}
   public countLife = 3
-  public resources: ResourceVisual
+  public resources: GameResources
 
   public player: SpaceCraft
   public bullets: SimpleBox[] = []
   public asteroids: Asteroid[] = []
   public enemies: Enemy[] = []
 
-  constructor(private settings: Settings, resources: ResourceVisual) {
+  constructor(
+    private settings: Settings,
+    resources: GameResources,
+  ) {
     this.settings = settings
     this.resources = resources
 
@@ -31,9 +35,9 @@ export class GameModel {
         width: settings.PLAYER_WIDTH,
         height: settings.PLAYER_HEIGHT,
       } as Rectangle,
-      this.resources['cruftLeft'],
-      this.resources['cruftRight'],
-      this.resources['cruft']
+      this.resources.visuals['cruftLeft'],
+      this.resources.visuals['cruftRight'],
+      this.resources.visuals['cruft'],
     )
   }
 
@@ -48,8 +52,8 @@ export class GameModel {
           width: this.settings.ENEMY_WIDTH,
           height: this.settings.ENEMY_HEIGHT,
         } as Rectangle,
-        this.resources['asteroid']
-      )
+        this.resources.visuals['asteroid'],
+      ),
     )
   }
 
@@ -64,8 +68,8 @@ export class GameModel {
           width: this.settings.ENEMY_WIDTH,
           height: this.settings.ENEMY_HEIGHT,
         } as Rectangle,
-        this.resources[`enemy${Math.floor(Math.random() * 3) + 1}`]
-      )
+        this.resources.visuals[`enemy${Math.floor(Math.random() * 3) + 1}`],
+      ),
     )
   }
 
@@ -88,9 +92,16 @@ export class GameModel {
               width: this.settings.BULLET_WIDTH,
               height: this.settings.BULLET_HEIGHT,
             } as Rectangle,
-            BasicColors.GREEN
-          )
+            BasicColors.GREEN,
+          ),
         )
+
+        const randomLaser = getRandomElement(this.resources.audio.lasers)
+
+        if (randomLaser) {
+          randomLaser.audio.currentTime = 0
+          randomLaser.audio.play()
+        }
       }
     }
 
