@@ -17,7 +17,7 @@ import {
   Link,
 } from '@mui/material'
 
-import { usePostAuthSignupMutation } from '../../redux/api/Auth/auth'
+import { usePostAuthSignupMutation } from '../../redux/api/Auth/enhanced/api'
 
 import type { TFormFieldsSchemas } from '../../utils/types/validation'
 

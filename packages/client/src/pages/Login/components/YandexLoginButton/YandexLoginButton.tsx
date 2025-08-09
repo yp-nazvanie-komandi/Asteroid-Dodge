@@ -1,25 +1,45 @@
-import { getClientID } from '../../../../services/oauth'
 import SvgButton from '../../../../components/Button/SvgButton'
+
+import { useLazyGetOauthYandexServiceIdQuery } from '../../../../redux/api/Oauth/generated/api'
+
 import './YandexLoginButton.scss'
 
-const YandexLoginButton = () => {
-  const redirectUri = import.meta.env.VITE_REDIRECT_URI
+interface IYandexLoginButtonProps {
+  setSigninError(error: string | undefined): void
+}
+
+const DEFAULT_LOGIN_ERROR_MESSAGE =
+  'Произошла ошибка при входе. Повторите попытку позже.'
+
+const YandexLoginButton = ({ setSigninError }: IYandexLoginButtonProps) => {
+  const [getServiceId, { isLoading, isFetching }] =
+    useLazyGetOauthYandexServiceIdQuery()
 
   const handleLogin = async () => {
+    setSigninError(undefined)
+
+    const redirectUrl = new URL('oauth', window.location.origin)
+
+    // TODO: по факту стоит засетить в куки и читать на oauth странице, так как там сейчас читается из window.location.origin
+    const redirectUri = redirectUrl.toString()
+
     try {
-      const { service_id } = await getClientID()
+      const { service_id } = await getServiceId({ redirectUri }).unwrap()
+
       const authUrl = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${service_id}&redirect_uri=${encodeURIComponent(
-        redirectUri
+        redirectUri,
       )}`
+
       window.location.href = authUrl
     } catch (error) {
-      console.log(`Ошибка авторизации: ${error}`)
+      setSigninError((error as Error)?.message || DEFAULT_LOGIN_ERROR_MESSAGE)
     }
   }
 
   return (
     <SvgButton
       onClick={handleLogin}
+      loading={isLoading || isFetching}
       className="yandex-login-button"
       type="button"
       text="Войти через Яндекс"
@@ -41,7 +61,7 @@ const YandexLoginButton = () => {
           />
         </svg>
       }
-    ></SvgButton>
+    />
   )
 }
 

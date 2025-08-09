@@ -1,4 +1,4 @@
-import { useGetAuthUserQuery } from '../../redux/api/Auth/auth'
+import { useGetAuthUserQuery } from '../../redux/api/Auth/enhanced/api'
 
 export const useAuth = () => {
   const { data, isLoading, isFetching, error } = useGetAuthUserQuery()

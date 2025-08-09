@@ -1,6 +1,7 @@
 class Settings {
   CANVAS_WIDTH = 800
-  CANVAS_HEIGHT = (window.innerHeight || 600) + 10
+  CANVAS_HEIGHT =
+    (typeof window === undefined ? 600 : globalThis?.innerHeight) + 10
 
   PLAYER_WIDTH = 50
   PLAYER_HEIGHT = 50
