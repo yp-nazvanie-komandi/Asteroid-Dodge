@@ -3,13 +3,12 @@ import { getClientID } from '../../../../services/oauth'
 
 const YandexLoginButton = () => {
   const [clientId, setClientId] = useState('')
-  const redirectUri = 'http://localhost:3000'
-  const scope = 'login:email login:info'
+  const redirectUri = import.meta.env.VITE_REDIRECT_URI
 
   const handleLogin = () => {
     const authUrl = `https://oauth.yandex.ru/authorize?response_type=token&client_id=${clientId}&redirect_uri=${encodeURIComponent(
       redirectUri
-    )}` // &scope=${scope}
+    )}`
     window.location.href = authUrl
   }
 
