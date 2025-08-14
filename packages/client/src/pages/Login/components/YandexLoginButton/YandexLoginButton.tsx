@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getClientID } from '../../../../services/oauth'
+import Button from '../../../../components/Button/Button'
 
 const YandexLoginButton = () => {
   const [clientId, setClientId] = useState('')
@@ -29,10 +30,11 @@ const YandexLoginButton = () => {
   })
 
   return (
-    <button
+    <Button
       onClick={handleLogin}
       className={`yandex-login-button`}
       type="button"
+      text="Войти через Яндекс"
       style={{
         backgroundColor: '#FFCC00',
         color: '#000',
@@ -63,8 +65,7 @@ const YandexLoginButton = () => {
           fill="#fff"
         />
       </svg>
-      Войти через Яндекс
-    </button>
+    </Button>
   )
 }
 
