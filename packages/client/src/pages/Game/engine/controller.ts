@@ -6,12 +6,12 @@ import { getRandomElement } from '../utils/collections'
 import { Enemy } from '../entities/enemy'
 import { Rectangle } from '../types'
 import { BasicColors } from '../utils/colors'
-
-type EnemyKeys = 'asteroids' | 'enemy'
+import showNotification from '../../../utils/showNotification'
 
 export class GameController {
   private lastSpawn = 0
   private lastShoot = 0
+  private isShowedNotification = false
 
   constructor(
     private model: GameModel,
@@ -55,8 +55,6 @@ export class GameController {
       }
     }
 
-    const keysBots: EnemyKeys[] = ['asteroids', 'enemy']
-
     // Обновление позиций противников
     for (let i = this.model.enemies.length - 1; i >= 0; i--) {
       this.model.enemies[i].y += this.settings.SPEED_ENEMY * dt
@@ -93,6 +91,10 @@ export class GameController {
           enemies.splice(i, 1)
           this.model.score += 1
 
+          if (this.model.score > 100 && !this.isShowedNotification) {
+            this.showNotificationScore()
+          }
+
           const randomExplosion = getRandomElement(
             this.model.resources.audio.explosions,
           )
@@ -128,6 +130,10 @@ export class GameController {
           this.model.bullets.splice(j, 1)
           asteroids.splice(i, 1)
           this.model.score += 1
+
+          if (this.model.score > 100 && !this.isShowedNotification) {
+            this.showNotificationScore()
+          }
 
           const randomExplosion = getRandomElement(
             this.model.resources.audio.explosions,
@@ -191,6 +197,14 @@ export class GameController {
       }
       this.lastSpawn = timestamp
     }
+  }
+
+  showNotificationScore() {
+    showNotification('Поздравляем!', {
+      body: 'Вы достигли более 100 очков!',
+    })
+
+    this.isShowedNotification = true
   }
 
   stop() {

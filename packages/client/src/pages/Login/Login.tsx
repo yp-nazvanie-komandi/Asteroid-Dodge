@@ -106,6 +106,12 @@ export const Login = () => {
     try {
       await signinMutate({ signInRequest: values }).unwrap()
 
+      if (Notification.permission === 'default') {
+        Notification.requestPermission().then(permission => {
+          console.log('Разрешение на уведомления:', permission)
+        })
+      }
+
       navigate(location.state?.from || DEFAULT_AFTER_LOGIN_NAVIGATION_PATH, {
         replace: true,
       })
