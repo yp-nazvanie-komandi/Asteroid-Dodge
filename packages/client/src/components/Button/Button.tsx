@@ -1,8 +1,9 @@
 import ButtonMaterial, { ButtonProps } from '@mui/material/Button'
 import './style.scss'
+import { ReactNode } from 'react'
 
-interface IButtonPropsExtended extends ButtonProps<'button'> {
-  text: string
+export interface IButtonPropsExtended extends ButtonProps<'button'> {
+  text: string | ReactNode
 }
 
 export default function Button({
