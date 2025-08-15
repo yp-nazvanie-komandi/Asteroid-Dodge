@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { getClientID } from '../../../../services/oauth'
 import SvgButton from '../../../../components/Button/SvgButton'
+import './YandexLoginButton.scss'
 
 const YandexLoginButton = () => {
   const [clientId, setClientId] = useState('')
@@ -32,7 +33,7 @@ const YandexLoginButton = () => {
   return (
     <SvgButton
       onClick={handleLogin}
-      className={`yandex-login-button`}
+      className="yandex-login-button"
       type="button"
       text="Войти через Яндекс"
       svg={
@@ -53,19 +54,6 @@ const YandexLoginButton = () => {
           />
         </svg>
       }
-      style={{
-        backgroundColor: '#FFCC00',
-        color: '#000',
-        border: 'none',
-        padding: '10px 20px',
-        borderRadius: '4px',
-        cursor: 'pointer',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '8px',
-        fontWeight: 'bold',
-      }}
     ></SvgButton>
   )
 }
