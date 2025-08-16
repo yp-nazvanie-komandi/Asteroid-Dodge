@@ -1,11 +1,15 @@
 import { useEffect, useRef } from 'react'
-import { useSearchParams } from 'react-router'
+import { useNavigate, useSearchParams } from 'react-router'
 import { usePostOauthYandexMutation } from '../../redux/api/Oauth/oauth'
+import { isFetchBaseQueryErrorWithReason } from '../../redux/api/helpers'
 
 const redirectUri = import.meta.env.VITE_REDIRECT_URI
+const ALREADY_IN_SYSTEM_ERROR_REASON = 'User already in system'
 
 export const Oauth = () => {
   const [searchParams] = useSearchParams()
+
+  const navigate = useNavigate()
 
   const [postOauthYandex] = usePostOauthYandexMutation()
 
@@ -30,9 +34,16 @@ export const Oauth = () => {
           .unwrap()
           .then(data => {
             console.log(data)
+            navigate('/')
           })
           .catch(error => {
             console.error(error)
+            if (isFetchBaseQueryErrorWithReason(error)) {
+              if (error.data.reason === ALREADY_IN_SYSTEM_ERROR_REASON) {
+                navigate('/')
+                return
+              }
+            }
           })
       } else {
         console.error('Код авторизации не найден')

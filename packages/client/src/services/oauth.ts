@@ -3,9 +3,10 @@ interface IServiceIdResponse {
 }
 
 export const getClientID = async () => {
-  console.log(import.meta.env.VITE_OAUTH_YANDEX_URI)
   const response = await fetch(
-    `${import.meta.env.VITE_OAUTH_YANDEX_URI}/service-id`,
+    `${import.meta.env.VITE_OAUTH_YANDEX_URI}/service-id?redirect_uri=${
+      import.meta.env.VITE_REDIRECT_URI
+    }`,
     {
       method: 'GET',
       headers: {
