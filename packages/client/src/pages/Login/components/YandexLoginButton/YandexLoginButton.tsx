@@ -4,31 +4,20 @@ import SvgButton from '../../../../components/Button/SvgButton'
 import './YandexLoginButton.scss'
 
 const YandexLoginButton = () => {
-  const [clientId, setClientId] = useState('')
   const redirectUri = import.meta.env.VITE_REDIRECT_URI
 
-  const handleLogin = () => {
-    const authUrl = `https://oauth.yandex.ru/authorize?response_type=token&client_id=${clientId}&redirect_uri=${encodeURIComponent(
-      redirectUri
-    )}`
-    window.location.href = authUrl
-  }
-
-  useEffect(() => {
-    const loadAuthData = async () => {
-      try {
-        const { service_id: clientResultId } = await getClientID()
-        console.log('Получен Client ID:', clientResultId)
-        setClientId(clientResultId)
-      } catch (error) {
-        console.error(
-          'Ошибка:',
-          error instanceof Error ? error.message : 'Неизвестная ошибка'
-        )
-      }
+  const handleLogin = async () => {
+    try {
+      const { service_id } = await getClientID()
+      console.log('Получен Client ID:', service_id)
+      const authUrl = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${service_id}&redirect_uri=${encodeURIComponent(
+        redirectUri
+      )}`
+      window.location.href = authUrl
+    } catch (error) {
+      console.log(`Ошибка авторизации: ${error}`)
     }
-    loadAuthData()
-  })
+  }
 
   return (
     <SvgButton

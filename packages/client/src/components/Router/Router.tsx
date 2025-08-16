@@ -15,6 +15,7 @@ import Error400 from '../../pages/400/400'
 import { CreateForumTopic } from '../../pages/CreateForumTopic/CreateForumTopic'
 
 import { PrivateRoutes } from '../PrivateRoutes/PrivateRoutes'
+import { Oauth } from '../OAuth/Oauth'
 
 export const Router = () => {
   return (
@@ -36,6 +37,7 @@ export const Router = () => {
           </Route>
         </Route>
         <Route path="/error" element={<Exception />} />
+        <Route path="/oauth" element={<Oauth />} />
         <Route path="*" element={<Error400 />} />
       </Routes>
     </BrowserRouter>
