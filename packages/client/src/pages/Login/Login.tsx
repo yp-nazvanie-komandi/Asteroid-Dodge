@@ -24,6 +24,7 @@ import type { TFormFieldsSchemas } from '../../utils/types/validation'
 import Button from '../../components/Button/Button'
 
 import './style.scss'
+import { TEMP } from './TEMP'
 interface ILoginFormValues {
   login: string
   password: string
@@ -179,6 +180,8 @@ export const Login = () => {
             {signinError}
           </Typography>
         )}
+
+        <TEMP />
       </Stack>
     </Container>
   )
