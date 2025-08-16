@@ -1,13 +1,13 @@
 import { useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router'
-//import { usePostOauthYandexMutation } from '../../redux/api/Oauth/oauth'
-import { useNavigate } from 'react-router'
-import { postOauthYandex } from '../../services/oauth'
+import { usePostOauthYandexMutation } from '../../redux/api/Oauth/oauth'
+
+const redirectUri = import.meta.env.VITE_REDIRECT_URI
 
 export const Oauth = () => {
   const [searchParams] = useSearchParams()
-  const navigate = useNavigate()
-  //const [postOauthYandex] = usePostOauthYandexMutation()
+
+  const [postOauthYandex] = usePostOauthYandexMutation()
 
   // Даже в стрикт моде очень желательно вызвать мутацию ровно 1 раз
   const mutationCallerRef = useRef(false)
@@ -18,27 +18,27 @@ export const Oauth = () => {
     if (!mutationCallerRef.current) {
       mutationCallerRef.current = true
 
-      // TODO: унести название параметра в константу
       const code = searchParams.get('code')
 
       if (code) {
         postOauthYandex({
-          code,
-          redirect_uri: import.meta.env.VITE_REDIRECT_URI,
+          oauthSignInRequest: {
+            code,
+            redirect_uri: redirectUri,
+          },
         })
-          .then(responce => {
-            console.log(responce)
-            navigate('/') // Main
+          .unwrap()
+          .then(data => {
+            console.log(data)
           })
           .catch(error => {
-            console.log(`Ошибка авторизации: ${error}`)
+            console.error(error)
           })
       } else {
-        navigate('/login')
+        console.error('Код авторизации не найден')
       }
     }
   }, [])
 
-  // TODO: можно зафигачить лоадер
   return <pre>{JSON.stringify(Object.fromEntries(searchParams))}</pre>
 }
