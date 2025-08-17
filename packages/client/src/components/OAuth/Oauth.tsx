@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
 import { usePostOauthYandexMutation } from '../../redux/api/Oauth/oauth'
 import { isFetchBaseQueryErrorWithReason } from '../../redux/api/helpers'
+import { CircularProgress, Container } from '@mui/material'
 
 const redirectUri = import.meta.env.VITE_REDIRECT_URI
 const ALREADY_IN_SYSTEM_ERROR_REASON = 'User already in system'
@@ -10,6 +11,8 @@ export const Oauth = () => {
   const [searchParams] = useSearchParams()
 
   const navigate = useNavigate()
+
+  const [isLoading, setIsLoading] = useState(true)
 
   const [postOauthYandex] = usePostOauthYandexMutation()
 
@@ -25,6 +28,7 @@ export const Oauth = () => {
       const code = searchParams.get('code')
 
       if (code) {
+        setIsLoading(true)
         postOauthYandex({
           oauthSignInRequest: {
             code,
@@ -45,11 +49,23 @@ export const Oauth = () => {
               }
             }
           })
+          .finally(() => {
+            setIsLoading(false)
+          })
       } else {
         console.error('Код авторизации не найден')
+        setIsLoading(false)
       }
     }
   }, [])
+
+  if (isLoading) {
+    return (
+      <Container fixed className="router-loader">
+        <CircularProgress />
+      </Container>
+    )
+  }
 
   return <pre>{JSON.stringify(Object.fromEntries(searchParams))}</pre>
 }

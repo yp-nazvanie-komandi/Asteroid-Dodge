@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react'
 import { getClientID } from '../../../../services/oauth'
 import SvgButton from '../../../../components/Button/SvgButton'
 import './YandexLoginButton.scss'

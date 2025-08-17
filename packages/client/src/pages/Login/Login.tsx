@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useLocation, useNavigate, Link as RouterLink } from 'react-router'
 import { useForm } from 'react-hook-form'
 
@@ -167,7 +167,7 @@ export const Login = () => {
 
         <br />
 
-        <YandexLoginButton></YandexLoginButton>
+        <YandexLoginButton />
 
         <Link
           className="link text-center"

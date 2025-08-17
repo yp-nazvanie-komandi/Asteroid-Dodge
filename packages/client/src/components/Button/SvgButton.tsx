@@ -1,9 +1,9 @@
 // SvgButton.tsx
-import React from 'react'
+import { ReactNode } from 'react'
 import Button, { IButtonPropsExtended } from './Button'
 
 interface ISvgButtonProps extends IButtonPropsExtended {
-  svg?: React.ReactNode
+  svg?: ReactNode
 }
 
 export default function SvgButton({ svg, text, ...rest }: ISvgButtonProps) {
