@@ -26,6 +26,7 @@
     "@commitlint/config-conventional": "^19.8.1",
     "@commitlint/cz-commitlint": "^19.8.1",
     "@evilmartians/lefthook": "^1.11.16",
+    "@types/js-cookie": "^3.0.6",
     "commitizen": "^4.3.1",
     "lerna": "^8.2.3"
   },
@@ -33,5 +34,9 @@
     "commitizen": {
       "path": "@commitlint/cz-commitlint"
     }
+  },
+  "dependencies": {
+    "js-cookie": "^3.0.5",
+    "yup": "^1.7.0"
   }
 }

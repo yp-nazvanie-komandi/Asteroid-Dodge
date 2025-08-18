@@ -3,6 +3,7 @@ import { Navigate, Outlet, useLocation } from 'react-router'
 import { Container, CircularProgress } from '@mui/material'
 
 import { useAuth } from '../../hooks/Auth/useAuth'
+import Cookies from 'js-cookie'
 
 import './style.scss'
 

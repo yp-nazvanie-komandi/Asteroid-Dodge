@@ -1,5 +1,4 @@
 import rocketSvg from '/src/assets/img/rocket.svg'
-
 import Button from '../../components/Button/Button'
 import { useNavigate } from 'react-router'
 
