@@ -8,7 +8,6 @@ const YandexLoginButton = () => {
   const handleLogin = async () => {
     try {
       const { service_id } = await getClientID()
-      console.log('Получен Client ID:', service_id)
       const authUrl = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${service_id}&redirect_uri=${encodeURIComponent(
         redirectUri
       )}`

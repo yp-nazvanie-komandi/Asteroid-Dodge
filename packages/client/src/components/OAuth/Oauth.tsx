@@ -53,7 +53,6 @@ export const Oauth = () => {
             setIsLoading(false)
           })
       } else {
-        console.error('Код авторизации не найден')
         setIsLoading(false)
       }
     }
