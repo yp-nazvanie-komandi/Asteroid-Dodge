@@ -1,0 +1,44 @@
+import { Routes as ReactRouterRoutes, Route } from 'react-router'
+
+// TODO: перевести на рельсы Lazy + Suspense + Data router
+import { Main } from '../../pages/Main/Main'
+import { Login } from '../../pages/Login/Login'
+import { Registration } from '../../pages/Registration/Registration'
+import { Profile } from '../../pages/Profile/Profile'
+import { GameCanvas } from '../../pages/Game/Game'
+import { Leaderboard } from '../../pages/Leaderboard/Leaderboard'
+import { Forum } from '../../pages/Forum/Forum'
+import { ForumTopic } from '../../pages/ForumTopic/ForumTopic'
+import { Exception } from '../../pages/Exception/Exception'
+import { GameOver } from '../../pages/Game-over/Game-over'
+import { Start } from '../../pages/Start/Start'
+import Error400 from '../../pages/400/400'
+import { CreateForumTopic } from '../../pages/CreateForumTopic/CreateForumTopic'
+import { OAuth } from '../../pages/OAuth/OAuth'
+
+import { PrivateRoutes } from '../PrivateRoutes/PrivateRoutes'
+
+export const Routes = () => {
+  return (
+    <ReactRouterRoutes>
+      <Route index element={<Main />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/oauth" element={<OAuth />} />
+      <Route path="/registration" element={<Registration />} />
+      <Route path="/" element={<PrivateRoutes />}>
+        <Route path="profile" element={<Profile />} />
+        <Route path="game" element={<GameCanvas />} />
+        <Route path="start" element={<Start />} />
+        <Route path="game-over" element={<GameOver />} />
+        <Route path="leaderboard" element={<Leaderboard />} />
+        <Route path="topics">
+          <Route index element={<Forum />} />
+          <Route path="new" element={<CreateForumTopic />} />
+          <Route path=":topicId" element={<ForumTopic />} />
+        </Route>
+      </Route>
+      <Route path="/error" element={<Exception />} />
+      <Route path="*" element={<Error400 />} />
+    </ReactRouterRoutes>
+  )
+}

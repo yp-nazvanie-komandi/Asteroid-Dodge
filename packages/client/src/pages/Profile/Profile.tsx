@@ -21,13 +21,13 @@ import type { TFormFieldsSchemas } from '../../utils/types/validation'
 import {
   useGetAuthUserQuery,
   usePostAuthLogoutMutation,
-} from '../../redux/api/Auth/auth'
+} from '../../redux/api/Auth/enhanced/api'
 
+import type { ProfileAvatarBody } from '../../redux/api/Users/generated/types'
 import {
-  type ProfileAvatarBody,
   usePutUserPasswordMutation,
   usePutUserProfileAvatarMutation,
-} from '../../redux/api/Users/users'
+} from '../../redux/api/Users/enhanced/api'
 
 const DEFAULT_ERROR_MESSAGE =
   'Упс, что-то пошло не так. Повторите попытку позже.'

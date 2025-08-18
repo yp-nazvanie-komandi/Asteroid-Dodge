@@ -4,8 +4,11 @@
   "scripts": {
     "bootstrap": "yarn && node init.js",
     "build": "lerna run build",
+    "build:ssr": "lerna run build:ssr --scope=client",
     "dev:client": "lerna run dev --scope=client",
+    "dev:client:ssr": "lerna run dev:ssr --scope=client",
     "dev:server": "lerna run dev --scope=server",
+    "preview:ssr": "lerna run preview:ssr --scope=client",
     "dev": "lerna run dev",
     "test": "lerna run test",
     "lint": "lerna run lint",
@@ -19,24 +22,20 @@
     "packages/*"
   ],
   "engines": {
-    "node": ">=20"
+    "node": ">=22.12.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@commitlint/cz-commitlint": "^19.8.1",
     "@evilmartians/lefthook": "^1.11.16",
-    "@types/js-cookie": "^3.0.6",
     "commitizen": "^4.3.1",
+    "typescript": "^5.8.3",
     "lerna": "^8.2.3"
   },
   "config": {
     "commitizen": {
       "path": "@commitlint/cz-commitlint"
     }
-  },
-  "dependencies": {
-    "js-cookie": "^3.0.5",
-    "yup": "^1.7.0"
   }
 }
