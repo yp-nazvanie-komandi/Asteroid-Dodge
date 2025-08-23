@@ -63,6 +63,11 @@ export default defineConfig({
   },
   define: {
     __SERVER_PORT__: process.env.SERVER_PORT,
+    __RTK_BASE_URL__:
+      process.env.CLIENT_MODE === 'ssr'
+        ? `"http://${process.env.SSR_SERVER_HOSTNAME}:${process.env.SSR_SERVER_PORT}/api/v2"`
+        : // TODO: переместить в env
+          '"https://ya-praktikum.tech/api/v2"',
   },
   plugins: [react(), htmlTransformPlugin({ mode: process.env.CLIENT_MODE })],
 })

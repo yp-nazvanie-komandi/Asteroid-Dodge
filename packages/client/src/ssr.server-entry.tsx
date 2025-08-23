@@ -9,25 +9,52 @@
 
 import { renderToString } from 'react-dom/server'
 
-import { StaticRouter } from 'react-router'
+import { matchRoutes, StaticRouter } from 'react-router'
 
 import App from './App'
 
-import { Routes } from './components/Routes/Routes'
+import { createStore } from './redux/main'
 
+import { baseAPI } from './redux/api/base'
+
+import { Routes } from './components/Routes/Routes'
+import { routes } from './components/Routes/constants'
 interface IRenderArgs {
-  /**
-   * Прилетает в request express сервера и отдается результату работы хелпера vite.ssrLoadModule
-   */
   url: string
+  serverContext: ISSRServerContext
 }
 
-export const render = ({ url }: IRenderArgs) => {
-  return renderToString(
-    <App>
+export const render = async ({ url, serverContext }: IRenderArgs) => {
+  const store = createStore({
+    serverContext,
+  })
+
+  const matches = matchRoutes(routes, url)
+
+  if (Array.isArray(matches)) {
+    await Promise.allSettled(
+      matches.map(match => {
+        const { route } = match
+
+        return route?.preloader?.({ store })
+      }),
+    )
+  }
+
+  const html = renderToString(
+    <App store={store}>
       <StaticRouter location={url}>
-        <Routes />
+        <Routes routes={routes} />
       </StaticRouter>
     </App>
   )
+
+  const preloadedReduxStoreState = store.getState()
+
+  store.dispatch(baseAPI.util.resetApiState())
+
+  return {
+    html,
+    preloadedReduxStoreState,
+  }
 }

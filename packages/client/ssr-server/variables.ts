@@ -3,8 +3,6 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 import {
-  DEFAULT_SERVER_PORT,
-  DEFAULT_SERVER_HOSTNAME,
   DEFAULT_SERVER_BASE,
   DEFAULT_TEMPLATE_ENCODING,
   DEFAULT_TEMPLATE_SSR_OUTLET_COMMENT,
@@ -18,10 +16,8 @@ import {
 export const isProductionEnvironment = process.env.NODE_ENV === 'production'
 
 // ВНИМАНИЕ! есть нюанс в Oauth: "в качестве redirect_uri можно использовать http://localhost:3000/ (без слеша в конце, это важно). Если ваш проект локально использует другой порт и по какой-то причине вам нужен именно он, обратитесь к ментору."
-export const serverPort =
-  Number(process.env.SSR_SERVER_PORT) || DEFAULT_SERVER_PORT
-export const serverHostname =
-  process.env.SSR_SERVER_HOSTNAME || DEFAULT_SERVER_HOSTNAME
+export const serverPort = process.env.SSR_SERVER_PORT
+export const serverHostname = process.env.SSR_SERVER_HOSTNAME
 export const serverBase = process.env.SSR_SERVER_BASE || DEFAULT_SERVER_BASE
 
 export const templateEncoding = (process.env.SSR_SERVER_TEMPLATE_ENCODING ||

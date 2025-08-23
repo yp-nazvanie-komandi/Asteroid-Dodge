@@ -1,23 +1,39 @@
-import { type ReactNode, StrictMode } from 'react'
+import { type ReactNode, StrictMode, useMemo } from 'react'
+
+import { Provider } from 'react-redux'
 
 import { Theme } from './components/Theme/Theme'
 
 import { ErrorBoundary } from './components/ErrorBoundary/ErrorBoundary'
 
-import { Store } from './components/Store/Store'
+import type { TAppStore } from './redux/types'
+
+import { createStore } from './redux/main'
 
 import './App.scss'
+
 interface IAppProps {
   children: ReactNode
+  store?: TAppStore
 }
 
-function App({ children }: IAppProps) {
+function App({ children, store }: IAppProps) {
+  const reduxStore = useMemo(() => {
+    if (store) {
+      return store
+    }
+
+    return createStore({
+      initialState: window.__PRELOADED_STATE__,
+    })
+  }, [store])
+
   return (
     <StrictMode>
       <ErrorBoundary>
-        <Store>
+        <Provider store={reduxStore}>
           <Theme>{children}</Theme>
-        </Store>
+        </Provider>
       </ErrorBoundary>
     </StrictMode>
   )

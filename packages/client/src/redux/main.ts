@@ -1,26 +1,57 @@
-import { configureStore } from '@reduxjs/toolkit'
+import {
+  configureStore,
+  type ThunkAction,
+  type UnknownAction,
+} from '@reduxjs/toolkit'
+
 import { setupListeners } from '@reduxjs/toolkit/query'
 
 import { useDispatch, useSelector, useStore } from 'react-redux'
 
+import type { TAppDispatch, TAppStore, TRootState } from './types'
+
 import { baseAPI as api } from './api/base'
 import { userAPI } from './api/base'
 
-export const store = configureStore({
-  reducer: {
-    [api.reducerPath]: api.reducer,
-    [userAPI.reducerPath]: userAPI.reducer,
-  },
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware().concat(api.middleware, userAPI.middleware),
-})
+interface ICreateStoreArgs {
+  serverContext?: ISSRServerContext
+  initialState?: IPreloadedReduxStoreState
+}
 
-setupListeners(store.dispatch)
+export const createStore = (args?: ICreateStoreArgs) => {
+  const store = configureStore({
+    reducer: {
+      [api.reducerPath]: api.reducer,
+    },
+    preloadedState: args?.initialState,
+    middleware: getDefaultMiddleware =>
+      getDefaultMiddleware({
+        thunk: {
+          extraArgument: args?.serverContext,
+        },
+      }).concat(api.middleware),
+  })
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
-export type AppStore = typeof store
+  setupListeners(store.dispatch)
 
-export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
-export const useAppSelector = useSelector.withTypes<RootState>()
-export const useAppStore = useStore.withTypes<AppStore>()
+  return store
+}
+
+export const useAppDispatch = useDispatch.withTypes<TAppDispatch>()
+export const useAppSelector = useSelector.withTypes<TRootState>()
+export const useAppStore = useStore.withTypes<TAppStore>()
+
+export const _serverContextThunk =
+  (
+    updatedContext: Partial<ISSRServerContext>,
+  ): ThunkAction<
+    void,
+    TRootState,
+    ISSRServerContext | undefined,
+    UnknownAction
+  > =>
+  (_dispatch, _getState, extra) => {
+    if (extra?.response) {
+      extra.response.redirect = updatedContext?.response?.redirect
+    }
+  }

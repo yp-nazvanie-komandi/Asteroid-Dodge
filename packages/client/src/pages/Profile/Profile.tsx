@@ -142,7 +142,7 @@ export const Profile = () => {
         <label>
           {user?.avatar ? (
             <img
-              src={'https://ya-praktikum.tech/api/v2/resources/' + user?.avatar}
+              src={`${__RTK_BASE_URL__}/resources${user.avatar}`}
               alt="Preview"
             />
           ) : (

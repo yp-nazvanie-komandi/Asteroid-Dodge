@@ -1,6 +1,8 @@
-import { Navigate, Outlet, useLocation } from 'react-router'
+import { Outlet, useLocation } from 'react-router'
 
 import { Container, CircularProgress } from '@mui/material'
+
+import { Navigate } from '../Navigate/Navigate'
 
 import { useAuth } from '../../hooks/Auth/useAuth'
 

@@ -1,13 +1,48 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { AttachedThemeResponse } from '../../components/Theme/change-theme-drop'
+import { createApi } from '@reduxjs/toolkit/query/react'
+
+import { fetchBaseQueryModified } from './fetcher'
 
 export const baseAPI = createApi({
   reducerPath: 'API',
   // TODO: Заменить на axios или другой HTTP-клиент
-  baseQuery: fetchBaseQuery({
-    baseUrl: 'https://ya-praktikum.tech/api/v2',
+  baseQuery: fetchBaseQueryModified({
+    baseUrl: __RTK_BASE_URL__,
     credentials: 'include',
-    responseHandler: async response => {
+    prepareHeaders: (headers, api) => {
+      const modified = new Headers(headers)
+
+      const extraArg = api.extra as ISSRServerContext | undefined
+
+      if (Array.isArray(extraArg?.request?.cookies)) {
+        modified.append('Cookie', extraArg.request.cookies.join('; '))
+      }
+
+      return modified
+    },
+    responseHandler: async (response, api) => {
+      const extraArg = api.extra as ISSRServerContext | undefined
+
+      if (extraArg?.response) {
+        /*
+        Пример содержимого cookiesFromResponse:
+        [
+        'uuid=d6e05106-6086-4308-a3ca-17dd96d9e741; Path=/; Expires=Tue, 16 Sep 2025 13:39:11 GMT; HttpOnly; Secure; SameSite=None',
+        'authCookie=; Path=/; Expires=Thu, 27 Feb 2025 19:21:05 GMT; HttpOnly; Secure; SameSite=None',
+        ]
+        */
+        const cookiesFromResponse = response.headers.getSetCookie()
+
+        if (cookiesFromResponse.length) {
+          if (!Array.isArray(extraArg.response.cookies)) {
+            extraArg.response.cookies = []
+          }
+
+          for (const cookie of cookiesFromResponse) {
+            extraArg.response.cookies.push(cookie)
+          }
+        }
+      }
+
       const text = await response.text()
 
       try {
