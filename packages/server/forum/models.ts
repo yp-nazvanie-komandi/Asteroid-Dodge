@@ -9,23 +9,6 @@ import {
   HasManyGetAssociationsMixin,
 } from 'sequelize'
 
-export const createSequelize = () => {
-  const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } =
-    process.env
-
-  return new Sequelize(
-    POSTGRES_DB || '',
-    POSTGRES_USER || '',
-    POSTGRES_PASSWORD || '',
-    {
-      host: 'localhost',
-      port: Number(POSTGRES_PORT) || 5432,
-      dialect: 'postgres',
-      logging: false,
-    }
-  )
-}
-
 export class Topic extends Model<
   InferAttributes<Topic, { omit: 'comments' }>,
   InferCreationAttributes<Topic>
@@ -84,7 +67,7 @@ export class Reaction extends Model<
   declare updatedAt: CreationOptional<Date>
 }
 
-export const initModels = (sequelize: Sequelize) => {
+export const initForumModels = (sequelize: Sequelize) => {
   Topic.init(
     {
       id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
@@ -99,7 +82,7 @@ export const initModels = (sequelize: Sequelize) => {
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
     },
-    { sequelize, tableName: 'topics' }
+    { sequelize, tableName: 'topics' },
   )
 
   Comment.init(
@@ -112,7 +95,7 @@ export const initModels = (sequelize: Sequelize) => {
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
     },
-    { sequelize, tableName: 'comments' }
+    { sequelize, tableName: 'comments' },
   )
 
   Reply.init(
@@ -125,7 +108,7 @@ export const initModels = (sequelize: Sequelize) => {
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
     },
-    { sequelize, tableName: 'replies' }
+    { sequelize, tableName: 'replies' },
   )
 
   Reaction.init(
@@ -140,7 +123,7 @@ export const initModels = (sequelize: Sequelize) => {
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
     },
-    { sequelize, tableName: 'reactions' }
+    { sequelize, tableName: 'reactions' },
   )
 
   Topic.hasMany(Comment, {
