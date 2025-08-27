@@ -42,6 +42,15 @@ export const Main = () => {
             navigate('/leaderboard')
           }}
         />
+
+        <Button
+          text={'Forum'}
+          size={'medium'}
+          onClick={() => {
+            //TODO поставить правильную навигацию
+            window.location.href = 'http://localhost:3001/api-docs' // серверная часть приложения, АПИ форума
+          }}
+        />
       </div>
     </div>
   )
