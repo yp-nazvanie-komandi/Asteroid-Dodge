@@ -31,7 +31,6 @@ export default function Pagination({
   onPageSize: (n: number) => void
   onGotoPage: (n: number) => void
 }) {
-  // Окно страниц
   const windowSize = 5
   let first = Math.max(0, pageIndex - Math.floor(windowSize / 2))
   let last = first + windowSize - 1
@@ -39,11 +38,8 @@ export default function Pagination({
   if (knownLastPage !== null) {
     last = Math.min(knownLastPage, last)
     first = Math.max(0, Math.min(first, knownLastPage + 1 - windowSize))
-  }
-
-  if (knownLastPage === null) {
-    last = Math.max(last, pageIndex + 1)
-    last = Math.min(last, pageIndex + 1)
+  } else {
+    last = Math.min(Math.max(last, pageIndex + 1), pageIndex + 1)
   }
 
   const pages = range(first, Math.max(first, last))
@@ -51,13 +47,13 @@ export default function Pagination({
   return (
     <div className="lb-footer">
       <div className="lb-rows-per-page">
-        <span className="lb-caption">Rows per page :</span>
+        <span className="lb-caption">Записей на странице:</span>
         <div className="lb-select-wrap">
           <select
             value={pageSize}
             onChange={e => onPageSize(Number(e.target.value))}
           >
-            {[10, 25, 50, 100].map(size => (
+            {[10, 30, 50].map(size => (
               <option key={size} value={size}>
                 {size}
               </option>
@@ -75,7 +71,7 @@ export default function Pagination({
         {start}-{end}
       </span>
 
-      <div className="lb-nav" style={{ gap: 4 }}>
+      <div className="lb-nav">
         <button
           className="lb-icon-btn"
           onClick={() => onGotoPage(0)}
@@ -94,7 +90,7 @@ export default function Pagination({
         </button>
 
         {first > 0 && (
-          <button className="lb-icon-btn" onClick={() => onGotoPage(0)}>
+          <button className="lb-page-btn" onClick={() => onGotoPage(0)}>
             1
           </button>
         )}
@@ -103,11 +99,7 @@ export default function Pagination({
         {pages.map(p => (
           <button
             key={p}
-            className="lb-icon-btn"
-            style={{
-              fontWeight: p === pageIndex ? 700 : 500,
-              textDecoration: p === pageIndex ? 'underline' : 'none',
-            }}
+            className={`lb-page-btn ${p === pageIndex ? 'is-active' : ''}`}
             onClick={() => onGotoPage(p)}
             disabled={knownLastPage === null && p > pageIndex + 1}
           >
@@ -120,7 +112,7 @@ export default function Pagination({
         )}
         {knownLastPage !== null && knownLastPage > last && (
           <button
-            className="lb-icon-btn"
+            className="lb-page-btn"
             onClick={() => onGotoPage(knownLastPage)}
           >
             {knownLastPage + 1}

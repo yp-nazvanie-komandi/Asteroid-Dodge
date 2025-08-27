@@ -2,7 +2,6 @@ import { useCallback } from 'react'
 import {
   usePostLeaderboardAllMutation,
   usePostLeaderboardByTeamNameMutation,
-  usePostLeaderboardMutation,
 } from '../../redux/api/Leaderboard/generated/api'
 
 export function useLeaderboardQuery({
@@ -18,7 +17,7 @@ export function useLeaderboardQuery({
 }) {
   const [fetchAll, allState] = usePostLeaderboardAllMutation()
   const [fetchTeam, teamState] = usePostLeaderboardByTeamNameMutation()
-
+  console.log(ratingFieldName)
   const trigger = useCallback(async () => {
     if (teamName) {
       return fetchTeam({
@@ -36,16 +35,4 @@ export function useLeaderboardQuery({
   const error = allState.error || teamState.error
 
   return { trigger, isLoading, isError, error }
-}
-
-export function useSubmitScore() {
-  const [mutate, state] = usePostLeaderboardMutation()
-  return {
-    submit: (args: {
-      data: Record<string, unknown>
-      ratingFieldName: string
-      teamName?: string
-    }) => mutate({ leaderboardNewLeaderRequest: args }).unwrap(),
-    state,
-  }
 }

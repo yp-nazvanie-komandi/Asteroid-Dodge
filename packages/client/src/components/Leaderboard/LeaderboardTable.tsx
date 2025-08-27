@@ -4,12 +4,11 @@ import { useLeaderboardQuery } from './useLeaderboardRtk'
 import Pagination from './LeaderboardPagination'
 
 export type LeaderboardRow = any
+
 export default function LeaderboardTable({
-  teamName,
   ratingFieldName,
   initialPageSize = 10,
 }: {
-  teamName?: string
   ratingFieldName: string
   initialPageSize?: number
 }) {
@@ -25,7 +24,6 @@ export default function LeaderboardTable({
 
   const cursor = pageIndex * pageSize
   const { trigger, isLoading, isError, error } = useLeaderboardQuery({
-    teamName,
     ratingFieldName,
     cursor,
     limit: pageSize,
@@ -47,7 +45,7 @@ export default function LeaderboardTable({
             )
           }
         }
-      } catch (_) {
+      } catch {
         if (!cancelled) setRows([])
       }
     })()
@@ -129,19 +127,10 @@ export default function LeaderboardTable({
   return (
     <div className="lb-wrapper">
       <div {...getTableProps()} className="lb-table">
-        {/* Head */}
         {headerGroups.map(hg => (
-          <div
-            key={hg.id}
-            {...hg.getHeaderGroupProps()}
-            className="lb-header-row"
-          >
+          <div {...hg.getHeaderGroupProps()} className="lb-header-row">
             {hg.headers.map(column => (
-              <div
-                key={column.id}
-                {...column.getHeaderProps()}
-                className="lb-th"
-              >
+              <div {...column.getHeaderProps()} className="lb-th">
                 {column.render('Header')}
                 {(column as any).canResize && (
                   <div
@@ -154,12 +143,10 @@ export default function LeaderboardTable({
             ))}
           </div>
         ))}
-
-        {/* Body */}
         <div {...getTableBodyProps()}>
           {isLoading && <div className="lb-empty">Loading…</div>}
           {isError && (
-            <div className="lb-empty" style={{ color: '#d32f2f' }}>
+            <div className="lb-empty lb-error-text">
               {String(
                 (error as any)?.data?.reason ||
                   (error as any)?.error ||
@@ -172,13 +159,9 @@ export default function LeaderboardTable({
             rtRows.map(row => {
               prepareRow(row)
               return (
-                <div key={row.id} {...row.getRowProps()} className="lb-row">
+                <div {...row.getRowProps()} className="lb-row">
                   {row.cells.map(cell => (
-                    <div
-                      key={cell.column.id}
-                      {...cell.getCellProps()}
-                      className="lb-td"
-                    >
+                    <div {...cell.getCellProps()} className="lb-td">
                       {cell.render('Cell')}
                     </div>
                   ))}
@@ -190,7 +173,6 @@ export default function LeaderboardTable({
           )}
         </div>
       </div>
-
       <Pagination
         pageIndex={pageIndex}
         pageSize={pageSize}
