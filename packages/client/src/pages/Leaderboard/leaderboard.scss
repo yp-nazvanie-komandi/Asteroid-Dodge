@@ -1,0 +1,24 @@
+.lb-wrapper { width: 984px; border-radius: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.05); overflow: hidden; }
+.lb-table { width: 984px; }
+.lb-header-row { display: flex; align-items: center; height: 56px; border-bottom: 1px solid rgba(0,0,0,0.12); }
+.lb-th { display: flex; align-items: center; padding: 16px; position: relative; font-family: Roboto, system-ui, sans-serif; font-weight: 500; font-size: 14px; line-height: 24px; letter-spacing: .17px; color: rgba(0,0,0,.87); user-select: none; }
+.resizer { position: absolute; right: 0; top: 0; height: 100%; width: 6px; transform: translateX(50%); cursor: col-resize; z-index: 10; touch-action: none; opacity: .4; }
+.resizer:hover { background: rgba(0,0,0,.06); }
+.resizer.isResizing { background: rgba(25,118,210,.25); }
+.lb-row { display: flex; align-items: center; height: 52px; border-bottom: 1px solid rgba(0,0,0,0.12); }
+.lb-td { display: flex; align-items: center; padding: 16px; font-family: Roboto, system-ui, sans-serif; font-weight: 400; font-size: 14px; line-height: 20px; letter-spacing: .17px; color: rgba(0,0,0,.87); }
+.truncate { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 430px; }
+.lb-empty { padding: 24px; text-align: center; color: rgba(0,0,0,.6); }
+
+
+.lb-footer { display: flex; align-items: center; justify-content: flex-end; gap: 26px; padding: 8px 0; height: 44px; }
+.lb-rows-per-page { display: flex; align-items: center; gap: 8px; }
+.lb-caption { font-family: Roboto, system-ui, sans-serif; font-size: 12px; letter-spacing: .4px; color: rgba(0,0,0,.6); }
+.lb-select-wrap { position: relative; width: 72px; }
+.lb-select-wrap select { appearance: none; width: 100%; height: 24px; padding: 0 28px 0 8px; font-size: 12px; border-radius: 6px; border: 1px solid rgba(0,0,0,.12); background: #fff; }
+.lb-caret { position: absolute; right: 4px; top: 0; bottom: 0; display: flex; align-items: center; pointer-events: none; opacity: .6; }
+.lb-range { font-family: Roboto, system-ui, sans-serif; font-size: 12px; letter-spacing: .4px; color: rgba(0,0,0,.87); min-width: 80px; text-align: right; }
+.lb-nav { display: flex; align-items: center; }
+.lb-icon-btn { padding: 8px; border-radius: 999px; background: transparent; border: none; }
+.lb-icon-btn[disabled] { opacity: .4; cursor: not-allowed; }
+.lb-icon { opacity: .6; }
