@@ -1,6 +1,6 @@
 import express from 'express'
 import jwt from 'jsonwebtoken'
-import { authMiddleware } from '../../middleware/auth'
+import { jwtAuthMiddleware } from '../../middleware/auth'
 
 const router = express.Router()
 
@@ -19,10 +19,10 @@ const router = express.Router()
  *       401:
  *         description: Not authenticated
  */
-router.get('/me', authMiddleware, async (req, res) => {
+router.get('/me', jwtAuthMiddleware, async (req, res) => {
   return res.json({
     authenticated: true,
-    user: req.user,
+    user: req.jwtUser,
   })
 })
 

@@ -5,7 +5,7 @@ import {
   getCommentById,
   getReplyById,
 } from '../../forum/crud/comments'
-import { authMiddleware } from '../../middleware/auth'
+import { jwtAuthMiddleware } from '../../middleware/auth'
 
 const router = express.Router()
 
@@ -44,18 +44,18 @@ const router = express.Router()
  *       404:
  *         description: Comment not found
  */
-router.post('/:id/replies', authMiddleware, async (req, res) => {
+router.post('/:id/replies', jwtAuthMiddleware, async (req, res) => {
   const { body } = req.body
   if (!body) return res.status(400).json({ error: 'body is required' })
 
   const comment = await getCommentById(Number(req.params.id))
   if (!comment) return res.sendStatus(404)
 
-  if (!req.user?.name) {
+  if (!req.jwtUser?.name) {
     return res.status(400).json({ error: 'User name is required in JWT token' })
   }
-  const author = req.user.name
-  const ownerId = req.user.uid
+  const author = req.jwtUser.name
+  const ownerId = req.jwtUser.uid
 
   const reply = await createReply(comment.id, author, body, ownerId)
   return res.status(201).json(reply)
@@ -97,17 +97,17 @@ router.post('/:id/replies', authMiddleware, async (req, res) => {
  *       404:
  *         description: Reply not found
  */
-router.post('/replies/:id/reactions', authMiddleware, async (req, res) => {
+router.post('/replies/:id/reactions', jwtAuthMiddleware, async (req, res) => {
   const { type } = req.body
   if (!type) return res.status(400).json({ error: 'type is required' })
 
   const reply = await getReplyById(Number(req.params.id))
   if (!reply) return res.sendStatus(404)
 
-  if (!req.user?.uid) {
+  if (!req.jwtUser?.uid) {
     return res.status(400).json({ error: 'User UID is required in JWT token' })
   }
-  const ownerId = req.user.uid
+  const ownerId = req.jwtUser.uid
 
   const reaction = await createReaction(reply.id, type, ownerId)
   return res.status(201).json(reaction)

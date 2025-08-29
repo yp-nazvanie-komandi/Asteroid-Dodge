@@ -1,30 +1,69 @@
 import { Request, Response, NextFunction } from 'express'
+
 import jwt from 'jsonwebtoken'
 
 // Расширенный Request интерфейс
 declare module 'express-serve-static-core' {
   interface Request {
-    user?: {
-      uid: string
-      name?: string
-    }
+    ypUser?: IYPUserInfo
+    jwtUser?: IJWTUserInfo
   }
 }
 
-export interface UserInfo {
+export interface IYPUserInfo {
+  id: number
+  name?: string
+}
+
+export interface IJWTUserInfo {
   uid: string
   name?: string
 }
 
-export interface JWTPayload {
-  uid: string
-  name?: string
-}
-
-export const authMiddleware = async (
+export const ypAuthMiddleware = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
+) => {
+  try {
+    const response = await fetch('https://ya-praktikum.tech/api/v2/auth/user', {
+      method: 'GET',
+      headers: {
+        Cookie: req.headers.cookie ?? '',
+      },
+    })
+
+    if (!response.ok) {
+      return res.status(401).json({
+        error: 'Invalid authorization cookie',
+        message: 'User must be authenticated via YP service',
+      })
+    }
+
+    const decoded = await response.json()
+
+    req.ypUser = {
+      id: decoded.id,
+      name: decoded.first_name,
+    }
+
+    next()
+
+    return
+  } catch (error) {
+    return res.status(500).json({
+      error: 'Internal server error',
+      message: 'An unexpected error occurred',
+    })
+  }
+}
+
+// JWT authentication middleware:
+
+export const jwtAuthMiddleware = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
 ) => {
   try {
     const authHeader = req.headers.authorization
@@ -40,7 +79,7 @@ export const authMiddleware = async (
 
     try {
       const secret = process.env.JWT_SECRET || 'your-secret-key'
-      const decoded = jwt.verify(token, secret) as JWTPayload
+      const decoded = jwt.verify(token, secret) as IJWTUserInfo
 
       if (!decoded.uid) {
         return res.status(401).json({
@@ -49,7 +88,7 @@ export const authMiddleware = async (
         })
       }
 
-      req.user = {
+      req.jwtUser = {
         uid: decoded.uid,
         name: decoded.name,
       }
@@ -70,10 +109,10 @@ export const authMiddleware = async (
 }
 
 // Возможно некоторые маршруты будут работать без требования авторизации
-export const optionalAuthMiddleware = async (
+export const jwtOptionalAuthMiddleware = async (
   req: Request,
   _res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const authHeader = req.headers.authorization
@@ -82,10 +121,10 @@ export const optionalAuthMiddleware = async (
       try {
         const token = authHeader.substring(7)
         const secret = process.env.JWT_SECRET || 'your-secret-key'
-        const decoded = jwt.verify(token, secret) as JWTPayload
+        const decoded = jwt.verify(token, secret) as IJWTUserInfo
 
         if (decoded.uid) {
-          req.user = {
+          req.jwtUser = {
             uid: decoded.uid,
             name: decoded.name,
           }
