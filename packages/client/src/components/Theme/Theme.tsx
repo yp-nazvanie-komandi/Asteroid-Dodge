@@ -58,7 +58,7 @@ export const Theme = ({ children }: IThemeProps) => {
     <CacheProvider value={emotionCache}>
       <ThemeProvider theme={getTheme()}>
         <ChangeThemeDrop
-          onChange={(event: 'light' | 'dark' | 'pink') => {
+          onChange={(event: string) => {
             setCurrentTheme(event)
           }}
         />
