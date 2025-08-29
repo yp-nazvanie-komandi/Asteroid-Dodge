@@ -4,6 +4,7 @@
   "scripts": {
     "bootstrap": "yarn && node init.js",
     "build": "lerna run build",
+    "build:server": "lerna run build --scope=server",
     "build:ssr": "lerna run build:ssr --scope=client",
     "dev:client": "lerna run dev --scope=client",
     "dev:client:ssr": "lerna run dev:ssr --scope=client",
