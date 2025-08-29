@@ -27,6 +27,11 @@ import YandexLoginButton from './components/YandexLoginButton/YandexLoginButton'
 
 import './style.scss'
 
+import {
+  AttachedThemeResponse,
+  HttpErrorBody,
+} from '../../components/Theme/change-theme-drop'
+
 interface ILoginFormValues {
   login: string
   password: string
@@ -113,6 +118,67 @@ export const Login = () => {
         Notification.requestPermission().then(permission => {
           console.log('Разрешение на уведомления:', permission)
         })
+      }
+      const cookieMatch = document?.cookie?.match(
+        '(^|;)\\s*' + 'theme' + '\\s*=\\s*([^;]+)',
+      )
+      const themeValue = cookieMatch ? cookieMatch.pop() : undefined
+
+      if (!themeValue) {
+        try {
+          const response = await fetch(
+            'http://localhost:3001/api/v1/users/theme/',
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                credentials: 'include',
+              },
+            },
+          )
+
+          if (response.ok) {
+            const data: AttachedThemeResponse = await response.json()
+            document.cookie = `theme=${data.name}; path=/`
+
+            return data
+          } else {
+            // Обработка ошибок
+            const errorData: HttpErrorBody = await response.json()
+            console.error('Ошибка получения темы:', errorData)
+            return null
+          }
+        } catch (error) {
+          console.error('Ошибка сети:', error)
+          return null
+        }
+      } else {
+        try {
+          const response = await fetch(
+            'http://localhost:3001/api/v1/users/theme/',
+            {
+              method: 'POST',
+              credentials: 'include',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ themeName: themeValue }),
+            },
+          )
+
+          if (response.ok) {
+            const data: AttachedThemeResponse = await response.json()
+            return data
+          } else {
+            // Обработка ошибок
+            const errorData: HttpErrorBody = await response.json()
+            console.error('Ошибка получения темы:', errorData)
+            return null
+          }
+        } catch (error) {
+          console.error('Ошибка сети:', error)
+          return null
+        }
       }
 
       navigate(location.state?.from || DEFAULT_AFTER_LOGIN_NAVIGATION_PATH, {

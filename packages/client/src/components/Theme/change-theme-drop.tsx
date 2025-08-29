@@ -7,7 +7,16 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import './style.scss'
 import { useGetAuthUserQuery } from '../../redux/api/Auth/enhanced/api'
 
-export default function ChangeThemeDrop() {
+export interface AttachedThemeResponse {
+  id: number
+  name: string
+}
+
+export interface HttpErrorBody {
+  error: string
+}
+
+export default function ChangeThemeDrop({ onChange }) {
   const { data: user } = useGetAuthUserQuery()
 
   const cookieMatch = document?.cookie?.match(
@@ -17,32 +26,39 @@ export default function ChangeThemeDrop() {
 
   const [theme, setTheme] = useState(themeValue || 'light')
 
-  const handleChange = (event: SelectChangeEvent) => {
+  const handleChange = async (event: SelectChangeEvent) => {
     setTheme(event.target.value)
-
+    onChange(event.target.value)
     document.cookie = `theme=${event.target.value}; path=/`
 
     if (user !== undefined) {
       // Если пользователь авторизован, отправляем на сервер
-      fetch('/api/v1/users/theme/', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ themeName: event.target.value }),
-      })
-        .then(res => {
-          if (res.ok) return res.json()
-          throw new Error('Failed to update theme')
-        })
-        .then(updatedTheme => {
-          // В ответ приходит полный объект темы
-          console.log('Обновленная тема:', updatedTheme)
-        })
-        .catch(error => {
-          console.error(error)
-        })
+      try {
+        const response = await fetch(
+          'http://localhost:3001/api/v1/users/theme/',
+          {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ themeName: event.target.value }),
+          },
+        )
+
+        if (response.ok) {
+          const data: AttachedThemeResponse = await response.json()
+          return data
+        } else {
+          // Обработка ошибок
+          const errorData: HttpErrorBody = await response.json()
+          console.error('Ошибка получения темы:', errorData)
+          return null
+        }
+      } catch (error) {
+        console.error('Ошибка сети:', error)
+        return null
+      }
     }
   }
 
