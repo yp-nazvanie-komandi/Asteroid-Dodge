@@ -3,6 +3,7 @@ import { type ReactNode, StrictMode } from 'react'
 import { Theme } from './components/Theme/Theme'
 
 import { ErrorBoundary } from './components/ErrorBoundary/ErrorBoundary'
+import ChangeThemeDrop from './components/Theme/change-theme-drop'
 
 import { Store } from './components/Store/Store'
 
@@ -16,7 +17,11 @@ function App({ children }: IAppProps) {
     <StrictMode>
       <ErrorBoundary>
         <Store>
-          <Theme>{children}</Theme>
+          <Theme>
+            <ChangeThemeDrop />
+
+            {children}
+          </Theme>
         </Store>
       </ErrorBoundary>
     </StrictMode>
