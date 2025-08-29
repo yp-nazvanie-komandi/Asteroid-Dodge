@@ -7,27 +7,20 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import './style.scss'
 import { useGetAuthUserQuery } from '../../redux/api/Auth/enhanced/api'
 
-interface IThemes {
-  oldPassword: string
-  newPassword: string
-}
-
 export default function ChangeThemeDrop() {
   const { data: user } = useGetAuthUserQuery()
 
-  const [theme, setTheme] = useState(
-    document?.cookie?.match('(^|;)\\s*' + 'theme' + '\\s*=\\s*([^;]+)').pop() ||
-      'light',
+  const cookieMatch = document?.cookie?.match(
+    '(^|;)\\s*' + 'theme' + '\\s*=\\s*([^;]+)',
   )
+  const themeValue = cookieMatch ? cookieMatch.pop() : undefined
+
+  const [theme, setTheme] = useState(themeValue || 'light')
 
   const handleChange = (event: SelectChangeEvent) => {
     setTheme(event.target.value)
 
     document.cookie = `theme=${event.target.value}; path=/`
-    console.log(
-      'document.cookie.theme',
-      document?.cookie?.match('(^|;)\\s*' + 'theme' + '\\s*=\\s*([^;]+)').pop(),
-    )
 
     if (user !== undefined) {
       // Если пользователь авторизован, отправляем на сервер
