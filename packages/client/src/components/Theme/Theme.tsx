@@ -35,7 +35,12 @@ const themeOrigin = createTheme({
 })
 
 export const Theme = ({ children }: IThemeProps) => {
-  const [currentTheme, setCurrentTheme] = useState('light') // или 'dark', 'pink'
+  const cookieMatch = document?.cookie?.match(
+    '(^|;)\\s*' + 'theme' + '\\s*=\\s*([^;]+)',
+  )
+  const themeValue = cookieMatch ? cookieMatch.pop() : undefined
+
+  const [currentTheme, setCurrentTheme] = useState(themeValue || 'light')
 
   const getTheme = () => {
     switch (currentTheme) {

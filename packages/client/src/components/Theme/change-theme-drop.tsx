@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
@@ -12,11 +12,16 @@ export interface AttachedThemeResponse {
   name: string
 }
 
+// Интерфейс для пропсов компонента
+interface ChangeThemeDropProps {
+  onChange: (themeName: string) => void
+}
+
 export interface HttpErrorBody {
   error: string
 }
 
-export default function ChangeThemeDrop({ onChange }) {
+export default function ChangeThemeDrop({ onChange }: ChangeThemeDropProps) {
   const { data: user } = useGetAuthUserQuery()
 
   const cookieMatch = document?.cookie?.match(
@@ -62,6 +67,27 @@ export default function ChangeThemeDrop({ onChange }) {
     }
   }
 
+  const [themes, setThemes] = useState<AttachedThemeResponse[]>([])
+
+  useEffect(() => {
+    const fetchThemes = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/v1/themes/')
+        if (response.ok) {
+          const data: AttachedThemeResponse[] = await response.json()
+          setThemes(data)
+        } else {
+          const errorData: HttpErrorBody = await response.json()
+          console.error(errorData.error || 'Ошибка при загрузке тем')
+        }
+      } catch (err) {
+        console.error('Ошибка сети')
+      }
+    }
+
+    fetchThemes()
+  }, [])
+
   return (
     <div className="theme">
       <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
@@ -74,9 +100,11 @@ export default function ChangeThemeDrop({ onChange }) {
           onChange={handleChange}
           label="Тема"
         >
-          <MenuItem value={'light'}>Светлая</MenuItem>
-          <MenuItem value={'dark'}>Темная</MenuItem>
-          <MenuItem value={'pink'}>Розовая</MenuItem>
+          {themes.map(themeOption => (
+            <MenuItem key={themeOption.id} value={themeOption.name}>
+              {themeOption.name}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     </div>
