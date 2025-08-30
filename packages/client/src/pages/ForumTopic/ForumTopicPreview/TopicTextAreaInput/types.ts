@@ -1,5 +1,5 @@
 export type TTopicTextAreaInput = {
-  submitCallback: (data: TCommentInput) => void
+  submitCallback: (form: { comment: string }) => Promise<void>
 }
 
 export type TCommentInput = {
