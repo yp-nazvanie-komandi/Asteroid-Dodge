@@ -6,6 +6,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 
 import './style.scss'
 import { useGetAuthUserQuery } from '../../redux/api/Auth/enhanced/api'
+import { useUpdateUserThemeMutation } from '../../redux/api/base'
 
 export interface AttachedThemeResponse {
   id: number
@@ -23,6 +24,7 @@ export interface HttpErrorBody {
 
 export default function ChangeThemeDrop({ onChange }: ChangeThemeDropProps) {
   const { data: user } = useGetAuthUserQuery()
+  const [updateTheme] = useUpdateUserThemeMutation()
 
   const cookieMatch = document?.cookie?.match(
     '(^|;)\\s*' + 'theme' + '\\s*=\\s*([^;]+)',
@@ -38,32 +40,7 @@ export default function ChangeThemeDrop({ onChange }: ChangeThemeDropProps) {
 
     if (user !== undefined) {
       // Если пользователь авторизован, отправляем на сервер
-      try {
-        const response = await fetch(
-          'http://localhost:3001/api/v1/users/theme/',
-          {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ themeName: event.target.value }),
-          },
-        )
-
-        if (response.ok) {
-          const data: AttachedThemeResponse = await response.json()
-          return data
-        } else {
-          // Обработка ошибок
-          const errorData: HttpErrorBody = await response.json()
-          console.error('Ошибка получения темы:', errorData)
-          return null
-        }
-      } catch (error) {
-        console.error('Ошибка сети:', error)
-        return null
-      }
+      updateTheme(themeValue)
     }
   }
 

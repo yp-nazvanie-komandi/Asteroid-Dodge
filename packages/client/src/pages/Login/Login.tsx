@@ -16,6 +16,10 @@ import {
 } from '@mui/material'
 
 import { usePostAuthSigninMutation } from '../../redux/api/Auth/enhanced/api'
+import {
+  useGetUserThemeQuery,
+  useUpdateUserThemeMutation,
+} from '../../redux/api/base'
 
 import { isFetchBaseQueryErrorWithReason } from '../../redux/api/helpers'
 
@@ -27,10 +31,7 @@ import YandexLoginButton from './components/YandexLoginButton/YandexLoginButton'
 
 import './style.scss'
 
-import {
-  AttachedThemeResponse,
-  HttpErrorBody,
-} from '../../components/Theme/change-theme-drop'
+import { AttachedThemeResponse } from '../../components/Theme/change-theme-drop'
 
 interface ILoginFormValues {
   login: string
@@ -91,6 +92,9 @@ const LOGIN_FORM_FIELDS_SCHEMA = yup
 
 // TODO: Вынести в отдельный компонент форму https://github.com/yp-nazvanie-komandi/Asteroid-Dodge/issues/96
 export const Login = () => {
+  const { data } = useGetUserThemeQuery() as { data?: AttachedThemeResponse }
+  const [updateTheme] = useUpdateUserThemeMutation()
+
   const [signinError, setSigninError] = useState<string>()
 
   const location = useLocation()
@@ -125,60 +129,11 @@ export const Login = () => {
       const themeValue = cookieMatch ? cookieMatch.pop() : undefined
 
       if (!themeValue) {
-        try {
-          const response = await fetch(
-            'http://localhost:3001/api/v1/users/theme/',
-            {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                credentials: 'include',
-              },
-            },
-          )
-
-          if (response.ok) {
-            const data: AttachedThemeResponse = await response.json()
-            document.cookie = `theme=${data.name}; path=/`
-
-            return data
-          } else {
-            // Обработка ошибок
-            const errorData: HttpErrorBody = await response.json()
-            console.error('Ошибка получения темы:', errorData)
-            return null
-          }
-        } catch (error) {
-          console.error('Ошибка сети:', error)
-          return null
+        if (data && data.name) {
+          document.cookie = `theme=${data.name}; path=/`
         }
       } else {
-        try {
-          const response = await fetch(
-            'http://localhost:3001/api/v1/users/theme/',
-            {
-              method: 'POST',
-              credentials: 'include',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ themeName: themeValue }),
-            },
-          )
-
-          if (response.ok) {
-            const data: AttachedThemeResponse = await response.json()
-            return data
-          } else {
-            // Обработка ошибок
-            const errorData: HttpErrorBody = await response.json()
-            console.error('Ошибка получения темы:', errorData)
-            return null
-          }
-        } catch (error) {
-          console.error('Ошибка сети:', error)
-          return null
-        }
+        updateTheme(themeValue)
       }
 
       navigate(location.state?.from || DEFAULT_AFTER_LOGIN_NAVIGATION_PATH, {
