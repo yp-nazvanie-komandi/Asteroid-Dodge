@@ -4,13 +4,15 @@ import { setupListeners } from '@reduxjs/toolkit/query'
 import { useDispatch, useSelector, useStore } from 'react-redux'
 
 import { baseAPI as api } from './api/base'
+import { userAPI } from './api/base'
 
 export const store = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer,
+    [userAPI.reducerPath]: userAPI.reducer,
   },
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware().concat(api.middleware),
+    getDefaultMiddleware().concat(api.middleware, userAPI.middleware),
 })
 
 setupListeners(store.dispatch)
