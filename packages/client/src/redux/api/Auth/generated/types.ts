@@ -1,49 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-types */
 // ВНИМАНИЕ! Этот файл был сгенерирован автоматически. Изменения могут быть перезаписаны. НЕ редактируйте его вручную!
-
-import { baseAPI as api } from '../base'
-const injectedRtkApi = api.injectEndpoints({
-  endpoints: build => ({
-    postAuthSignup: build.mutation<
-      PostAuthSignupApiResponse,
-      PostAuthSignupApiArg
-    >({
-      query: queryArg => ({
-        url: `/auth/signup`,
-        method: 'POST',
-        body: queryArg.signUpRequest,
-      }),
-    }),
-    postAuthSignin: build.mutation<
-      PostAuthSigninApiResponse,
-      PostAuthSigninApiArg
-    >({
-      query: queryArg => ({
-        url: `/auth/signin`,
-        method: 'POST',
-        body: queryArg.signInRequest,
-      }),
-    }),
-    getAuthUser: build.query<GetAuthUserApiResponse, GetAuthUserApiArg>({
-      query: () => ({ url: `/auth/user` }),
-    }),
-    postAuthLogout: build.mutation<
-      PostAuthLogoutApiResponse,
-      PostAuthLogoutApiArg
-    >({
-      query: () => ({ url: `/auth/logout`, method: 'POST' }),
-    }),
-  }),
-  overrideExisting: false,
-})
-export { injectedRtkApi as AuthAPI }
-export type PostAuthSignupApiResponse = /** status 200 Ok */ SignUpResponse
+export type PostAuthSignupApiResponse = SignUpResponse
 export type PostAuthSignupApiArg = {
   /** User data */
   signUpRequest: SignUpRequest
 }
-export type PostAuthSigninApiResponse = /** status 200 Ok */ string
+export type PostAuthSigninApiResponse = string
 export type PostAuthSigninApiArg = {
   /** User data */
   signInRequest: SignInRequest
@@ -99,10 +63,3 @@ export type UserResponse = {
   /** Avatar */
   avatar: string
 }
-export const {
-  usePostAuthSignupMutation,
-  usePostAuthSigninMutation,
-  useGetAuthUserQuery,
-  useLazyGetAuthUserQuery,
-  usePostAuthLogoutMutation,
-} = injectedRtkApi

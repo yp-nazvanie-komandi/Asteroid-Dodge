@@ -1,13 +1,19 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App'
-import './App.scss'
-import { ErrorBoundary } from './components/ErrorBoundary/ErrorBoundary'
+/*
+  Данный файл используется для классического CSR рендера приложения по умолчанию
+*/
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <ErrorBoundary>
-      <App />
-    </ErrorBoundary>
-  </React.StrictMode>
+import { createRoot } from 'react-dom/client'
+
+import { BrowserRouter } from 'react-router'
+
+import App from './App'
+
+import { Routes } from './components/Routes/Routes'
+
+createRoot(document.getElementById('root') as HTMLElement).render(
+  <App>
+    <BrowserRouter>
+      <Routes />
+    </BrowserRouter>
+  </App>
 )

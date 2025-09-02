@@ -6,17 +6,14 @@ import { getRandomElement } from '../utils/collections'
 import { Enemy } from '../entities/enemy'
 import { Rectangle } from '../types'
 import { BasicColors } from '../utils/colors'
-
-type EnemyKeys = 'asteroids' | 'enemy'
+import showNotification from '../../../utils/showNotification'
 
 export class GameController {
   private lastSpawn = 0
   private lastShoot = 0
+  private isShowedNotification = false
 
-  constructor(
-    private model: GameModel,
-    private settings: Settings,
-  ) {}
+  constructor(private model: GameModel, private settings: Settings) {}
 
   update(dt: number): boolean {
     if (this.model.countLife <= 0) {
@@ -28,14 +25,14 @@ export class GameController {
     if (this.model.keys['ArrowLeft']) {
       this.model.player.x = Math.max(
         0,
-        this.model.player.x - this.settings.SPEED_PALYER * dt,
+        this.model.player.x - this.settings.SPEED_PALYER * dt
       )
       this.model.player.update(Direction.Right)
     }
     if (this.model.keys['ArrowRight']) {
       this.model.player.x = Math.min(
         this.settings.CANVAS_WIDTH - this.model.player.width,
-        this.model.player.x + this.settings.SPEED_PALYER * dt,
+        this.model.player.x + this.settings.SPEED_PALYER * dt
       )
       this.model.player.update(Direction.Left)
     }
@@ -54,8 +51,6 @@ export class GameController {
         if (this.model.bullets[i].y < 0) this.model.bullets.splice(i, 1)
       }
     }
-
-    const keysBots: EnemyKeys[] = ['asteroids', 'enemy']
 
     // Обновление позиций противников
     for (let i = this.model.enemies.length - 1; i >= 0; i--) {
@@ -96,8 +91,12 @@ export class GameController {
           enemies.splice(i, 1)
           this.model.score += 1
 
+          if (this.model.score > 100 && !this.isShowedNotification) {
+            this.showNotificationScore()
+          }
+
           const randomExplosion = getRandomElement(
-            this.model.resources.audio.explosions,
+            this.model.resources.audio.explosions
           )
 
           randomExplosion?.audio.play()
@@ -132,8 +131,12 @@ export class GameController {
           asteroids.splice(i, 1)
           this.model.score += 1
 
+          if (this.model.score > 100 && !this.isShowedNotification) {
+            this.showNotificationScore()
+          }
+
           const randomExplosion = getRandomElement(
-            this.model.resources.audio.explosions,
+            this.model.resources.audio.explosions
           )
 
           randomExplosion?.audio.play()
@@ -170,8 +173,8 @@ export class GameController {
               width: this.settings.BULLET_WIDTH,
               height: this.settings.BULLET_HEIGHT,
             } as Rectangle,
-            BasicColors.RED,
-          ),
+            BasicColors.RED
+          )
         )
 
         if (randomLaser) {
@@ -194,6 +197,14 @@ export class GameController {
       }
       this.lastSpawn = timestamp
     }
+  }
+
+  showNotificationScore() {
+    showNotification('Поздравляем!', {
+      body: 'Вы достигли более 100 очков!',
+    })
+
+    this.isShowedNotification = true
   }
 
   stop() {

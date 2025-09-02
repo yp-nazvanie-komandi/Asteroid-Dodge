@@ -1,6 +1,8 @@
 class Settings {
   CANVAS_WIDTH = 800
 
+  //CANVAS_HEIGHT = (typeof window === undefined ? 600 : globalThis?.innerHeight) + 10
+
   get CANVAS_HEIGHT() {
     return window.innerHeight || 900
   }

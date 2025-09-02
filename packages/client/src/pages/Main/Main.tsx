@@ -1,5 +1,4 @@
 import rocketSvg from '/src/assets/img/rocket.svg'
-
 import Button from '../../components/Button/Button'
 import { useNavigate } from 'react-router'
 
@@ -41,6 +40,15 @@ export const Main = () => {
           size={'medium'}
           onClick={() => {
             navigate('/leaderboard')
+          }}
+        />
+
+        <Button
+          text={'Forum'}
+          size={'medium'}
+          onClick={() => {
+            //TODO поставить правильную навигацию
+            window.location.href = 'http://localhost:3001/api-docs' // серверная часть приложения, АПИ форума
           }}
         />
       </div>

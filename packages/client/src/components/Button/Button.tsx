@@ -1,9 +1,11 @@
 import ButtonMaterial, { ButtonProps } from '@mui/material/Button'
+
 import './style.scss'
 import { styled } from '@mui/material/styles'
+import { ReactNode } from 'react'
 
-interface IButtonPropsExtended extends ButtonProps<'button'> {
-  text: string
+export interface IButtonPropsExtended extends ButtonProps<'button'> {
+  text: string | ReactNode
 }
 
 export default function Button({
@@ -12,12 +14,11 @@ export default function Button({
   color = 'primary',
   size = 'small',
   onClick,
-  customClass = 'MuiButton',
   ...rest
 }: IButtonPropsExtended) {
   return (
     <ButtonMaterial
-      className={customClass}
+      className="MuiButton"
       variant={variant}
       size={size}
       color={color}

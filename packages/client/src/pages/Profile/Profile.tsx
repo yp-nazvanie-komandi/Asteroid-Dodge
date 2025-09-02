@@ -21,13 +21,13 @@ import type { TFormFieldsSchemas } from '../../utils/types/validation'
 import {
   useGetAuthUserQuery,
   usePostAuthLogoutMutation,
-} from '../../redux/api/Auth/auth'
+} from '../../redux/api/Auth/enhanced/api'
 
+import type { ProfileAvatarBody } from '../../redux/api/Users/generated/types'
 import {
-  type ProfileAvatarBody,
   usePutUserPasswordMutation,
   usePutUserProfileAvatarMutation,
-} from '../../redux/api/Users/users'
+} from '../../redux/api/Users/enhanced/api'
 
 const DEFAULT_ERROR_MESSAGE =
   'Упс, что-то пошло не так. Повторите попытку позже.'
@@ -54,20 +54,17 @@ const PASSWORD_FORM_FIELDS = [
       .required(DEFAULT_REQUIRED_FIELD_MESSAGE)
       .matches(
         /^(?=.*[A-Z])(?=.*\d).{8,40}$/,
-        'Поле состоит от 8 до 40 символов, обязательно хотя бы одна заглавная буква и цифра',
+        'Поле состоит от 8 до 40 символов, обязательно хотя бы одна заглавная буква и цифра'
       ),
   },
 ] as const
 
 const PASSWORDS_FORM_FIELDS_SCHEMA = yup
   .object(
-    PASSWORD_FORM_FIELDS.reduce(
-      (acc, field) => {
-        acc[field.name] = field.validation
-        return acc
-      },
-      {} as TFormFieldsSchemas<typeof PASSWORD_FORM_FIELDS>,
-    ),
+    PASSWORD_FORM_FIELDS.reduce((acc, field) => {
+      acc[field.name] = field.validation
+      return acc
+    }, {} as TFormFieldsSchemas<typeof PASSWORD_FORM_FIELDS>)
   )
   .required()
 
