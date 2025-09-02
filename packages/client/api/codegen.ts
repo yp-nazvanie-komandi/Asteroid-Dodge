@@ -18,7 +18,7 @@ import { generateEndpoints } from '@rtk-query/codegen-openapi'
       const serviceReduxApiFolder = resolve(
         reduxApiFolder,
         serviceName,
-        'generated',
+        'generated'
       )
 
       const schemaFile = resolve(servicePath, 'schema.json')
@@ -40,7 +40,7 @@ import { generateEndpoints } from '@rtk-query/codegen-openapi'
         generatedApi as string,
         ts.ScriptTarget.Latest,
         false,
-        ts.ScriptKind.TS,
+        ts.ScriptKind.TS
       )
 
       const typeNodes: (
@@ -68,16 +68,18 @@ import { generateEndpoints } from '@rtk-query/codegen-openapi'
 
       const typesCode = typeNodes
         .map(node =>
-          printer.printNode(ts.EmitHint.Unspecified, node, sourceFile),
+          printer.printNode(ts.EmitHint.Unspecified, node, sourceFile)
         )
         .join('\n')
       let apiCode = codeNodes
         .map(node =>
-          printer.printNode(ts.EmitHint.Unspecified, node, sourceFile),
+          printer.printNode(ts.EmitHint.Unspecified, node, sourceFile)
         )
         .join('\n')
 
-      const typesImportStatement = `import type { ${Array.from(typesNames).join(', ')} } from './types'`
+      const typesImportStatement = `import type { ${Array.from(typesNames).join(
+        ', '
+      )} } from './types'`
 
       apiCode = typesImportStatement + '\n' + apiCode
 
@@ -97,7 +99,7 @@ import { generateEndpoints } from '@rtk-query/codegen-openapi'
         writeFile(apiFile, prefixContent(apiCode), 'utf-8'),
         writeFile(typesFile, prefixContent(typesCode), 'utf-8'),
       ])
-    }),
+    })
   )
 })()
 //

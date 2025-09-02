@@ -77,7 +77,7 @@ const REGISTRATION_FORM_FIELDS = [
       .required(DEFAULT_REQUIRED_FIELD_MESSAGE)
       .matches(
         /^(?!\d+$)[A-Za-z0-9_-]{3,20}$/,
-        'Поле состоит от 3 до 20 символов, латиницы, может содержать цифры, но не состоять из них, без пробелов, без спецсимволов (допустимы дефис и нижнее подчёркивание)',
+        'Поле состоит от 3 до 20 символов, латиницы, может содержать цифры, но не состоять из них, без пробелов, без спецсимволов (допустимы дефис и нижнее подчёркивание)'
       ),
   },
   {
@@ -91,7 +91,7 @@ const REGISTRATION_FORM_FIELDS = [
       .required(DEFAULT_REQUIRED_FIELD_MESSAGE)
       .matches(
         /^[\w.-]+@[a-zA-Z]+\.[a-zA-Z]+$/,
-        'Поле состоит из латиницы, может включать цифры и спецсимволы вроде дефиса и подчёркивания, обязательно должна быть «собака» (@) и точка после неё, но перед точкой обязательно должны быть буквы',
+        'Поле состоит из латиницы, может включать цифры и спецсимволы вроде дефиса и подчёркивания, обязательно должна быть «собака» (@) и точка после неё, но перед точкой обязательно должны быть буквы'
       ),
   },
   {
@@ -105,7 +105,7 @@ const REGISTRATION_FORM_FIELDS = [
       .required(DEFAULT_REQUIRED_FIELD_MESSAGE)
       .matches(
         /^(?=.*[A-Z])(?=.*\d).{8,40}$/,
-        'Поле состоит от 8 до 40 символов, обязательно хотя бы одна заглавная буква и цифра',
+        'Поле состоит от 8 до 40 символов, обязательно хотя бы одна заглавная буква и цифра'
       ),
   },
   {
@@ -119,20 +119,17 @@ const REGISTRATION_FORM_FIELDS = [
       .required(DEFAULT_REQUIRED_FIELD_MESSAGE)
       .matches(
         /^\+?[0-9]{10,15}$/,
-        'Поле состоит от 10 до 15 символов, из цифр, может начинается с плюса',
+        'Поле состоит от 10 до 15 символов, из цифр, может начинается с плюса'
       ),
   },
 ] as const
 
 const REGISTRATION_FORM_FIELDS_SCHEMA = yup
   .object(
-    REGISTRATION_FORM_FIELDS.reduce(
-      (acc, field) => {
-        acc[field.name] = field.validation
-        return acc
-      },
-      {} as TFormFieldsSchemas<typeof REGISTRATION_FORM_FIELDS>,
-    ),
+    REGISTRATION_FORM_FIELDS.reduce((acc, field) => {
+      acc[field.name] = field.validation
+      return acc
+    }, {} as TFormFieldsSchemas<typeof REGISTRATION_FORM_FIELDS>)
   )
   .required()
 
@@ -163,7 +160,7 @@ export const Registration = () => {
     } catch (error) {
       // TODO: https://redux-toolkit.js.org/rtk-query/usage-with-typescript#inline-error-handling-example
       setSignupError(
-        (error as Error)?.message || DEFAULT_REGISTRATION_ERROR_MESSAGE,
+        (error as Error)?.message || DEFAULT_REGISTRATION_ERROR_MESSAGE
       )
     }
   }

@@ -54,20 +54,17 @@ const PASSWORD_FORM_FIELDS = [
       .required(DEFAULT_REQUIRED_FIELD_MESSAGE)
       .matches(
         /^(?=.*[A-Z])(?=.*\d).{8,40}$/,
-        'Поле состоит от 8 до 40 символов, обязательно хотя бы одна заглавная буква и цифра',
+        'Поле состоит от 8 до 40 символов, обязательно хотя бы одна заглавная буква и цифра'
       ),
   },
 ] as const
 
 const PASSWORDS_FORM_FIELDS_SCHEMA = yup
   .object(
-    PASSWORD_FORM_FIELDS.reduce(
-      (acc, field) => {
-        acc[field.name] = field.validation
-        return acc
-      },
-      {} as TFormFieldsSchemas<typeof PASSWORD_FORM_FIELDS>,
-    ),
+    PASSWORD_FORM_FIELDS.reduce((acc, field) => {
+      acc[field.name] = field.validation
+      return acc
+    }, {} as TFormFieldsSchemas<typeof PASSWORD_FORM_FIELDS>)
   )
   .required()
 

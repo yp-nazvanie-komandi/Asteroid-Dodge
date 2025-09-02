@@ -49,7 +49,7 @@ export const OAuth = () => {
               location.state?.from || DEFAULT_AFTER_LOGIN_NAVIGATION_PATH,
               {
                 replace: true,
-              },
+              }
             )
           })
           .catch(error => {
@@ -60,7 +60,7 @@ export const OAuth = () => {
                   location.state?.from || DEFAULT_AFTER_LOGIN_NAVIGATION_PATH,
                   {
                     replace: true,
-                  },
+                  }
                 )
 
                 return

@@ -15,5 +15,5 @@ createRoot(document.getElementById('root') as HTMLElement).render(
     <BrowserRouter>
       <Routes />
     </BrowserRouter>
-  </App>,
+  </App>
 )

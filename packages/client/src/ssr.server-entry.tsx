@@ -28,6 +28,6 @@ export const render = ({ url }: IRenderArgs) => {
       <StaticRouter location={url}>
         <Routes />
       </StaticRouter>
-    </App>,
+    </App>
   )
 }

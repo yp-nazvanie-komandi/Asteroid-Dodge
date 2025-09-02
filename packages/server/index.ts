@@ -25,7 +25,7 @@ dotenv.config()
       port: Number(POSTGRES_PORT) || 5432,
       dialect: 'postgres',
       logging: false,
-    },
+    }
   )
 
   initThemeModels(sequelize)
@@ -87,7 +87,7 @@ dotenv.config()
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
       exposedHeaders: ['Set-Cookie'],
-    }),
+    })
   )
 
   // Handle preflight requests
@@ -108,7 +108,7 @@ dotenv.config()
         persistAuthorization: true,
         tryItOutEnabled: true,
       },
-    }),
+    })
   )
 
   app.get('/swagger.json', (req, res) => {
@@ -120,7 +120,7 @@ dotenv.config()
   app.listen(port, () => {
     console.log(`  ➜ 🎸 Server is listening on port: ${port}`)
     console.log(
-      `  ➜ 📚 API documentation is available at: http://localhost:${port}/api-docs`,
+      `  ➜ 📚 API documentation is available at: http://localhost:${port}/api-docs`
     )
   })
 })()

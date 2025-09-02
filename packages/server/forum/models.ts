@@ -82,7 +82,7 @@ export const initForumModels = (sequelize: Sequelize) => {
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
     },
-    { sequelize, tableName: 'topics' },
+    { sequelize, tableName: 'topics' }
   )
 
   Comment.init(
@@ -95,7 +95,7 @@ export const initForumModels = (sequelize: Sequelize) => {
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
     },
-    { sequelize, tableName: 'comments' },
+    { sequelize, tableName: 'comments' }
   )
 
   Reply.init(
@@ -108,7 +108,7 @@ export const initForumModels = (sequelize: Sequelize) => {
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
     },
-    { sequelize, tableName: 'replies' },
+    { sequelize, tableName: 'replies' }
   )
 
   Reaction.init(
@@ -123,7 +123,7 @@ export const initForumModels = (sequelize: Sequelize) => {
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
     },
-    { sequelize, tableName: 'reactions' },
+    { sequelize, tableName: 'reactions' }
   )
 
   Topic.hasMany(Comment, {

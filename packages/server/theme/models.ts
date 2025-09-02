@@ -36,7 +36,7 @@ export const initThemeModels = (sequelize: Sequelize) => {
       id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
       name: { type: DataTypes.STRING(255), allowNull: false, unique: true },
     },
-    { sequelize, tableName: 'theme' },
+    { sequelize, tableName: 'theme' }
   )
 
   User.init(
@@ -44,7 +44,7 @@ export const initThemeModels = (sequelize: Sequelize) => {
       id: { type: DataTypes.INTEGER, primaryKey: true },
       themeId: { type: DataTypes.INTEGER, allowNull: false },
     },
-    { sequelize, tableName: 'user' },
+    { sequelize, tableName: 'user' }
   )
 
   Theme.hasMany(User, {

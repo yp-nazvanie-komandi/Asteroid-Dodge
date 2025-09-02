@@ -31,7 +31,7 @@ export class GameModel {
     this.player = new SpaceCraft(
       {
         x: settings.CANVAS_WIDTH / 2 - settings.PLAYER_WIDTH / 2,
-        y: settings.CANVAS_HEIGHT - settings.PLAYER_HEIGHT - 10,
+        y: settings.CANVAS_HEIGHT - settings.PLAYER_HEIGHT, // - 10,
         width: settings.PLAYER_WIDTH,
         height: settings.PLAYER_HEIGHT,
       } as Rectangle,
