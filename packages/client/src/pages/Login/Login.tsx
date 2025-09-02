@@ -15,7 +15,7 @@ import {
   Link,
 } from '@mui/material'
 
-import { usePostAuthSigninMutation } from '../../redux/api/Auth/auth'
+import { usePostAuthSigninMutation } from '../../redux/api/Auth/enhanced/api'
 
 import { isFetchBaseQueryErrorWithReason } from '../../redux/api/helpers'
 
@@ -23,7 +23,10 @@ import type { TFormFieldsSchemas } from '../../utils/types/validation'
 
 import Button from '../../components/Button/Button'
 
+import YandexLoginButton from './components/YandexLoginButton/YandexLoginButton'
+
 import './style.scss'
+
 interface ILoginFormValues {
   login: string
   password: string
@@ -106,6 +109,12 @@ export const Login = () => {
     try {
       await signinMutate({ signInRequest: values }).unwrap()
 
+      if (Notification.permission === 'default') {
+        Notification.requestPermission().then(permission => {
+          console.log('Разрешение на уведомления:', permission)
+        })
+      }
+
       navigate(location.state?.from || DEFAULT_AFTER_LOGIN_NAVIGATION_PATH, {
         replace: true,
       })
@@ -165,6 +174,10 @@ export const Login = () => {
           size="large"
           loading={isSubmitting}
         />
+
+        <br />
+
+        <YandexLoginButton setSigninError={setSigninError} />
 
         <Link
           className="link text-center"

@@ -1,32 +1,25 @@
+// TODO: При необходимости перенести на SSR + переход на Emotion
 import type { ReactNode } from 'react'
 
-import { ThemeProvider, createTheme, alpha } from '@mui/material'
+import { ThemeProvider, CssBaseline } from '@mui/material'
 
-const violetBase = '#862DF9'
-const violetMain = alpha(violetBase, 0.7)
+import { CacheProvider } from '@emotion/react'
 
-const orangeBase = '#FE6003'
-const orangeMain = alpha(orangeBase, 0.7)
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: violetMain,
-      light: alpha(violetBase, 0.5),
-      dark: alpha(violetBase, 0.9),
-    },
-    info: {
-      main: orangeMain,
-      light: alpha(orangeBase, 0.5),
-      dark: alpha(orangeBase, 0.9),
-    },
-  },
-})
+import { createEmotionCache, createMuiTheme } from './utils'
 
 interface IThemeProps {
   children: ReactNode
 }
 
+const muiTheme = createMuiTheme()
+const emotionCache = createEmotionCache()
+
 export const Theme = ({ children }: IThemeProps) => {
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>
+  return (
+    <CacheProvider value={emotionCache}>
+      <ThemeProvider theme={muiTheme}>
+        <CssBaseline>{children}</CssBaseline>
+      </ThemeProvider>
+    </CacheProvider>
+  )
 }
