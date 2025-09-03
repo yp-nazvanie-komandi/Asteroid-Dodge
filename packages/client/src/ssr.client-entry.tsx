@@ -17,5 +17,5 @@ hydrateRoot(
     <BrowserRouter>
       <Routes />
     </BrowserRouter>
-  </App>,
+  </App>
 )

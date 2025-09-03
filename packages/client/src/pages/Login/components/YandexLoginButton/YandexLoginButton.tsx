@@ -27,7 +27,7 @@ const YandexLoginButton = ({ setSigninError }: IYandexLoginButtonProps) => {
       const { service_id } = await getServiceId({ redirectUri }).unwrap()
 
       const authUrl = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${service_id}&redirect_uri=${encodeURIComponent(
-        redirectUri,
+        redirectUri
       )}`
 
       window.location.href = authUrl

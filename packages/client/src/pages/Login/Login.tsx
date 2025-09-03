@@ -59,7 +59,7 @@ const LOGIN_FORM_FIELDS = [
       .required(DEFAULT_REQUIRED_FIELD_MESSAGE)
       .matches(
         /^(?!\d+$)[A-Za-z0-9_-]{3,20}$/,
-        'Поле состоит от 3 до 20 символов, латиницы, может содержать цифры, но не состоять из них, без пробелов, без спецсимволов (допустимы дефис и нижнее подчёркивание)',
+        'Поле состоит от 3 до 20 символов, латиницы, может содержать цифры, но не состоять из них, без пробелов, без спецсимволов (допустимы дефис и нижнее подчёркивание)'
       ),
   },
   {
@@ -73,20 +73,17 @@ const LOGIN_FORM_FIELDS = [
       .required(DEFAULT_REQUIRED_FIELD_MESSAGE)
       .matches(
         /^(?=.*[A-Z])(?=.*\d).{8,40}$/,
-        'Поле состоит от 8 до 40 символов, обязательно хотя бы одна заглавная буква и цифра',
+        'Поле состоит от 8 до 40 символов, обязательно хотя бы одна заглавная буква и цифра'
       ),
   },
 ] as const
 
 const LOGIN_FORM_FIELDS_SCHEMA = yup
   .object(
-    LOGIN_FORM_FIELDS.reduce(
-      (acc, field) => {
-        acc[field.name] = field.validation
-        return acc
-      },
-      {} as TFormFieldsSchemas<typeof LOGIN_FORM_FIELDS>,
-    ),
+    LOGIN_FORM_FIELDS.reduce((acc, field) => {
+      acc[field.name] = field.validation
+      return acc
+    }, {} as TFormFieldsSchemas<typeof LOGIN_FORM_FIELDS>)
   )
   .required()
 
@@ -147,7 +144,7 @@ export const Login = () => {
             location.state?.from || DEFAULT_AFTER_LOGIN_NAVIGATION_PATH,
             {
               replace: true,
-            },
+            }
           )
 
           return

@@ -23,7 +23,7 @@ export interface IJWTUserInfo {
 export const ypAuthMiddleware = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const response = await fetch('https://ya-praktikum.tech/api/v2/auth/user', {
@@ -63,7 +63,7 @@ export const ypAuthMiddleware = async (
 export const jwtAuthMiddleware = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const authHeader = req.headers.authorization
@@ -112,7 +112,7 @@ export const jwtAuthMiddleware = async (
 export const jwtOptionalAuthMiddleware = async (
   req: Request,
   _res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const authHeader = req.headers.authorization

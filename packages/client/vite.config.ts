@@ -42,13 +42,13 @@ const htmlTransformPlugin = ({ mode }: IPluginOptions): Plugin => {
 
       transformedHtml = transformedHtml.replace(
         templateOutlet,
-        mode === DEFAULT_CLIENT_SSR_MODE_NAME ? templateSsrOutlet : '',
+        mode === DEFAULT_CLIENT_SSR_MODE_NAME ? templateSsrOutlet : ''
       )
 
       if (mode === DEFAULT_CLIENT_SSR_MODE_NAME) {
         transformedHtml = transformedHtml.replace(
           templateClientEntryPath,
-          templateSsrClientEntryPath,
+          templateSsrClientEntryPath
         )
       }
 

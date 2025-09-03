@@ -34,7 +34,7 @@ import {
     app.use(compression())
     app.use(
       serverBase,
-      sirv(join(projectRoot, clientProdBundlePath), { extensions: [] }),
+      sirv(join(projectRoot, clientProdBundlePath), { extensions: [] })
     )
   } else {
     // Только в dev режиме загружаем vite модуль и необходимые к нему утилиты и подключаем его как middleware для express
@@ -60,7 +60,7 @@ import {
       if (isProductionEnvironment) {
         htmlTemplate = await readFile(
           join(projectRoot, templatePath),
-          templateEncoding,
+          templateEncoding
         )
 
         let resolvedSsrEntryPath = join(projectRoot, ssrServerEntryModulePath)
@@ -74,14 +74,14 @@ import {
       } else {
         htmlTemplate = await readFile(
           join(projectRoot, templatePath),
-          templateEncoding,
+          templateEncoding
         )
 
         htmlTemplate = await viteDevServer.transformIndexHtml(url, htmlTemplate)
 
         ssrRenderFunction = (
           await viteDevServer.ssrLoadModule(
-            join(projectRoot, ssrServerEntryModulePath),
+            join(projectRoot, ssrServerEntryModulePath)
           )
         ).render
       }
@@ -92,7 +92,7 @@ import {
 
       const html = htmlTemplate.replace(
         templateSsrOutletComment,
-        renderedApplication,
+        renderedApplication
       )
 
       response.status(200).set({ 'Content-Type': 'text/html' }).send(html)
@@ -107,7 +107,7 @@ import {
 
   app.listen(serverPort, serverHostname, () => {
     console.log(
-      `[SSR-SERVER] SSR сервер доступен по адресу: http://${serverHostname}:${serverPort}`,
+      `[SSR-SERVER] SSR сервер доступен по адресу: http://${serverHostname}:${serverPort}`
     )
   })
 })()

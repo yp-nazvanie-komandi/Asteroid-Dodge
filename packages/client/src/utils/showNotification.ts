@@ -5,7 +5,7 @@ type NotificationType = {
 
 export default function showNotification(
   title: string,
-  options: NotificationType,
+  options: NotificationType
 ) {
   if (Notification.permission === 'granted') {
     new Notification(title, options)

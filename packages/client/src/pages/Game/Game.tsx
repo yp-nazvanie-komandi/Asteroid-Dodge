@@ -48,9 +48,8 @@ export const GameCanvas = () => {
               setShowGameOver(false)
             }
           },
-        },
+        }
       )
-
       engineRef.current.start()
     }
 
@@ -99,11 +98,11 @@ export const GameCanvas = () => {
       {isLoading ? (
         <CircularProgress />
       ) : (
-        <div>
+        <>
           {playerLose && showGameOver ? (
             <GameOver countPoints={score} />
           ) : (
-            <div className={'count'}>
+            <div className={'count'} style={{ height: settings.CANVAS_HEIGHT }}>
               <Typography component="h1" className="title" marginBottom={2}>
                 {score}
 
@@ -113,7 +112,6 @@ export const GameCanvas = () => {
                   ))}
                 </div>
               </Typography>
-
               <canvas
                 ref={canvasRef}
                 width={settings.CANVAS_WIDTH}
@@ -121,7 +119,7 @@ export const GameCanvas = () => {
               />
             </div>
           )}
-        </div>
+        </>
       )}
     </div>
   )
