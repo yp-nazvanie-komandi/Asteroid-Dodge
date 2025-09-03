@@ -1,5 +1,7 @@
 import { type ReactNode, StrictMode, useMemo } from 'react'
 
+import type { EmotionCache } from '@emotion/react'
+
 import { Provider } from 'react-redux'
 
 import { Theme } from './components/Theme/Theme'
@@ -15,9 +17,11 @@ import './App.scss'
 interface IAppProps {
   children: ReactNode
   store?: TAppStore
+  initialTheme?: string
+  emotionCache?: EmotionCache
 }
 
-function App({ children, store }: IAppProps) {
+function App({ children, store, initialTheme, emotionCache }: IAppProps) {
   const reduxStore = useMemo(() => {
     if (store) {
       return store
@@ -32,7 +36,9 @@ function App({ children, store }: IAppProps) {
     <StrictMode>
       <ErrorBoundary>
         <Provider store={reduxStore}>
-          <Theme>{children}</Theme>
+          <Theme initialTheme={initialTheme} emotionCache={emotionCache}>
+            {children}
+          </Theme>
         </Provider>
       </ErrorBoundary>
     </StrictMode>

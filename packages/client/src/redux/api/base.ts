@@ -2,11 +2,18 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 
 import { fetchBaseQueryModified } from './fetcher'
 
-export const baseAPI = createApi({
-  reducerPath: 'API',
-  // TODO: Заменить на axios или другой HTTP-клиент
-  baseQuery: fetchBaseQueryModified({
-    baseUrl: __RTK_BASE_URL__,
+const apiBaseUrlResolver = (isYp: boolean) => {
+  if (__API_MODE__ === 'ssr' || import.meta.env.SSR) {
+    return isYp ? __SSR_YP_API_BASE_URL__ : __SSR_ASTEROID_DODGE_API_BASE_URL__
+  }
+
+  return isYp ? __YP_API_BASE_URL__ : __ASTEROID_DODGE_API_BASE_URL__
+}
+
+// TODO: Заменить на axios или другой HTTP-клиент
+const apiFetcherWrapper = (isYp: boolean) => {
+  return fetchBaseQueryModified({
+    baseUrl: apiBaseUrlResolver(isYp),
     credentials: 'include',
     prepareHeaders: (headers, api) => {
       const modified = new Headers(headers)
@@ -51,26 +58,33 @@ export const baseAPI = createApi({
         return text
       }
     },
-  }),
+  })
+}
+
+export const baseAPI = createApi({
+  reducerPath: 'baseAPI',
+  baseQuery: apiFetcherWrapper(true),
   endpoints: () => ({}),
 })
 
-export const userAPI = createApi({
-  reducerPath: 'userAPI',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3001/api/v1/' }),
-  endpoints: builder => ({
-    getUserTheme: builder.query<AttachedThemeResponse, void>({
-      query: () => 'users/theme/',
-    }),
-    updateUserTheme: builder.mutation({
-      query: newTheme => ({
-        url: 'users/theme/',
-        credentials: 'include',
-        method: 'POST', // или 'POST', если API так требует
-        body: JSON.stringify({ theme: newTheme }),
-      }),
-    }),
-  }),
+export const asteroidDodgeAPI = createApi({
+  reducerPath: 'asteroidDodgeAPI',
+  // baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3001/api/v1/' }),
+  baseQuery: apiFetcherWrapper(false),
+  endpoints: () => ({}),
+  // endpoints: builder => ({
+  //   getUserTheme: builder.query<AttachedThemeResponse, void>({
+  //     query: () => 'users/theme/',
+  //   }),
+  //   updateUserTheme: builder.mutation({
+  //     query: newTheme => ({
+  //       url: 'users/theme/',
+  //       credentials: 'include',
+  //       method: 'POST', // или 'POST', если API так требует
+  //       body: JSON.stringify({ theme: newTheme }),
+  //     }),
+  //   }),
+  // }),
 })
 
-export const { useGetUserThemeQuery, useUpdateUserThemeMutation } = userAPI
+// export const { useGetUserThemeQuery, useUpdateUserThemeMutation } = userAPI

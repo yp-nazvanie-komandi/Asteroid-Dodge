@@ -10,6 +10,8 @@ import cookieParser from 'cookie-parser'
 
 import { createProxyMiddleware } from 'http-proxy-middleware'
 
+import serialize from 'serialize-javascript'
+
 import { HOSTNAME_MISSING_ERROR, PORT_MISSING_ERROR } from './constants'
 
 import {
@@ -50,11 +52,10 @@ import {
     // https://nodejs.org/api/esm.html#import-expressions
     const compression = (await import('compression')).default
     const sirv = (await import('sirv')).default
-    // @ts-expect-error https://github.com/expressjs/compression/issues/223
     app.use(compression())
     app.use(
       serverBase,
-      sirv(join(projectRoot, clientProdBundlePath), { extensions: [] })
+      sirv(join(projectRoot, clientProdBundlePath), { extensions: [] }),
     )
   } else {
     // Только в dev режиме загружаем vite модуль и необходимые к нему утилиты и подключаем его как middleware для express
@@ -82,6 +83,19 @@ import {
     }),
   )
 
+  app.use(
+    '/api/v1',
+    createProxyMiddleware({
+      changeOrigin: true,
+      cookieDomainRewrite: {
+        '*': '',
+      },
+      logger: console,
+      // TODO: переместить в env
+      target: 'http://localhost:3001/api/v1',
+    }),
+  )
+
   app.use('*all', async (request, response) => {
     try {
       let htmlTemplate: string
@@ -94,10 +108,12 @@ import {
       }) =>
         | Promise<{
             html: string
+            emotionCss: string
             preloadedReduxStoreState: IPreloadedReduxStoreState
           }>
         | {
             html: string
+            emotionCss: string
             preloadedReduxStoreState: IPreloadedReduxStoreState
           }
 
@@ -106,7 +122,7 @@ import {
       if (isProductionEnvironment) {
         htmlTemplate = await readFile(
           join(projectRoot, templatePath),
-          templateEncoding
+          templateEncoding,
         )
 
         let resolvedSsrEntryPath = join(projectRoot, ssrServerEntryModulePath)
@@ -120,14 +136,14 @@ import {
       } else {
         htmlTemplate = await readFile(
           join(projectRoot, templatePath),
-          templateEncoding
+          templateEncoding,
         )
 
         htmlTemplate = await viteDevServer.transformIndexHtml(url, htmlTemplate)
 
         ssrRenderFunction = (
           await viteDevServer.ssrLoadModule(
-            join(projectRoot, ssrServerEntryModulePath)
+            join(projectRoot, ssrServerEntryModulePath),
           )
         ).render
       }
@@ -143,11 +159,14 @@ import {
         response: {},
       }
 
-      const { html: renderedApplication, preloadedReduxStoreState } =
-        await ssrRenderFunction({
-          url,
-          serverContext,
-        })
+      const {
+        html: renderedApplication,
+        emotionCss,
+        preloadedReduxStoreState,
+      } = await ssrRenderFunction({
+        url,
+        serverContext,
+      })
 
       if (serverContext.response.redirect) {
         response.redirect(serverContext.response.redirect)
@@ -159,9 +178,12 @@ import {
         .replace(
           // TODO: переместить в env
           '/*__PRELOADED_STATE__*/',
-          `window.__PRELOADED_STATE__ = ${JSON.stringify(
-            preloadedReduxStoreState,
-          )};`,
+          `window.__PRELOADED_STATE__ = ${serialize(preloadedReduxStoreState)};`,
+        )
+        .replace(
+          // TODO: переместить в env
+          '<!-- EMOTION_CSS -->',
+          emotionCss,
         )
 
       response.status(200).set({ 'Content-Type': 'text/html' }).send(html)

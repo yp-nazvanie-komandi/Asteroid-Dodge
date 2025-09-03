@@ -10,8 +10,7 @@ import { useDispatch, useSelector, useStore } from 'react-redux'
 
 import type { TAppDispatch, TAppStore, TRootState } from './types'
 
-import { baseAPI as api } from './api/base'
-import { userAPI } from './api/base'
+import { baseAPI, asteroidDodgeAPI } from './api/base'
 
 interface ICreateStoreArgs {
   serverContext?: ISSRServerContext
@@ -21,7 +20,8 @@ interface ICreateStoreArgs {
 export const createStore = (args?: ICreateStoreArgs) => {
   const store = configureStore({
     reducer: {
-      [api.reducerPath]: api.reducer,
+      [baseAPI.reducerPath]: baseAPI.reducer,
+      [asteroidDodgeAPI.reducerPath]: asteroidDodgeAPI.reducer,
     },
     preloadedState: args?.initialState,
     middleware: getDefaultMiddleware =>
@@ -29,7 +29,7 @@ export const createStore = (args?: ICreateStoreArgs) => {
         thunk: {
           extraArgument: args?.serverContext,
         },
-      }).concat(api.middleware),
+      }).concat(baseAPI.middleware, asteroidDodgeAPI.middleware),
   })
 
   setupListeners(store.dispatch)

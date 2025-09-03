@@ -11,14 +11,29 @@ import { renderToString } from 'react-dom/server'
 
 import { matchRoutes, StaticRouter } from 'react-router'
 
+import createEmotionServer from '@emotion/server/create-instance'
+
 import App from './App'
 
 import { createStore } from './redux/main'
 
-import { baseAPI } from './redux/api/base'
+import { baseAPI, asteroidDodgeAPI } from './redux/api/base'
+
+import {
+  getAuthUser,
+  getRunningQueriesThunk as getRunningAuthQueriesThunk,
+} from './redux/api/Auth/enhanced/api'
+import {
+  getApiV1Themes,
+  getApiV1UsersTheme,
+  getRunningQueriesThunk as getRunningAsteroidDodgeQueriesThunk,
+} from './redux/api/AsteroidDodge/enhanced/api'
 
 import { Routes } from './components/Routes/Routes'
 import { routes } from './components/Routes/constants'
+
+import { createEmotionCache } from './components/Theme/utils'
+
 interface IRenderArgs {
   url: string
   serverContext: ISSRServerContext
@@ -28,6 +43,25 @@ export const render = async ({ url, serverContext }: IRenderArgs) => {
   const store = createStore({
     serverContext,
   })
+
+  // USER_PRELOADER используем глобально, так как нужен по факту для тем
+  store.dispatch(getAuthUser.initiate())
+
+  await Promise.all(store.dispatch(getRunningAuthQueriesThunk()))
+  //
+
+  // THEME_PRELOADER используем глобально, так как нужен по факту для тем
+  store.dispatch(getApiV1Themes.initiate({}))
+  store.dispatch(getApiV1UsersTheme.initiate())
+
+  await Promise.all(store.dispatch(getRunningAsteroidDodgeQueriesThunk()))
+  //
+
+  // Внимание! Вот тут уже serverContext будет прошит темой, которая должна будет заоверайдить request, берем значение оттуда
+
+  const themeCookie = serverContext.request.cookies
+    ?.find(cookie => cookie.startsWith('theme='))
+    ?.split('=')[1]
 
   const matches = matchRoutes(routes, url)
 
@@ -41,20 +75,32 @@ export const render = async ({ url, serverContext }: IRenderArgs) => {
     )
   }
 
+  const emotionCache = createEmotionCache()
+
+  const { extractCriticalToChunks, constructStyleTagsFromChunks } =
+    createEmotionServer(emotionCache)
+
+  // data extraction
   const html = renderToString(
-    <App store={store}>
+    <App initialTheme={themeCookie} emotionCache={emotionCache} store={store}>
       <StaticRouter location={url}>
         <Routes routes={routes} />
       </StaticRouter>
-    </App>
+    </App>,
   )
 
   const preloadedReduxStoreState = store.getState()
 
+  const emotionChunks = extractCriticalToChunks(html)
+  const emotionCss = constructStyleTagsFromChunks(emotionChunks)
+
+  // cleanup
   store.dispatch(baseAPI.util.resetApiState())
+  store.dispatch(asteroidDodgeAPI.util.resetApiState())
 
   return {
     html,
+    emotionCss,
     preloadedReduxStoreState,
   }
 }

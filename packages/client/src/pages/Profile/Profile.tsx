@@ -54,17 +54,20 @@ const PASSWORD_FORM_FIELDS = [
       .required(DEFAULT_REQUIRED_FIELD_MESSAGE)
       .matches(
         /^(?=.*[A-Z])(?=.*\d).{8,40}$/,
-        'Поле состоит от 8 до 40 символов, обязательно хотя бы одна заглавная буква и цифра'
+        'Поле состоит от 8 до 40 символов, обязательно хотя бы одна заглавная буква и цифра',
       ),
   },
 ] as const
 
 const PASSWORDS_FORM_FIELDS_SCHEMA = yup
   .object(
-    PASSWORD_FORM_FIELDS.reduce((acc, field) => {
-      acc[field.name] = field.validation
-      return acc
-    }, {} as TFormFieldsSchemas<typeof PASSWORD_FORM_FIELDS>)
+    PASSWORD_FORM_FIELDS.reduce(
+      (acc, field) => {
+        acc[field.name] = field.validation
+        return acc
+      },
+      {} as TFormFieldsSchemas<typeof PASSWORD_FORM_FIELDS>,
+    ),
   )
   .required()
 
@@ -142,7 +145,7 @@ export const Profile = () => {
         <label>
           {user?.avatar ? (
             <img
-              src={`${__RTK_BASE_URL__}/resources${user.avatar}`}
+              src={`${__API_MODE__ === 'ssr' || import.meta.env.SSR ? __SSR_YP_API_BASE_URL__ : __YP_API_BASE_URL__}/resources${user.avatar}`}
               alt="Preview"
             />
           ) : (

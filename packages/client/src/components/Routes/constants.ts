@@ -17,7 +17,6 @@ import { CreateForumTopic } from '../../pages/CreateForumTopic/CreateForumTopic'
 import { OAuth } from '../../pages/OAuth/OAuth'
 
 import { PrivateRoutes } from '../PrivateRoutes/PrivateRoutes'
-import { privateRoutesPreloader } from '../PrivateRoutes/utils/privateRoutesPreloader'
 
 export const routes: TRouteDescriptor[] = [
   {
@@ -39,7 +38,6 @@ export const routes: TRouteDescriptor[] = [
   {
     path: '/',
     Component: PrivateRoutes,
-    preloader: privateRoutesPreloader,
     children: [
       {
         path: 'profile',

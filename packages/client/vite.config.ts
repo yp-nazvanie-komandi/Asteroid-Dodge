@@ -42,13 +42,13 @@ const htmlTransformPlugin = ({ mode }: IPluginOptions): Plugin => {
 
       transformedHtml = transformedHtml.replace(
         templateOutlet,
-        mode === DEFAULT_CLIENT_SSR_MODE_NAME ? templateSsrOutlet : ''
+        mode === DEFAULT_CLIENT_SSR_MODE_NAME ? templateSsrOutlet : '',
       )
 
       if (mode === DEFAULT_CLIENT_SSR_MODE_NAME) {
         transformedHtml = transformedHtml.replace(
           templateClientEntryPath,
-          templateSsrClientEntryPath
+          templateSsrClientEntryPath,
         )
       }
 
@@ -62,12 +62,11 @@ export default defineConfig({
     port: Number(process.env.CLIENT_PORT) || 3000,
   },
   define: {
-    __SERVER_PORT__: process.env.SERVER_PORT,
-    __RTK_BASE_URL__:
-      process.env.CLIENT_MODE === 'ssr'
-        ? `"http://${process.env.SSR_SERVER_HOSTNAME}:${process.env.SSR_SERVER_PORT}/api/v2"`
-        : // TODO: переместить в env
-          '"https://ya-praktikum.tech/api/v2"',
+    __YP_API_BASE_URL__: '"https://ya-praktikum.tech/api/v2"',
+    __ASTEROID_DODGE_API_BASE_URL__: '"http://localhost:3001/"',
+    __SSR_YP_API_BASE_URL__: `"http://${process.env.SSR_SERVER_HOSTNAME}:${process.env.SSR_SERVER_PORT}/api/v2"`,
+    __SSR_ASTEROID_DODGE_API_BASE_URL__: `"http://${process.env.SSR_SERVER_HOSTNAME}:${process.env.SSR_SERVER_PORT}/"`,
+    __API_MODE__: process.env.CLIENT_MODE === 'ssr' ? '"ssr"' : '"csr"',
   },
   plugins: [react(), htmlTransformPlugin({ mode: process.env.CLIENT_MODE })],
 })

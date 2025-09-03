@@ -13,7 +13,9 @@ declare global {
 
   interface IPreloadedReduxStoreState {
     // eslint-disable-next-line @typescript-eslint/ban-types
-    API: CombinedState<{}, never, 'API'>
+    baseAPI: CombinedState<{}, never, 'baseAPI'>
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    asteroidDodgeAPI: CombinedState<{}, never, 'asteroidDodgeAPI'>
   }
 
   interface Window {
