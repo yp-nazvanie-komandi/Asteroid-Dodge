@@ -16,6 +16,10 @@ import {
 } from '@mui/material'
 
 import { usePostAuthSigninMutation } from '../../redux/api/Auth/enhanced/api'
+import {
+  useGetUserThemeQuery,
+  useUpdateUserThemeMutation,
+} from '../../redux/api/base'
 
 import { isFetchBaseQueryErrorWithReason } from '../../redux/api/helpers'
 
@@ -26,6 +30,8 @@ import Button from '../../components/Button/Button'
 import YandexLoginButton from './components/YandexLoginButton/YandexLoginButton'
 
 import './style.scss'
+
+import { AttachedThemeResponse } from '../../components/Theme/change-theme-drop'
 
 interface ILoginFormValues {
   login: string
@@ -83,6 +89,9 @@ const LOGIN_FORM_FIELDS_SCHEMA = yup
 
 // TODO: Вынести в отдельный компонент форму https://github.com/yp-nazvanie-komandi/Asteroid-Dodge/issues/96
 export const Login = () => {
+  const { data } = useGetUserThemeQuery() as { data?: AttachedThemeResponse }
+  const [updateTheme] = useUpdateUserThemeMutation()
+
   const [signinError, setSigninError] = useState<string>()
 
   const location = useLocation()
@@ -110,6 +119,18 @@ export const Login = () => {
         Notification.requestPermission().then(permission => {
           console.log('Разрешение на уведомления:', permission)
         })
+      }
+      const cookieMatch = document?.cookie?.match(
+        '(^|;)\\s*' + 'theme' + '\\s*=\\s*([^;]+)',
+      )
+      const themeValue = cookieMatch ? cookieMatch.pop() : undefined
+
+      if (!themeValue) {
+        if (data && data.name) {
+          document.cookie = `theme=${data.name}; path=/`
+        }
+      } else {
+        updateTheme(themeValue)
       }
 
       navigate(location.state?.from || DEFAULT_AFTER_LOGIN_NAVIGATION_PATH, {
