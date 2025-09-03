@@ -5,7 +5,7 @@ import { ThemeProvider, CssBaseline, createTheme } from '@mui/material'
 
 import { CacheProvider } from '@emotion/react'
 
-import { createEmotionCache, createMuiTheme } from './utils'
+import { createEmotionCache } from './utils'
 import ChangeThemeDrop from './change-theme-drop'
 import { useState } from 'react'
 

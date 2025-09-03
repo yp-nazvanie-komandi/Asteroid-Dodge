@@ -9,11 +9,14 @@ import { BrowserRouter } from 'react-router'
 import App from './App'
 
 import { Routes } from './components/Routes/Routes'
+import { FloatMenu } from './components/FloatMenu/FloatMenu'
 
 createRoot(document.getElementById('root') as HTMLElement).render(
   <App>
     <BrowserRouter>
       <Routes />
+
+      <FloatMenu />
     </BrowserRouter>
-  </App>
+  </App>,
 )
