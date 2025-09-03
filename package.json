@@ -8,6 +8,7 @@
     "build:ssr": "lerna run build:ssr --scope=client",
     "dev:client": "lerna run dev --scope=client",
     "dev:client:ssr": "lerna run dev:ssr --scope=client",
+    "dev:client:ssr:debug": "lerna run dev:ssr:debug --scope=client",
     "dev:server": "lerna run dev --scope=server",
     "preview:ssr": "lerna run preview:ssr --scope=client",
     "dev": "lerna run dev",

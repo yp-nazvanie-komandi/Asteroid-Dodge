@@ -10,12 +10,13 @@ import { BrowserRouter } from 'react-router'
 import App from './App'
 
 import { Routes } from './components/Routes/Routes'
+import { routes } from './components/Routes/constants'
 
 hydrateRoot(
   document.getElementById('root') as HTMLElement,
   <App>
     <BrowserRouter>
-      <Routes />
+      <Routes routes={routes} />
     </BrowserRouter>
   </App>
 )

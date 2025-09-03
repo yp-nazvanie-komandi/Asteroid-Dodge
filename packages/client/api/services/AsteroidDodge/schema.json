@@ -1,0 +1,219 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "AsteroidDodge API",
+    "version": "1.0.0",
+    "description": "AsteroidDodge API documentation"
+  },
+  "servers": [{ "url": "http://localhost:3001" }],
+  "externalDocs": {
+    "description": "[Download this swagger spec]",
+    "url": "/swagger.json"
+  },
+  "paths": {
+    "/api/v1/themes": {
+      "get": {
+        "summary": "Get all themes",
+        "tags": ["Themes"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "name",
+            "required": false,
+            "description": "Name of the theme to filter by",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of themes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ThemeResponse" }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HttpErrorBody" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/theme/": {
+      "get": {
+        "summary": "Get user theme",
+        "tags": ["Users"],
+        "responses": {
+          "200": {
+            "description": "Theme attached to user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttachedThemeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HttpErrorBody" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HttpErrorBody" }
+              }
+            }
+          },
+          "404": {
+            "description": "User or theme not found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HttpErrorBody" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HttpErrorBody" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Attach theme to user",
+        "tags": ["Users"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AttachThemeRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Theme attached to user",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AttachThemeResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HttpErrorBody" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HttpErrorBody" }
+              }
+            }
+          },
+          "404": {
+            "description": "User or theme not found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HttpErrorBody" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HttpErrorBody" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HttpErrorBody": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string", "description": "Error message" }
+        },
+        "required": ["error"]
+      },
+      "ThemeResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "ID of the theme attached to the user"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the theme attached to the user"
+          }
+        },
+        "required": ["id", "name"]
+      },
+      "AttachedThemeResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "ID of the theme attached to the user"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the theme attached to the user"
+          }
+        },
+        "required": ["id", "name"]
+      },
+      "AttachThemeRequest": {
+        "type": "object",
+        "properties": {
+          "themeName": {
+            "type": "string",
+            "description": "Name of the theme to attach to the user"
+          }
+        },
+        "required": ["themeName"]
+      },
+      "AttachThemeResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "ID of the theme attached to the user"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the theme attached to the user"
+          }
+        },
+        "required": ["id", "name"]
+      }
+    }
+  },
+  "tags": []
+}

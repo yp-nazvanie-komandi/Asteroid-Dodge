@@ -23,4 +23,7 @@ export const {
   useGetAuthUserQuery,
   useLazyGetAuthUserQuery,
   usePostAuthLogoutMutation,
+  util: { getRunningQueriesThunk },
 } = enhancedApi
+
+export const { getAuthUser } = enhancedApi.endpoints
