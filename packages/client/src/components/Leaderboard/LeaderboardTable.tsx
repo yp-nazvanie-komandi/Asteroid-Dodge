@@ -3,7 +3,9 @@ import { useTable, useResizeColumns, useBlockLayout } from 'react-table'
 import { useLeaderboardQuery } from './useLeaderboardRtk'
 import Pagination from './LeaderboardPagination'
 
-export type LeaderboardRow = any
+export type LeaderboardRow = {
+  data?: Record<string, unknown>
+}
 
 export default function LeaderboardTable({
   ratingFieldName,
@@ -33,10 +35,15 @@ export default function LeaderboardTable({
     let cancelled = false
     ;(async () => {
       try {
-        const data: any = await trigger()
-        const list: any[] = Array.isArray(data)
-          ? data
-          : (data?.leaders ?? data?.data ?? [])
+        const resp: any = await trigger()
+        const list: any[] = Array.isArray(resp)
+          ? resp
+          : Array.isArray(resp?.data)
+            ? resp.data
+            : Array.isArray(resp?.leaders)
+              ? resp.leaders
+              : []
+
         if (!cancelled) {
           setRows(list)
           if (list.length < pageSize) {
@@ -60,40 +67,27 @@ export default function LeaderboardTable({
         Header: '#',
         accessor: (_: any, i: number) => cursor + i + 1,
         id: 'rank',
-        width: 60,
-        minWidth: 50,
-        maxWidth: 80,
-      },
-      {
-        Header: 'Player',
-        accessor: (r: any) => r?.data?.myField ?? r?.data?.name ?? '—',
-        id: 'player',
-        width: 462,
-        minWidth: 180,
-        maxWidth: 700,
-        Cell: ({ value }: any) => (
-          <div className="truncate">{String(value)}</div>
-        ),
-      },
-      {
-        Header: 'Wins',
-        accessor: (r: any) => r?.data?.wins ?? '—',
-        id: 'wins',
-        width: 120,
-        minWidth: 80,
-        maxWidth: 240,
+        width: 80,
+        minWidth: 60,
+        maxWidth: 120,
       },
       {
         Header: 'Score',
-        accessor: (r: any) => r?.data?.otherField ?? r?.score ?? 0,
+        accessor: (r: any) =>
+          Number(
+            r?.data?.[ratingFieldName as keyof (typeof r)['data']] ??
+              r?.score ??
+              0,
+          ),
         id: 'score',
-        width: 342,
-        minWidth: 120,
-        maxWidth: 500,
-        Cell: ({ value }: any) => Number(value).toLocaleString(),
+        width: 300,
+        minWidth: 140,
+        maxWidth: 600,
+        Cell: ({ value }: any) =>
+          Number.isFinite(value) ? Number(value).toLocaleString() : '0',
       },
     ],
-    [cursor],
+    [cursor, ratingFieldName],
   )
 
   const defaultColumn = React.useMemo(

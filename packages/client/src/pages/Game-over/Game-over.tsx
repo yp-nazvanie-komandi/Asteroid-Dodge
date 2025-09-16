@@ -9,10 +9,9 @@ interface GameOverProps {
 
 export const GameOver: React.FC<GameOverProps> = ({ countPoints }) => {
   const navigate = useNavigate()
-  const { isSubmitting, error } = useSubmitGameResultRtk(
-    { countPoints },
-    { auto: true },
-  )
+  const { isSubmitting, error } = useSubmitGameResultRtk(countPoints, {
+    auto: true,
+  })
 
   if (isSubmitting) {
     return <div className="container">Saving result…</div>

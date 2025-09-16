@@ -17,7 +17,7 @@ export function useLeaderboardQuery({
 }) {
   const [fetchAll, allState] = usePostLeaderboardAllMutation()
   const [fetchTeam, teamState] = usePostLeaderboardByTeamNameMutation()
-  console.log(ratingFieldName)
+
   const trigger = useCallback(async () => {
     if (teamName) {
       return fetchTeam({
@@ -33,6 +33,13 @@ export function useLeaderboardQuery({
   const isLoading = allState.isLoading || teamState.isLoading
   const isError = allState.isError || teamState.isError
   const error = allState.error || teamState.error
+  const data = teamName ? teamState.data : allState.data
 
-  return { trigger, isLoading, isError, error }
+  return {
+    trigger,
+    data,
+    isLoading,
+    isError,
+    error,
+  }
 }
