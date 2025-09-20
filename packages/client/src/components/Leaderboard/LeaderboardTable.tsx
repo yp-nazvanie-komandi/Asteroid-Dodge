@@ -24,6 +24,11 @@ export default function LeaderboardTable({
   const [rows, setRows] = React.useState<LeaderboardRow[]>([])
   const [knownLastPage, setKnownLastPage] = React.useState<number | null>(null)
 
+  React.useEffect(() => {
+    setKnownLastPage(null)
+    setPageIndex(0)
+  }, [pageSize, ratingFieldName])
+
   const cursor = pageIndex * pageSize
 
   const { trigger, isLoading, isError, error } = useLeaderboardQuery({
@@ -37,15 +42,12 @@ export default function LeaderboardTable({
   React.useEffect(() => {
     let active = true
     const seq = ++seqRef.current
-
     ;(async () => {
       try {
         const resp = await trigger()
         if (!active || seq !== seqRef.current) return
-
         const list = extractRows<LeaderboardRow>(resp)
         setRows(list)
-
         if (list.length < pageSize) {
           setKnownLastPage(prev =>
             prev === null ? pageIndex : Math.max(prev, pageIndex),
@@ -55,12 +57,11 @@ export default function LeaderboardTable({
         if (active && seq === seqRef.current) setRows([])
       }
     })()
-
     return () => {
       active = false
       seqRef.current++
     }
-  }, [trigger, pageIndex, pageSize])
+  }, [ratingFieldName, cursor, pageSize])
 
   const getScore = React.useCallback(
     (r: LeaderboardRow): number => {
@@ -132,64 +133,88 @@ export default function LeaderboardTable({
 
   return (
     <div className="lb-wrapper">
-      <div {...getTableProps()} className="lb-table">
-        {headerGroups.map(hg => (
-          <div
-            {...hg.getHeaderGroupProps()}
-            className="lb-header-row"
-            key={hg.id}
-          >
-            {hg.headers.map(h => {
-              const column = h as ResizableColumn<LeaderboardRow>
+      {(() => {
+        const tableProps = getTableProps() as any
+        const { key: tableKey, ...tableRest } = tableProps
+        return (
+          <div {...tableRest} key={tableKey} className="lb-table">
+            {headerGroups.map(hg => {
+              const { key: hgKey, ...hgRest } = hg.getHeaderGroupProps() as any
               return (
-                <div
-                  {...column.getHeaderProps()}
-                  className="lb-th"
-                  key={column.id}
-                >
-                  {column.render('Header')}
-                  {column.canResize && column.getResizerProps && (
-                    <div
-                      {...column.getResizerProps()}
-                      className={`resizer ${column.isResizing ? 'isResizing' : ''}`}
-                      title="Drag to resize"
-                    />
+                <div {...hgRest} key={hgKey} className="lb-header-row">
+                  {hg.headers.map(h => {
+                    const column = h as ResizableColumn<LeaderboardRow>
+                    const { key: hKey, ...hRest } =
+                      column.getHeaderProps() as any
+                    return (
+                      <div {...hRest} key={hKey} className="lb-th">
+                        {column.render('Header')}
+                        {column.canResize &&
+                          column.getResizerProps &&
+                          (() => {
+                            const resizerProps = column.getResizerProps()
+                            const { key: resKey, ...resRest } = (resizerProps ||
+                              {}) as any
+                            return (
+                              <div
+                                {...resRest}
+                                key={resKey}
+                                className={`resizer ${column.isResizing ? 'isResizing' : ''}`}
+                                title="Drag to resize"
+                              />
+                            )
+                          })()}
+                      </div>
+                    )
+                  })}
+                </div>
+              )
+            })}
+            {(() => {
+              const bodyProps = getTableBodyProps() as any
+              const { key: bodyKey, ...bodyRest } = bodyProps
+              return (
+                <div {...bodyRest} key={bodyKey}>
+                  {isLoading && <div className="lb-empty">Loading…</div>}
+                  {isError && (
+                    <div className="lb-empty lb-error-text">
+                      {getErrorMessage(error)}
+                    </div>
+                  )}
+                  {!isLoading &&
+                    !isError &&
+                    rtRows.map(row => {
+                      prepareRow(row)
+                      const { key: rowKey, ...rowRest } =
+                        row.getRowProps() as any
+                      return (
+                        <div {...rowRest} key={rowKey} className="lb-row">
+                          {row.cells.map(cell => {
+                            const { key: cellKey, ...cellRest } =
+                              cell.getCellProps() as any
+                            return (
+                              <div
+                                {...cellRest}
+                                key={cellKey}
+                                className="lb-td"
+                              >
+                                {cell.render('Cell')}
+                              </div>
+                            )
+                          })}
+                        </div>
+                      )
+                    })}
+                  {!isLoading && !isError && rows.length === 0 && (
+                    <div className="lb-empty">No data</div>
                   )}
                 </div>
               )
-            })}
+            })()}
           </div>
-        ))}
-        <div {...getTableBodyProps()}>
-          {isLoading && <div className="lb-empty">Loading…</div>}
-          {isError && (
-            <div className="lb-empty lb-error-text">
-              {getErrorMessage(error)}
-            </div>
-          )}
-          {!isLoading &&
-            !isError &&
-            rtRows.map(row => {
-              prepareRow(row)
-              return (
-                <div {...row.getRowProps()} className="lb-row" key={row.id}>
-                  {row.cells.map(cell => (
-                    <div
-                      {...cell.getCellProps()}
-                      className="lb-td"
-                      key={cell.column.id}
-                    >
-                      {cell.render('Cell')}
-                    </div>
-                  ))}
-                </div>
-              )
-            })}
-          {!isLoading && !isError && rows.length === 0 && (
-            <div className="lb-empty">No data</div>
-          )}
-        </div>
-      </div>
+        )
+      })()}
+
       <Pagination
         pageIndex={pageIndex}
         pageSize={pageSize}

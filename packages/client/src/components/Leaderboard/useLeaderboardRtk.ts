@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import {
   usePostLeaderboardAllMutation,
   usePostLeaderboardByTeamNameMutation,
@@ -11,6 +11,7 @@ import {
   UseLeaderboardQueryArgs,
   UseLeaderboardQueryResult,
 } from '../../pages/Leaderboard/types'
+
 export function useLeaderboardQuery<
   Row extends LeaderboardRow = LeaderboardRow,
 >({
@@ -22,18 +23,42 @@ export function useLeaderboardQuery<
   const [fetchAll, allState] = usePostLeaderboardAllMutation()
   const [fetchTeam, teamState] = usePostLeaderboardByTeamNameMutation()
 
-  const trigger = useCallback<() => Promise<LeadersResponse<Row>>>(async () => {
-    const body: LeaderboardRequest = { ratingFieldName, cursor, limit }
-    if (teamName) {
-      const res = await fetchTeam({
-        teamName,
-        leaderboardRequest: body,
-      }).unwrap()
+  const latestRef = useRef<() => Promise<LeadersResponse<Row>>>(() =>
+    Promise.resolve([] as unknown as LeadersResponse<Row>),
+  )
+  const inFlightKeyRef = useRef<string | null>(null)
+  const inFlightPromiseRef = useRef<Promise<LeadersResponse<Row>> | null>(null)
+
+  useEffect(() => {
+    latestRef.current = async () => {
+      const body: LeaderboardRequest = { ratingFieldName, cursor, limit }
+      if (teamName) {
+        const res = await fetchTeam({
+          teamName,
+          leaderboardRequest: body,
+        }).unwrap()
+        return res as LeadersResponse<Row>
+      }
+      const res = await fetchAll({ leaderboardRequest: body }).unwrap()
       return res as LeadersResponse<Row>
     }
-    const res = await fetchAll({ leaderboardRequest: body }).unwrap()
-    return res as LeadersResponse<Row>
   }, [teamName, ratingFieldName, cursor, limit, fetchAll, fetchTeam])
+
+  const trigger = useCallback(() => {
+    const key = `${teamName ?? ''}|${ratingFieldName}|${cursor}|${limit}`
+    if (inFlightKeyRef.current === key && inFlightPromiseRef.current) {
+      return inFlightPromiseRef.current
+    }
+    const p = latestRef.current()
+    inFlightKeyRef.current = key
+    inFlightPromiseRef.current = p
+    return p.finally(() => {
+      if (inFlightKeyRef.current === key) {
+        inFlightKeyRef.current = null
+        inFlightPromiseRef.current = null
+      }
+    })
+  }, [teamName, ratingFieldName, cursor, limit])
 
   const isLoading = allState.isLoading || teamState.isLoading
   const isError = allState.isError || teamState.isError
@@ -42,11 +67,5 @@ export function useLeaderboardQuery<
     | LeadersResponse<Row>
     | undefined
 
-  return {
-    trigger,
-    data,
-    isLoading,
-    isError,
-    error,
-  }
+  return { trigger, data, isLoading, isError, error }
 }
