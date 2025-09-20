@@ -3,37 +3,44 @@ import {
   usePostLeaderboardAllMutation,
   usePostLeaderboardByTeamNameMutation,
 } from '../../redux/api/Leaderboard/generated/api'
-
-export function useLeaderboardQuery({
+import type { LeaderboardRequest } from '../../redux/api/Leaderboard/generated/types'
+import {
+  LeaderboardRow,
+  LeadersResponse,
+  RtkError,
+  UseLeaderboardQueryArgs,
+  UseLeaderboardQueryResult,
+} from '../../pages/Leaderboard/types'
+export function useLeaderboardQuery<
+  Row extends LeaderboardRow = LeaderboardRow,
+>({
   teamName,
   ratingFieldName,
   cursor,
   limit,
-}: {
-  teamName?: string
-  ratingFieldName: string
-  cursor: number
-  limit: number
-}) {
+}: UseLeaderboardQueryArgs): UseLeaderboardQueryResult<Row> {
   const [fetchAll, allState] = usePostLeaderboardAllMutation()
   const [fetchTeam, teamState] = usePostLeaderboardByTeamNameMutation()
 
-  const trigger = useCallback(async () => {
+  const trigger = useCallback<() => Promise<LeadersResponse<Row>>>(async () => {
+    const body: LeaderboardRequest = { ratingFieldName, cursor, limit }
     if (teamName) {
-      return fetchTeam({
+      const res = await fetchTeam({
         teamName,
-        leaderboardRequest: { ratingFieldName, cursor, limit },
+        leaderboardRequest: body,
       }).unwrap()
+      return res as LeadersResponse<Row>
     }
-    return fetchAll({
-      leaderboardRequest: { ratingFieldName, cursor, limit },
-    }).unwrap()
+    const res = await fetchAll({ leaderboardRequest: body }).unwrap()
+    return res as LeadersResponse<Row>
   }, [teamName, ratingFieldName, cursor, limit, fetchAll, fetchTeam])
 
   const isLoading = allState.isLoading || teamState.isLoading
   const isError = allState.isError || teamState.isError
-  const error = allState.error || teamState.error
-  const data = teamName ? teamState.data : allState.data
+  const error: RtkError = (allState.error ?? teamState.error) as RtkError
+  const data = (teamName ? teamState.data : allState.data) as
+    | LeadersResponse<Row>
+    | undefined
 
   return {
     trigger,
