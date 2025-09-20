@@ -5,7 +5,7 @@ import { ASTEROID_DODGE_SCORE } from '../../utils/constants'
 import Button from '../../components/Button/Button'
 import { useNavigate } from 'react-router'
 
-export default function LeaderboardPage() {
+export function Leaderboard() {
   const navigate = useNavigate()
   return (
     <div className="lb-container">
