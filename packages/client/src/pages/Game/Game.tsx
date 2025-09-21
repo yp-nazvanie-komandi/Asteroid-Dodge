@@ -48,7 +48,7 @@ export const GameCanvas = () => {
               setShowGameOver(false)
             }
           },
-        }
+        },
       )
       engineRef.current.start()
     }
@@ -78,7 +78,7 @@ export const GameCanvas = () => {
         // Убеждаемся, что игрок не выходит за границы по горизонтали
         player.x = Math.max(
           0,
-          Math.min(settings.CANVAS_WIDTH - settings.PLAYER_WIDTH, player.x)
+          Math.min(settings.CANVAS_WIDTH - settings.PLAYER_WIDTH, player.x),
         )
 
         // Если игрок оказался за границами, перемещаем его в центр нижней части экрана

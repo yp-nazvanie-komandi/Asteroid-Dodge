@@ -14,7 +14,10 @@ export class GameController {
   private isShowedNotification = false
   private currentCanvasHeight: number
 
-  constructor(private model: GameModel, private settings: Settings) {
+  constructor(
+    private model: GameModel,
+    private settings: Settings,
+  ) {
     this.currentCanvasHeight = this.settings.CANVAS_HEIGHT
   }
 
@@ -33,14 +36,14 @@ export class GameController {
     if (this.model.keys['ArrowLeft']) {
       this.model.player.x = Math.max(
         0,
-        this.model.player.x - this.settings.SPEED_PALYER * dt
+        this.model.player.x - this.settings.SPEED_PALYER * dt,
       )
       this.model.player.update(Direction.Right)
     }
     if (this.model.keys['ArrowRight']) {
       this.model.player.x = Math.min(
         this.settings.CANVAS_WIDTH - this.model.player.width,
-        this.model.player.x + this.settings.SPEED_PALYER * dt
+        this.model.player.x + this.settings.SPEED_PALYER * dt,
       )
       this.model.player.update(Direction.Left)
     }
@@ -104,7 +107,7 @@ export class GameController {
           }
 
           const randomExplosion = getRandomElement(
-            this.model.resources.audio.explosions
+            this.model.resources.audio.explosions,
           )
 
           randomExplosion?.audio.play()
@@ -144,7 +147,7 @@ export class GameController {
           }
 
           const randomExplosion = getRandomElement(
-            this.model.resources.audio.explosions
+            this.model.resources.audio.explosions,
           )
 
           randomExplosion?.audio.play()
@@ -181,8 +184,8 @@ export class GameController {
               width: this.settings.BULLET_WIDTH,
               height: this.settings.BULLET_HEIGHT,
             } as Rectangle,
-            BasicColors.RED
-          )
+            BasicColors.RED,
+          ),
         )
 
         if (randomLaser) {
