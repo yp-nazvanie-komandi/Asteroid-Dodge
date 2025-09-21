@@ -3,13 +3,33 @@ import { TopicTextAreaInput } from './TopicTextAreaInput/TopicTextAreaInput'
 import { Paper } from '@mui/material'
 import { TopicTitles } from '../../../components/ForumTopicTitles/TopicTitles'
 import { usePostApiV1ForumTopicsByIdCommentsMutation } from '../../../redux/api/Forum/generated/api'
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import type { SerializedError } from '@reduxjs/toolkit'
+
+function getErrorMessage(err: unknown) {
+  const e = err as FetchBaseQueryError | SerializedError | undefined
+  if (!e) return ''
+  if ('status' in (e as FetchBaseQueryError)) {
+    const fbqe = e as FetchBaseQueryError
+    if (typeof fbqe.data === 'string') return fbqe.data
+    if (typeof fbqe.data === 'object' && fbqe.data) {
+      const maybeMsg = (fbqe.data as any).message ?? (fbqe.data as any).error
+      if (maybeMsg) return String(maybeMsg)
+      return JSON.stringify(fbqe.data)
+    }
+    return `HTTP ${String(fbqe.status)}`
+  }
+  if ('message' in (e as SerializedError) && (e as SerializedError).message) {
+    return String((e as SerializedError).message)
+  }
+  return JSON.stringify(e)
+}
 
 export const ForumTopicPreview = ({
   id,
-  avatar,
   title,
-  text,
-  userName,
+  body,
+  author,
 }: TForumTopicProps) => {
   const [
     addComment,
@@ -22,7 +42,6 @@ export const ForumTopicPreview = ({
         id,
         createCommentRequest: { body: form.comment },
       }).unwrap()
-      console.log('Комментарий добавлен')
     } catch (e) {
       console.error('Ошибка при добавлении комментария', e)
     }
@@ -30,21 +49,11 @@ export const ForumTopicPreview = ({
 
   return (
     <Paper elevation={5}>
-      <TopicTitles
-        title={title}
-        text={text}
-        avatar={avatar}
-        userName={userName}
-      />
+      <TopicTitles title={title} text={body} author={author} />
       <div className="forum-topic__descriptions">
         <TopicTextAreaInput submitCallback={onSubmit} />
         {isSendingComment && <p>Отправляем комментарий…</p>}
-        {isError && (
-          <p>
-            Ошибка:{' '}
-            {typeof error === 'object' ? JSON.stringify(error) : String(error)}
-          </p>
-        )}
+        {isError && <p>Ошибка: {getErrorMessage(error)}</p>}
         {isSuccess && <p>Комментарий успешно добавлен</p>}
       </div>
     </Paper>

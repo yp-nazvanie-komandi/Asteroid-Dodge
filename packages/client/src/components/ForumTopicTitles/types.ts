@@ -1,6 +1,5 @@
 export type TTopicTitlesProps = {
   title: string
-  userName: string
-  avatar?: string
+  author: string
   text: string
 }

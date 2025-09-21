@@ -1,21 +1,16 @@
-import { Typography } from '@mui/material'
+import { Avatar, Typography } from '@mui/material'
 import { TTopicTitlesProps } from './types'
 import './styled.scss'
-import { CircleAvatar } from '../CircleAvatar/CircleAvatar'
+import { stringAvatar } from '../CircleAvatar/utils'
 
-export const TopicTitles = ({
-  title,
-  userName,
-  avatar,
-  text,
-}: TTopicTitlesProps) => {
+export const TopicTitles = ({ title, author, text }: TTopicTitlesProps) => {
   return (
     <>
       <div className="forum-topic__titles">
         <Typography variant="h6" className="forum-topic__title">
           {title}
         </Typography>
-        <CircleAvatar name={userName} url={avatar} />
+        <Avatar>{stringAvatar(author)}</Avatar>
       </div>
       <div className="forum-topic__text">
         <Typography variant="h6" className="forum-topic__title">

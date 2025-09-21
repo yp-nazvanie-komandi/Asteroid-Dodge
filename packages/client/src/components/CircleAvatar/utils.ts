@@ -1,5 +1,6 @@
-export function stringAvatar(name: string) {
-  return {
-    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-  }
+export function stringAvatar(rawName?: string) {
+  const name = (rawName ?? '').trim()
+  const initial = name ? name[0].toUpperCase() : '?'
+
+  return initial
 }

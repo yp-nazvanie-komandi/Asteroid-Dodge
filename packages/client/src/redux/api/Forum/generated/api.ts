@@ -19,7 +19,7 @@ import type {
   CreateTopicRequest,
   CreateCommentRequest,
 } from './types'
-import { baseAPI as api } from '../../base'
+import { asteroidDodgeAPI as api } from '../../base'
 const injectedRtkApi = api.injectEndpoints({
   endpoints: build => ({
     getApiV1ForumTopics: build.query<

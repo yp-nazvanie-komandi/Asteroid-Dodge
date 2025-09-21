@@ -1,60 +1,112 @@
-import { TCreateTopicInputs } from './types'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import './style.scss'
-import { ForumContainer } from '../../components/ForumContainer/ForumContainer'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { Paper, TextField, Button, Box, Typography } from '@mui/material'
+import { usePostApiV1ForumTopicsMutation } from '../../redux/api/Forum/generated/api'
+import { useNavigate } from 'react-router'
+
+type TCreateTopicForm = { title: string; body: string }
 
 export const CreateForumTopic = () => {
+  const navigate = useNavigate()
+  const [createTopic, { isLoading, isError, error, isSuccess }] =
+    usePostApiV1ForumTopicsMutation()
+
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<TCreateTopicInputs>()
+    formState: { errors, isValid, isSubmitting },
+    reset,
+  } = useForm<TCreateTopicForm>({ mode: 'onChange' })
 
-  const onSubmit: SubmitHandler<TCreateTopicInputs> = data => {
-    console.log(data)
+  const getErrorMessage = (err: unknown) => {
+    if (typeof err === 'object' && err !== null) {
+      const e: any = err
+      if (e?.data?.error) return String(e.data.error)
+      if (e?.data?.reason) return String(e.data.reason)
+      if (e?.error) return String(e.error)
+      try {
+        return JSON.stringify(err)
+      } catch {
+        return 'Unknown error'
+      }
+    }
+    return String(err ?? 'Unknown error')
   }
 
+  const onSubmit: SubmitHandler<TCreateTopicForm> = async data => {
+    const res = await createTopic({
+      createTopicRequest: { title: data.title, body: data.body },
+    }).unwrap()
+    reset()
+    if (res?.id) navigate(`/topics/${res.id}`)
+  }
+
+  const sending = isLoading || isSubmitting
+
   return (
-    <ForumContainer>
-      <form onSubmit={handleSubmit(onSubmit)} className="forum-topic-form">
-        <h2 className="forum-topic-form__title">Creating your topic</h2>
-        <div className="forum-topic-form__field-group">
-          <label htmlFor="name" className="forum-topic-form__label">
-            Name
-          </label>
-          <input
-            id="name"
-            {...register('name', { required: true })}
-            className="forum-topic-form__input"
-            placeholder="Enter your name"
-          />
-          {errors.name && (
-            <span className="forum-topic-form__error">Name is required</span>
-          )}
-        </div>
+    <Paper elevation={5} sx={{ p: 3, maxWidth: 720, mx: 'auto' }}>
+      <Typography variant="h5" sx={{ mb: 2 }}>
+        Создать тему
+      </Typography>
 
-        <div className="forum-topic-form__field-group">
-          <label htmlFor="text" className="forum-topic-form__label">
-            Topic Text
-          </label>
-          <textarea
-            id="text"
-            {...register('text', { required: true })}
-            className="forum-topic-form__input"
-            placeholder="Enter your topic text"
-            rows={5}
-          />
-          {errors.text && (
-            <span className="forum-topic-form__error">Text is required</span>
-          )}
-        </div>
-
-        <input
-          type="submit"
-          value="COMMENT"
-          className="forum-topic-form__submit"
+      <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+        <TextField
+          label="Название"
+          fullWidth
+          margin="normal"
+          {...register('title', {
+            required: 'Укажите название темы',
+            minLength: { value: 3, message: 'Минимум 3 символа' },
+            maxLength: { value: 255, message: 'Максимум 255 символов' },
+          })}
+          error={!!errors.title}
+          helperText={errors.title?.message}
+          disabled={sending}
         />
-      </form>
-    </ForumContainer>
+
+        <TextField
+          label="Текст"
+          fullWidth
+          margin="normal"
+          multiline
+          rows={6}
+          {...register('body', {
+            required: 'Введите текст темы',
+            minLength: { value: 1, message: 'Минимум 1 символ' },
+          })}
+          error={!!errors.body}
+          helperText={errors.body?.message}
+          disabled={sending}
+        />
+
+        {isError && (
+          <Typography color="error" sx={{ mt: 1 }}>
+            Ошибка: {getErrorMessage(error)}
+          </Typography>
+        )}
+        {isSuccess && (
+          <Typography color="success.main" sx={{ mt: 1 }}>
+            Тема создана, выполняю переход…
+          </Typography>
+        )}
+
+        <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={!isValid || sending}
+          >
+            {sending ? 'Создаём…' : 'Создать тему'}
+          </Button>
+          <Button
+            type="button"
+            variant="outlined"
+            disabled={sending}
+            onClick={() => reset()}
+          >
+            Очистить
+          </Button>
+        </Box>
+      </Box>
+    </Paper>
   )
 }
