@@ -3,5 +3,5 @@
   "compilerOptions": {
     "outDir": "./dist/ssr-server"
   },
-  "include": ["ssr-server"],
+  "include": ["ssr-server", "global.d.ts"]
 }

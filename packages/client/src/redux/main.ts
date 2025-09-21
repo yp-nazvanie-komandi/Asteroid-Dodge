@@ -1,26 +1,57 @@
-import { configureStore } from '@reduxjs/toolkit'
+import {
+  configureStore,
+  type ThunkAction,
+  type UnknownAction,
+} from '@reduxjs/toolkit'
+
 import { setupListeners } from '@reduxjs/toolkit/query'
 
 import { useDispatch, useSelector, useStore } from 'react-redux'
 
-import { baseAPI as api } from './api/base'
-import { userAPI } from './api/base'
+import type { TAppDispatch, TAppStore, TRootState } from './types'
 
-export const store = configureStore({
-  reducer: {
-    [api.reducerPath]: api.reducer,
-    [userAPI.reducerPath]: userAPI.reducer,
-  },
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware().concat(api.middleware, userAPI.middleware),
-})
+import { baseAPI, asteroidDodgeAPI } from './api/base'
 
-setupListeners(store.dispatch)
+interface ICreateStoreArgs {
+  serverContext?: ISSRServerContext
+  initialState?: IPreloadedReduxStoreState
+}
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
-export type AppStore = typeof store
+export const createStore = (args?: ICreateStoreArgs) => {
+  const store = configureStore({
+    reducer: {
+      [baseAPI.reducerPath]: baseAPI.reducer,
+      [asteroidDodgeAPI.reducerPath]: asteroidDodgeAPI.reducer,
+    },
+    preloadedState: args?.initialState,
+    middleware: getDefaultMiddleware =>
+      getDefaultMiddleware({
+        thunk: {
+          extraArgument: args?.serverContext,
+        },
+      }).concat(baseAPI.middleware, asteroidDodgeAPI.middleware),
+  })
 
-export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
-export const useAppSelector = useSelector.withTypes<RootState>()
-export const useAppStore = useStore.withTypes<AppStore>()
+  setupListeners(store.dispatch)
+
+  return store
+}
+
+export const useAppDispatch = useDispatch.withTypes<TAppDispatch>()
+export const useAppSelector = useSelector.withTypes<TRootState>()
+export const useAppStore = useStore.withTypes<TAppStore>()
+
+export const _serverContextThunk =
+  (
+    updatedContext: Partial<ISSRServerContext>,
+  ): ThunkAction<
+    void,
+    TRootState,
+    ISSRServerContext | undefined,
+    UnknownAction
+  > =>
+  (_dispatch, _getState, extra) => {
+    if (extra?.response) {
+      extra.response.redirect = updatedContext?.response?.redirect
+    }
+  }

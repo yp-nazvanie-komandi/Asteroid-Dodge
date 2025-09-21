@@ -10,7 +10,7 @@ export const FullscreenToggle = () => {
     all: 'unset',
     position: 'fixed',
     top: '20px',
-    right: '20px',
+    left: '20px',
     zIndex: 2000,
     padding: '8px 16px',
     height: 'auto',

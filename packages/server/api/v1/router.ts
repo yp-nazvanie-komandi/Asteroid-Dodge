@@ -8,8 +8,8 @@ import authRouter from './auth'
 
 const router = express.Router()
 
-router.use('/topics', topicsRouter)
-router.use('/comments', commentsRouter)
+router.use('/forum/topics', topicsRouter)
+router.use('/forum/comments', commentsRouter)
 router.use('/auth', authRouter)
 router.use('/themes', themeRouter)
 router.use('/users', userRouter)

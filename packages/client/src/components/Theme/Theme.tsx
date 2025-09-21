@@ -1,17 +1,18 @@
 // TODO: При необходимости перенести на SSR + переход на Emotion
-import type { ReactNode } from 'react'
+import { useRef, useState, type ReactNode } from 'react'
 
 import { ThemeProvider, CssBaseline, createTheme } from '@mui/material'
 
-import { CacheProvider } from '@emotion/react'
+import { CacheProvider, type EmotionCache } from '@emotion/react'
+
+import ChangeThemeDrop from './change-theme-drop'
+
+import { useLazyGetApiV1UsersThemeQuery } from '../../redux/api/AsteroidDodge/enhanced/api'
+
+import { useIsomorphicLayoutEffect } from '../../hooks/useIsomorphicLayoutEffect'
+import { useAuth } from '../../hooks/Auth/useAuth'
 
 import { createEmotionCache } from './utils'
-import ChangeThemeDrop from './change-theme-drop'
-import { useState } from 'react'
-
-interface IThemeProps {
-  children: ReactNode
-}
 
 const emotionCache = createEmotionCache()
 
@@ -34,35 +35,72 @@ const themeOrigin = createTheme({
   },
 })
 
-export const Theme = ({ children }: IThemeProps) => {
-  const cookieMatch = document?.cookie?.match(
-    '(^|;)\\s*' + 'theme' + '\\s*=\\s*([^;]+)',
-  )
-  const themeValue = cookieMatch ? cookieMatch.pop() : undefined
+const cookieMatch =
+  typeof document !== 'undefined'
+    ? document?.cookie?.match('(^|;)\\s*' + 'theme' + '\\s*=\\s*([^;]+)')
+    : null
 
-  const [currentTheme, setCurrentTheme] = useState(themeValue || 'light')
+interface IThemeProps {
+  initialTheme?: string
+  emotionCache?: EmotionCache
+  children: ReactNode
+}
 
-  const getTheme = () => {
-    switch (currentTheme) {
-      case 'dark':
-        return themeDark
-      case 'pink':
-        return themeOrigin
-      case 'light':
-      default:
-        return themeLight
-    }
+const getThemeObjectByName = (themeName: string) => {
+  switch (themeName) {
+    case 'dark':
+      return themeDark
+    case 'pink':
+      return themeOrigin
+    case 'light':
+    default:
+      return themeLight
   }
+}
+
+export const Theme = ({
+  children,
+  initialTheme: initialThemeProp,
+  emotionCache: emotionCacheProp,
+}: IThemeProps) => {
+  // Ахтунг! они по идее должны матчится) иначе будет рофлан с гидрацией
+  const initialThemeFromCookie = cookieMatch
+    ? cookieMatch[cookieMatch.length - 1]
+    : undefined
+
+  const initialTheme = initialThemeProp || initialThemeFromCookie
+
+  const [currentTheme, setCurrentTheme] = useState(initialTheme ?? 'light')
+
+  const { isAuthenticated } = useAuth()
+
+  const [getUserTheme] = useLazyGetApiV1UsersThemeQuery()
+
+  // Даже в стрикт моде очень желательно вызвать запрос ровно 1 раз
+  const queryCallerRef = useRef(false)
+
+  useIsomorphicLayoutEffect(() => {
+    if (!queryCallerRef.current) {
+      if (!initialTheme && isAuthenticated) {
+        queryCallerRef.current = true
+
+        getUserTheme()
+          .unwrap()
+          .then(data => {
+            setCurrentTheme(data.name)
+          })
+          .catch()
+      }
+    }
+  }, [initialTheme, isAuthenticated])
 
   return (
-    <CacheProvider value={emotionCache}>
-      <ThemeProvider theme={getTheme()}>
+    <CacheProvider value={emotionCacheProp || emotionCache}>
+      <ThemeProvider theme={getThemeObjectByName(currentTheme)}>
         <ChangeThemeDrop
-          onChange={(event: string) => {
-            setCurrentTheme(event)
-          }}
+          currentTheme={currentTheme}
+          onChange={setCurrentTheme}
         />
-
         <CssBaseline>{children}</CssBaseline>
       </ThemeProvider>
     </CacheProvider>

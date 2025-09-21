@@ -12,8 +12,19 @@ export class GameController {
   private lastSpawn = 0
   private lastShoot = 0
   private isShowedNotification = false
+  private currentCanvasHeight: number
 
-  constructor(private model: GameModel, private settings: Settings) {}
+  constructor(
+    private model: GameModel,
+    private settings: Settings,
+  ) {
+    this.currentCanvasHeight = this.settings.CANVAS_HEIGHT
+  }
+
+  // Метод для обновления границ при изменении размера окна
+  updateCanvasHeight(newHeight: number) {
+    this.currentCanvasHeight = newHeight
+  }
 
   update(dt: number): boolean {
     if (this.model.countLife <= 0) {
@@ -25,14 +36,14 @@ export class GameController {
     if (this.model.keys['ArrowLeft']) {
       this.model.player.x = Math.max(
         0,
-        this.model.player.x - this.settings.SPEED_PALYER * dt
+        this.model.player.x - this.settings.SPEED_PALYER * dt,
       )
       this.model.player.update(Direction.Right)
     }
     if (this.model.keys['ArrowRight']) {
       this.model.player.x = Math.min(
         this.settings.CANVAS_WIDTH - this.model.player.width,
-        this.model.player.x + this.settings.SPEED_PALYER * dt
+        this.model.player.x + this.settings.SPEED_PALYER * dt,
       )
       this.model.player.update(Direction.Left)
     }
@@ -44,7 +55,7 @@ export class GameController {
     for (let i = this.model.bullets.length - 1; i >= 0; i--) {
       if (this.model.bullets[i].color === BasicColors.RED) {
         this.model.bullets[i].y += this.settings.SPEED_BULLET * dt
-        if (this.model.bullets[i].y > this.settings.CANVAS_HEIGHT)
+        if (this.model.bullets[i].y > this.currentCanvasHeight)
           this.model.bullets.splice(i, 1)
       } else {
         this.model.bullets[i].y -= this.settings.SPEED_BULLET * dt
@@ -55,7 +66,7 @@ export class GameController {
     // Обновление позиций противников
     for (let i = this.model.enemies.length - 1; i >= 0; i--) {
       this.model.enemies[i].y += this.settings.SPEED_ENEMY * dt
-      if (this.model.enemies[i].y > this.settings.CANVAS_HEIGHT) {
+      if (this.model.enemies[i].y > this.currentCanvasHeight) {
         this.model.enemies.splice(i, 1)
       } else {
         this.model.enemies[i].update(dt)
@@ -65,7 +76,7 @@ export class GameController {
     // Обновление позиций астероидов
     for (let i = this.model.asteroids.length - 1; i >= 0; i--) {
       this.model.asteroids[i].y += this.settings.SPEED_ASTEROID * dt
-      if (this.model.asteroids[i].y > this.settings.CANVAS_HEIGHT) {
+      if (this.model.asteroids[i].y > this.currentCanvasHeight) {
         this.model.asteroids.splice(i, 1)
         this.model.countLife -= 1
         if (this.model.countLife < 0) {
@@ -96,7 +107,7 @@ export class GameController {
           }
 
           const randomExplosion = getRandomElement(
-            this.model.resources.audio.explosions
+            this.model.resources.audio.explosions,
           )
 
           randomExplosion?.audio.play()
@@ -136,7 +147,7 @@ export class GameController {
           }
 
           const randomExplosion = getRandomElement(
-            this.model.resources.audio.explosions
+            this.model.resources.audio.explosions,
           )
 
           randomExplosion?.audio.play()
@@ -173,8 +184,8 @@ export class GameController {
               width: this.settings.BULLET_WIDTH,
               height: this.settings.BULLET_HEIGHT,
             } as Rectangle,
-            BasicColors.RED
-          )
+            BasicColors.RED,
+          ),
         )
 
         if (randomLaser) {
