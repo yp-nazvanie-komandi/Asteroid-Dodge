@@ -4,7 +4,12 @@
   align-items: center;
   justify-content: center;
   gap: 32px;
+  height: 100vh;
 
+  .forum-container__toolbar {
+    display: flex;
+    gap: 15px;
+  }
   &__title {
     font-family: VT323;
     font-style: normal;
