@@ -1,7 +1,7 @@
 import { Avatar, Typography } from '@mui/material'
 import { TTopicTitlesProps } from './types'
 import './styled.scss'
-import { stringAvatar } from '../CircleAvatar/utils'
+import { stringAvatar } from './utils'
 
 export const TopicTitles = ({ title, author, text }: TTopicTitlesProps) => {
   return (

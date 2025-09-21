@@ -53,8 +53,7 @@ export const ForumTopic = () => {
           <TopicTitles
             title={topic.title}
             text={topic.body}
-            avatar={undefined}
-            userName={topic.author}
+            author={topic.author}
           />
 
           <div className="forum-topic-comments">
@@ -67,8 +66,7 @@ export const ForumTopic = () => {
             {topic.comments?.map(comment => (
               <ForumTopicComment
                 key={comment.id}
-                avatar={undefined}
-                userName={comment.author}
+                author={comment.author}
                 text={comment.body}
               />
             ))}
