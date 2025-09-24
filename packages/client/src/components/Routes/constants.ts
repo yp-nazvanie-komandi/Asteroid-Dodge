@@ -7,7 +7,7 @@ import { Registration } from '../../pages/Registration/Registration'
 import { Profile } from '../../pages/Profile/Profile'
 import { GameCanvas } from '../../pages/Game/Game'
 import { Leaderboard } from '../../pages/Leaderboard/Leaderboard'
-import { Forum } from '../../pages/Forum/Forum'
+import { ForumIndex } from '../../pages/ForumIndex/ForumIndex'
 import { ForumTopic } from '../../pages/ForumTopic/ForumTopic'
 import { Exception } from '../../pages/Exception/Exception'
 import { GameOver } from '../../pages/Game-over/Game-over'
@@ -17,6 +17,7 @@ import { CreateForumTopic } from '../../pages/CreateForumTopic/CreateForumTopic'
 import { OAuth } from '../../pages/OAuth/OAuth'
 
 import { PrivateRoutes } from '../PrivateRoutes/PrivateRoutes'
+import { ForumLayout } from '../../layouts/Forum/Forum'
 
 export const routes: TRouteDescriptor[] = [
   {
@@ -61,20 +62,11 @@ export const routes: TRouteDescriptor[] = [
       },
       {
         path: 'topics',
-        Component: Forum,
+        Component: ForumLayout,
         children: [
-          {
-            index: true,
-            Component: Forum,
-          },
-          {
-            path: 'new',
-            Component: CreateForumTopic,
-          },
-          {
-            path: ':topicId',
-            Component: ForumTopic,
-          },
+          { index: true, Component: ForumIndex },
+          { path: 'new', Component: CreateForumTopic },
+          { path: ':topicId', Component: ForumTopic },
         ],
       },
     ],

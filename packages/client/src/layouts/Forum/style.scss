@@ -4,7 +4,12 @@
   align-items: center;
   justify-content: center;
   gap: 32px;
+  width: 100%;
 
+  .forum-container__toolbar {
+    display: flex;
+    gap: 15px;
+  }
   &__title {
     font-family: VT323;
     font-style: normal;
@@ -20,4 +25,5 @@
     flex-direction: column;
     gap: 32px;
   }
+
 }

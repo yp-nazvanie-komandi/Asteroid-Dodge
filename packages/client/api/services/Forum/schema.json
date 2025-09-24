@@ -1,0 +1,233 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Forum API (subset)",
+    "description": "Только необходимые операции: comments, topic, Create topic, getsingletopic, add comment to topic. JWT-аутентификация требуется для создания темы и добавления комментария.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    { "url": "http://localhost:3001" }
+  ],
+  "tags": [
+    { "name": "Topics", "description": "Операции с темами" },
+    { "name": "Comments", "description": "Операции с комментариями" }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Используйте /api/v1/forum/auth/login для получения токена"
+      }
+    },
+    "schemas": {
+      "Reaction": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32" },
+          "replyId": { "type": "integer", "format": "int32" },
+          "type": { "type": "string", "enum": ["like", "dislike", "laugh", "sad", "angry"] },
+          "ownerId": { "type": "string" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        },
+        "required": ["id", "replyId", "type", "ownerId", "createdAt", "updatedAt"]
+      },
+      "Reply": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32" },
+          "commentId": { "type": "integer", "format": "int32" },
+          "author": { "type": "string" },
+          "body": { "type": "string" },
+          "ownerId": { "type": "string" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" },
+          "reactions": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Reaction" }
+          }
+        },
+        "required": ["id", "commentId", "author", "body", "ownerId", "createdAt", "updatedAt"]
+      },
+      "Comment": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32" },
+          "topicId": { "type": "integer", "format": "int32" },
+          "author": { "type": "string" },
+          "body": { "type": "string" },
+          "ownerId": { "type": "string" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" },
+          "replies": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Reply" }
+          }
+        },
+        "required": ["id", "topicId", "author", "body", "ownerId", "createdAt", "updatedAt"]
+      },
+      "Topic": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32" },
+          "title": { "type": "string" },
+          "body": { "type": "string" },
+          "author": { "type": "string", "default": "NoBody" },
+          "ownerId": { "type": "string" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" },
+          "comments": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Comment" }
+          }
+        },
+        "required": ["id", "title", "body", "author", "ownerId", "createdAt", "updatedAt"]
+      },
+      "CreateTopicRequest": {
+        "type": "object",
+        "required": ["title", "body"],
+        "additionalProperties": false,
+        "properties": {
+          "title": { "type": "string", "description": "Заголовок темы" },
+          "body": { "type": "string", "description": "Содержимое темы" }
+        }
+      },
+      "CreateCommentRequest": {
+        "type": "object",
+        "required": ["body"],
+        "additionalProperties": false,
+        "properties": {
+          "body": { "type": "string", "description": "Текст комментария" }
+        }
+      },
+      "HttpErrorBody": {
+        "type": "object",
+        "required": ["error"],
+        "additionalProperties": false,
+        "properties": {
+          "error": { "type": "string", "description": "Сообщение об ошибке" }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/v1/forum/topics": {
+      "get": {
+        "tags": ["Topics"],
+        "summary": "Get all topics",
+        "responses": {
+          "200": {
+            "description": "Список тем (каждая с комментариями/ответами/реакциями)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Topic" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Topics"],
+        "summary": "Create topic",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "description": "Данные для создания темы",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateTopicRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Тема создана",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Topic" }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректный запрос",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HttpErrorBody" }
+              }
+            }
+          },
+          "401": { "description": "Не авторизован", "content": {} }
+        },
+        "x-codegen-request-body-name": "createTopicRequest"
+      }
+    },
+    "/api/v1/forum/topics/{id}": {
+      "get": {
+        "tags": ["Topics"],
+        "summary": "getsingletopic",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer", "format": "int32" }, "description": "ID темы" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Тема найдена",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Topic" }
+              }
+            }
+          },
+          "404": { "description": "Тема не найдена", "content": {} }
+        }
+      }
+    },
+    "/api/v1/forum/topics/{id}/comments": {
+      "post": {
+        "tags": ["Comments"],
+        "summary": "add comment to topic",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer", "format": "int32" }, "description": "ID темы" }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "description": "Данные комментария",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateCommentRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Комментарий создан",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Comment" }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректный запрос",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HttpErrorBody" }
+              }
+            }
+          },
+          "401": { "description": "Не авторизован", "content": {} },
+          "404": { "description": "Тема не найдена", "content": {} }
+        },
+        "x-codegen-request-body-name": "createCommentRequest"
+      }
+    }
+  },
+  "security": [
+    { "bearerAuth": [] }
+  ]
+}

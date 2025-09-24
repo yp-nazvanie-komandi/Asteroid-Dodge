@@ -1,5 +1,4 @@
 export type TForumTopicCommentProps = {
-  avatar?: string
-  userName: string
+  author: string
   text: string
 }

@@ -7,8 +7,13 @@ export const TopicTextAreaInput = ({ submitCallback }: TTopicTextAreaInput) => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<TCommentInput>()
-  const onSubmit: SubmitHandler<TCommentInput> = data => submitCallback(data)
+
+  const onSubmit: SubmitHandler<TCommentInput> = async data => {
+    await submitCallback({ comment: data.comment })
+    reset()
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="comment-input">
