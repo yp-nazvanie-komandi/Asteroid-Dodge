@@ -53,10 +53,6 @@ export const routes: TRouteDescriptor[] = [
         Component: Start,
       },
       {
-        path: 'game-over',
-        Component: GameOver,
-      },
-      {
         path: 'leaderboard',
         Component: Leaderboard,
       },
