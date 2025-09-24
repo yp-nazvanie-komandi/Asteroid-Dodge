@@ -11,9 +11,9 @@ export const Main = () => {
         <h1 className="title">Asteroid Dodge</h1>
 
         <p>
-          Управляйте кораблём, уворачивайтесь от астероидов и уничтожайте врагов
-          в эпических космических боях. Простые правила, затягивающий геймплей и
-          рекорды для самых метких!
+          Control the ship, dodge asteroids and destroy enemies In epic cosmic
+          battles. Simple rules that delay the gameplay and Records for the most
+          well!
         </p>
 
         <img src={rocketSvg} alt="rocket" />

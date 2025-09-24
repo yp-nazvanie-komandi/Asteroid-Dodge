@@ -46,7 +46,7 @@ export const Start = () => {
         ) : (
           <div>
             <h1 className={'title'}>{displayCount}</h1>
-            <p>секунд до начала игры</p>
+            <p>seconds before the start of the game</p>
           </div>
         )}
       </div>

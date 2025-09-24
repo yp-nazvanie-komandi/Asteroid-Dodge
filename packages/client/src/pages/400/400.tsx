@@ -8,7 +8,7 @@ const Error400 = () => {
   return (
     <div className={'container container--error'}>
       <h1 className={'error'}>404</h1>
-      <p>Ой, что то пошло не так</p>
+      <p>Oh, something went wrong</p>
       <Button
         text={'Go back'}
         onClick={() => {

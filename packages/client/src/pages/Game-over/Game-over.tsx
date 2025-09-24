@@ -13,7 +13,7 @@ export const GameOver = (props: GameOverProps) => {
     <div className={'container container--game-over'}>
       <h1 className="title title--white">GAME OVER</h1>
 
-      <p> Ваш счет: {countPoints}</p>
+      <p> Your account: {countPoints}</p>
 
       <Button
         color={'info'}

@@ -30,14 +30,14 @@ import {
 } from '../../redux/api/Users/enhanced/api'
 
 const DEFAULT_ERROR_MESSAGE =
-  'Упс, что-то пошло не так. Повторите попытку позже.'
+  'Oops, something went wrong. Repeat the attempt later.'
 
-const DEFAULT_REQUIRED_FIELD_MESSAGE = 'Поле обязательно для заполнения'
+const DEFAULT_REQUIRED_FIELD_MESSAGE = 'The field is mandatory for filling out'
 
 const PASSWORD_FORM_FIELDS = [
   {
     name: 'oldPassword',
-    label: 'Старый пароль',
+    label: 'Old Password',
     type: 'password',
     placeholder: '*************',
     autoComplete: 'current-password',
@@ -45,7 +45,7 @@ const PASSWORD_FORM_FIELDS = [
   },
   {
     name: 'newPassword',
-    label: 'Новый пароль',
+    label: 'New Password',
     type: 'password',
     placeholder: '*************',
     autoComplete: 'new-password',
@@ -54,7 +54,7 @@ const PASSWORD_FORM_FIELDS = [
       .required(DEFAULT_REQUIRED_FIELD_MESSAGE)
       .matches(
         /^(?=.*[A-Z])(?=.*\d).{8,40}$/,
-        'Поле состоит от 8 до 40 символов, обязательно хотя бы одна заглавная буква и цифра',
+        'The field consists of 8 to 40 characters, always at least one title letter and figure',
       ),
   },
 ] as const
