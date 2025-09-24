@@ -35,13 +35,13 @@ interface IRegistrationFormValues {
 }
 
 const DEFAULT_REGISTRATION_ERROR_MESSAGE =
-  'Произошла ошибка при регистрации. Повторите попытку позже.'
+  'An error occurred during registration. Repeat the attempt later.'
 
-const DEFAULT_REQUIRED_FIELD_MESSAGE = 'Поле обязательно для заполнения'
+const DEFAULT_REQUIRED_FIELD_MESSAGE = 'The field is mandatory for filling out'
 
 const NAMES_REGEX = /^[A-ZА-Я][a-zA-Zа-яА-Я-]*$/
 const NAMES_FIELDS_MESSAGE =
-  'Поле состоит из латиницы или кириллицы, первая буква должна быть заглавной, без пробелов и без цифр, нет спецсимволов (допустим только дефис)'
+  "The field consists of Latin or Cyrillic alphabet, the first letter should be title, without gaps and without numbers, there are no special systems (let's only have a hyphen)"
 
 const REGISTRATION_FORM_FIELDS = [
   {
@@ -77,7 +77,7 @@ const REGISTRATION_FORM_FIELDS = [
       .required(DEFAULT_REQUIRED_FIELD_MESSAGE)
       .matches(
         /^(?!\d+$)[A-Za-z0-9_-]{3,20}$/,
-        'Поле состоит от 3 до 20 символов, латиницы, может содержать цифры, но не состоять из них, без пробелов, без спецсимволов (допустимы дефис и нижнее подчёркивание)'
+        'The field consists of 3 to 20 characters, Latin, may contain numbers, but not consist of them, without spaces, without special systems (permissible hyphen and lower emphasis)',
       ),
   },
   {
@@ -91,7 +91,7 @@ const REGISTRATION_FORM_FIELDS = [
       .required(DEFAULT_REQUIRED_FIELD_MESSAGE)
       .matches(
         /^[\w.-]+@[a-zA-Z]+\.[a-zA-Z]+$/,
-        'Поле состоит из латиницы, может включать цифры и спецсимволы вроде дефиса и подчёркивания, обязательно должна быть «собака» (@) и точка после неё, но перед точкой обязательно должны быть буквы'
+        'The field consists of Latin, can include numbers and special systems like a hyphen and emphasizing, there must be a “dog” (@) and a point after it, but there must be letters in front of the point',
       ),
   },
   {
@@ -105,7 +105,7 @@ const REGISTRATION_FORM_FIELDS = [
       .required(DEFAULT_REQUIRED_FIELD_MESSAGE)
       .matches(
         /^(?=.*[A-Z])(?=.*\d).{8,40}$/,
-        'Поле состоит от 8 до 40 символов, обязательно хотя бы одна заглавная буква и цифра'
+        'The field consists of 8 to 40 characters, always at least one title letter and figure',
       ),
   },
   {
@@ -119,17 +119,20 @@ const REGISTRATION_FORM_FIELDS = [
       .required(DEFAULT_REQUIRED_FIELD_MESSAGE)
       .matches(
         /^\+?[0-9]{10,15}$/,
-        'Поле состоит от 10 до 15 символов, из цифр, может начинается с плюса'
+        'The field consists of 10 to 15 characters, of the numbers, it can begin with the plus',
       ),
   },
 ] as const
 
 const REGISTRATION_FORM_FIELDS_SCHEMA = yup
   .object(
-    REGISTRATION_FORM_FIELDS.reduce((acc, field) => {
-      acc[field.name] = field.validation
-      return acc
-    }, {} as TFormFieldsSchemas<typeof REGISTRATION_FORM_FIELDS>)
+    REGISTRATION_FORM_FIELDS.reduce(
+      (acc, field) => {
+        acc[field.name] = field.validation
+        return acc
+      },
+      {} as TFormFieldsSchemas<typeof REGISTRATION_FORM_FIELDS>,
+    ),
   )
   .required()
 
@@ -160,7 +163,7 @@ export const Registration = () => {
     } catch (error) {
       // TODO: https://redux-toolkit.js.org/rtk-query/usage-with-typescript#inline-error-handling-example
       setSignupError(
-        (error as Error)?.message || DEFAULT_REGISTRATION_ERROR_MESSAGE
+        (error as Error)?.message || DEFAULT_REGISTRATION_ERROR_MESSAGE,
       )
     }
   }

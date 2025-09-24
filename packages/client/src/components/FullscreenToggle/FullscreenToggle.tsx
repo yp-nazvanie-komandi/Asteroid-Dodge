@@ -53,7 +53,7 @@ export const FullscreenToggle = () => {
   return (
     <FullscreenButton
       onClick={toggleFullscreen}
-      text={isFullscreen ? 'Выйти из Fullscreen' : 'Fullscreen'}
+      text={isFullscreen ? 'Log out Fullscreen' : 'Fullscreen'}
       className={isFullscreen ? 'fullscreen-mode' : ''}
     ></FullscreenButton>
   )

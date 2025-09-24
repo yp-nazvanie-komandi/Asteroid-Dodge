@@ -51,7 +51,7 @@ export default function ChangeThemeDrop({
   return (
     <div className="theme">
       <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-standard-label">Тема</InputLabel>
+        <InputLabel id="demo-simple-select-standard-label">Theme</InputLabel>
         <Select
           labelId="demo-simple-select-standard-label"
           id="demo-simple-select-standard"
