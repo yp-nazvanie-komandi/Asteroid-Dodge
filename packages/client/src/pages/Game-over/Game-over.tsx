@@ -30,10 +30,7 @@ export const GameOver: React.FC<GameOverProps> = ({ countPoints }) => {
   return (
     <div className="container container--game-over">
       <h1 className="title title--white">GAME OVER</h1>
-
       <p> Your account: {countPoints}</p>
-      <p>Ваш счёт: {countPoints}</p>
-
       <Button
         color="info"
         size="large"
