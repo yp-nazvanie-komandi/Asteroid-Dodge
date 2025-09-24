@@ -47,8 +47,7 @@ export const Main = () => {
           text={'Forum'}
           size={'medium'}
           onClick={() => {
-            //TODO поставить правильную навигацию
-            window.location.href = 'http://localhost:3001/api-docs' // серверная часть приложения, АПИ форума
+            navigate('/topics')
           }}
         />
       </div>

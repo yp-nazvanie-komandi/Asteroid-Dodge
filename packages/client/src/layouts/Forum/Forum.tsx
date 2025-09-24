@@ -12,12 +12,12 @@ export const ForumLayout = () => {
 
       <div className="forum-container__toolbar">
         <Button
-          text="Список тем"
+          text="Topics list"
           size="medium"
           onClick={() => navigate('/topics')}
         />
         <Button
-          text="Новая тема"
+          text="New topic"
           size="medium"
           onClick={() => navigate('new')}
         />

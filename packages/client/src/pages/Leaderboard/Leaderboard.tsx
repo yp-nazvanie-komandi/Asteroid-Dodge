@@ -20,7 +20,7 @@ export function Leaderboard() {
           />
         </section>
         <Button
-          text={'Назад'}
+          text={'Back'}
           color={'info'}
           size={'large'}
           onClick={() => {

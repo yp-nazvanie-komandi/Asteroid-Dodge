@@ -45,18 +45,18 @@ export const CreateForumTopic = () => {
   return (
     <Paper elevation={5} sx={{ p: 3, maxWidth: 720, mx: 'auto' }}>
       <Typography variant="h5" sx={{ mb: 2 }}>
-        Создать тему
+        Create topic
       </Typography>
 
       <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
         <TextField
-          label="Название"
+          label="Topic name"
           fullWidth
           margin="normal"
           {...register('title', {
-            required: 'Укажите название темы',
-            minLength: { value: 3, message: 'Минимум 3 символа' },
-            maxLength: { value: 255, message: 'Максимум 255 символов' },
+            required: 'Set topic name',
+            minLength: { value: 3, message: 'Min 3 symbols' },
+            maxLength: { value: 255, message: 'Max 255 sybmols' },
           })}
           error={!!errors.title}
           helperText={errors.title?.message}
@@ -64,14 +64,14 @@ export const CreateForumTopic = () => {
         />
 
         <TextField
-          label="Текст"
+          label="Text"
           fullWidth
           margin="normal"
           multiline
           rows={6}
           {...register('body', {
-            required: 'Введите текст темы',
-            minLength: { value: 1, message: 'Минимум 1 символ' },
+            required: 'Enter topic text',
+            minLength: { value: 1, message: 'Min 1 sybmol' },
           })}
           error={!!errors.body}
           helperText={errors.body?.message}
@@ -95,7 +95,7 @@ export const CreateForumTopic = () => {
             variant="contained"
             disabled={!isValid || sending}
           >
-            {sending ? 'Создаём…' : 'Создать тему'}
+            {sending ? 'Creating…' : 'Create topic'}
           </Button>
           <Button
             type="button"
