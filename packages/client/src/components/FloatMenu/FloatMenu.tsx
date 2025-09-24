@@ -22,12 +22,12 @@ interface MenuItem {
 const hiddenPaths = ['/login', '/registration', '/OAuth', '/game'] // пути, на которых меню скрыто
 
 const menuItems: MenuItem[] = [
-  { label: 'Главная', value: '/', icon: <Home />, link: '/' },
-  { label: 'Старт', value: '/start', icon: <SportsEsports />, link: '/start' },
-  { label: 'Профиль', value: '/profile', icon: <Settings />, link: '/profile' },
-  { label: 'Форум', value: '/forum', icon: <Groups />, link: '/forum' },
+  { label: 'Main', value: '/', icon: <Home />, link: '/' },
+  { label: 'Start', value: '/start', icon: <SportsEsports />, link: '/start' },
+  { label: 'Profile', value: '/profile', icon: <Settings />, link: '/profile' },
+  { label: 'Forum', value: '/forum', icon: <Groups />, link: '/forum' },
   {
-    label: 'Рейтинг',
+    label: 'Leaderbord',
     value: '/leaderboard',
     icon: <EmojiEvents />,
     link: '/leaderboard',
