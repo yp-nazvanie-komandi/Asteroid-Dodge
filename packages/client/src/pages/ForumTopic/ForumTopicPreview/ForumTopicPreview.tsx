@@ -30,6 +30,7 @@ export const ForumTopicPreview = ({
   title,
   body,
   author,
+  refetch,
 }: TForumTopicProps) => {
   const [
     addComment,
@@ -42,6 +43,7 @@ export const ForumTopicPreview = ({
         id,
         createCommentRequest: { body: form.comment },
       }).unwrap()
+      if (isSuccess) refetch()
     } catch (e) {
       console.error('Ошибка при добавлении комментария', e)
     }
@@ -49,7 +51,7 @@ export const ForumTopicPreview = ({
 
   return (
     <Paper elevation={5}>
-      <TopicTitles title={title} text={body} author={author} />
+      <TopicTitles id={id} title={title} text={body} author={author} />
       <div className="forum-topic__descriptions">
         <TopicTextAreaInput submitCallback={onSubmit} />
         {isSendingComment && <p>Отправляем комментарий…</p>}

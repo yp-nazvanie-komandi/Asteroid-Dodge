@@ -7,24 +7,22 @@ export const ForumLayout = () => {
   const navigate = useNavigate()
 
   return (
-    <ForumContainer>
-      <div className="forum-container">
-        <h1 className="title">Forum</h1>
+    <div className="forum-container">
+      <h1 className="title">Forum</h1>
 
-        <div className="forum-container__toolbar">
-          <Button
-            text="Список тем"
-            size="medium"
-            onClick={() => navigate('/topics')}
-          />
-          <Button
-            text="Новая тема"
-            size="medium"
-            onClick={() => navigate('new')}
-          />
-        </div>
-        <Outlet />
+      <div className="forum-container__toolbar">
+        <Button
+          text="Список тем"
+          size="medium"
+          onClick={() => navigate('/topics')}
+        />
+        <Button
+          text="Новая тема"
+          size="medium"
+          onClick={() => navigate('new')}
+        />
       </div>
-    </ForumContainer>
+      <Outlet />
+    </div>
   )
 }
