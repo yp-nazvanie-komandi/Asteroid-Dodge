@@ -20,7 +20,7 @@ export const TopicTextAreaInput = ({ submitCallback }: TTopicTextAreaInput) => {
       <textarea
         {...register('comment', { required: true })}
         className="comment-input__field"
-        placeholder="Введите комментарий..."
+        placeholder="Enter comment..."
         rows={4}
       />
       {errors.comment && <span>This field is required</span>}
