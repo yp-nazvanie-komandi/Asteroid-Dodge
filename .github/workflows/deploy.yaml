@@ -1,0 +1,48 @@
+name: CI/CD Docker Deploy
+
+on:
+  push:
+    branches:
+      - main   # Срабатываем на пуш в главную ветку
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Клонируем репозиторий
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Входим в Docker Registry (например, Docker Hub)
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # 3. Строим Docker-образ из Dockerfile
+      - name: Build Docker image
+        run: docker build -t myapp:${{ github.sha }} .
+
+      # 4. Отправляем образ в регистр (Docker Hub или GitHub Container Registry)
+      - name: Push Docker image
+        run: docker push myapp:${{ github.sha }}
+
+      # 5. Подключаемся по SSH к серверу и обновляем контейнеры
+      - name: Deploy to server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          IMAGE_TAG: ${{ github.sha }}
+
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh -o StrictHostKeyChecking=no user@yourserver << EOF
+            docker pull myapp:$IMAGE_TAG
+            docker stop myapp_container || true
+            docker rm myapp_container || true
+            docker run -d --name myapp_container -p 80:80 myapp:$IMAGE_TAG
+            exit
+          EOF
